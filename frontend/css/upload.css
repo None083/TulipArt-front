@@ -29,8 +29,7 @@
 
 /* Estilo para el mensaje de error */
 #error-message-upload {
-    display: block;
-    color: #cc0000;
+    color: #D83C2D;
     margin-bottom: 10px;
     opacity: 0;
     visibility: hidden;
@@ -47,15 +46,6 @@
     width: 100%; /* Ocupar todo el ancho disponible */
     justify-content: center;
     clear: both; /* Asegurar que no haya elementos flotantes alrededor */
-}
-
-#error-message-upload {
-    color: #D83C2D;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-align: center;
-    padding: 5px;
-    display: none; /* Por defecto está oculto */
 }
 
 /* Estilo para el botón con apariencia de deshabilitado pero que sí puede recibir eventos */
