@@ -417,6 +417,10 @@ main#index>nav#tab>span {
     cursor: pointer;
 }
 
+main#index>nav#tab>span#busqueda-activa {
+    margin-top: 2px;
+}
+
 .borderbottom {
     border-bottom: 2px solid #2A2121;
 
