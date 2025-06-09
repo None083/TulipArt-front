@@ -104,7 +104,7 @@ async function buscar_obras_por_etiquetas(idsEtiquetas, idObraExcluir) {
             const fotosResponse = await obtener_fotos_obra(obra.idObra);
             const fotos = fotosResponse || [];
             const primeraFoto = fotos.length > 0
-                ? `../../backend/images/obras/${fotos[0].foto}`
+                ? `${DIR_API}/images/obras/${fotos[0].foto}`
                 : "../imagenes/arte/default.webp";
 
             // Obtener datos del usuario autor
