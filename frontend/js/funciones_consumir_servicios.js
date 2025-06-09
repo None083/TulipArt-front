@@ -109,7 +109,7 @@ async function cargar_obras() {
                     html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //boton seguir
                 }
                 html_obras += "<img class='icon-albondiga' src='imagenes/icons/MenuVertical.svg' alt='menu-post'></div>";
-                html_obras += `<picture class='obra-arte'><img src=DIR_API + '/images/obras/${primeraFoto}' alt='Obra de arte'></picture>`; // Primera foto de la obra
+                html_obras += `<picture class='obra-arte'><img src='${DIR_API}/images/obras/${primeraFoto}' alt='Obra de arte'></picture>`; // Primera foto de la obra
                 html_obras += `<ul class='icons-post'><li><img id='btn-like-index' class='btn-like' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //dar like
                 html_obras += "<li><img src='imagenes/icons/message-circle.svg' alt='Icon message post'><span id='num-comments'>" + numComentarios + "</span></li></ul></article>"; //comentar *
             }
@@ -209,7 +209,7 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
                     html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //boton seguir
                 }
                 html_obras += "<img class='icon-albondiga' src='imagenes/icons/MenuVertical.svg' alt='menu-post'></div>";
-                html_obras += `<picture class='obra-arte'><img src=DIR_API + '/images/obras/${primeraFoto}' alt='Obra de arte ${tupla["nombreObra"]}'></picture>`; // Primera foto de la obra
+                html_obras += `<picture class='obra-arte'><img src='${DIR_API}/images/obras/${primeraFoto}' alt='Obra de arte ${tupla["nombreObra"]}'></picture>`; // Primera foto de la obra
                 html_obras += `<ul class='icons-post'><li><img class='btn-like' data-idobra='${tupla["idObra"]}' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //dar like
                 html_obras += `<li><img src='imagenes/icons/message-circle.svg' alt='Icon message post'><span class='num-comments'>${numComentarios}</span></li></ul></article>`; //comentar *
             }
@@ -542,7 +542,7 @@ async function cargar_obras_usuario(idUsu) {
                 // Obtener los datos del usuario dueño de la obra
                 const usuario = await obtener_datos_usuario(tupla["idUsu"]);
                 const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // Nombre del usuario o valor por defecto
-                const iconoUsuario = usuario.fotoPerfil ? "..DIR_API + //images/profilePics/" + usuario.fotoPerfil : "..DIR_API + //images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
+                const iconoUsuario = usuario.fotoPerfil ? `${DIR_API}/images/profilePics/${usuario.fotoPerfil}` : `${DIR_API}/images/profilePics/no_image.jpg`; // Icono del usuario o valor por defecto
 
                 const likes = await obtener_likes_obra(tupla["idObra"]);
                 const numLikes = likes.length;
@@ -562,7 +562,7 @@ async function cargar_obras_usuario(idUsu) {
                 html_posts += '</div>';
                 html_posts += '</div>';
                 html_posts += `<a id="enlace-post-perfil" href="post.html?id=${tupla["idObra"]}">`;
-                html_posts += '<picture class="obra-arte"><img src="..DIR_API + //images/obras/' + primeraFoto + '" alt="Obra de arte ' + tupla["nombreObra"] + '"></picture>';
+                html_posts += `<picture class="obra-arte"><img src="${DIR_API}/images/obras/${primeraFoto}" alt="Obra de arte ${tupla["nombreObra"]}"></picture>`;
                 html_posts += '</a>';
                 html_posts += '<ul class="icons-post">';
                 html_posts += `<li><img src="${iconoLike}" alt="Icon like"><span class="num-likes">${numLikes}</span></li>`;
@@ -730,7 +730,7 @@ async function cargar_usuario_pagina_post(idUsu) {
             localStorage.clear();
         } else {
             $('.user-link-post').attr('href', "profile.html?id=" + idUsu);
-            $('#user-photo').attr('src', "..DIR_API + //images/profilePics/" + response.usuario.fotoPerfil);
+            $('#user-photo').attr('src', `${DIR_API}/images/profilePics/${response.usuario.fotoPerfil}`);
             $('#user-nombre').text(response.usuario.nombreUsuario);
             return response.usuario;
         }
@@ -781,7 +781,7 @@ async function cargar_more_by(idUsuAutor, idObraActual, contenedor = '#more-by',
                 const fotosResponse = await obtener_fotos_obra(obra.idObra);
                 const fotos = fotosResponse || [];
                 const primeraFoto = fotos.length > 0
-                    ? `..DIR_API + //images/obras/${fotos[0].foto}`
+                    ? `${DIR_API}/images/obras/${fotos[0].foto}`
                     : "../imagenes/arte/default.webp";
 
                 // Crear el artículo de la obra
@@ -1024,7 +1024,7 @@ async function cargar_comentarios_obra(idObra) {
                         html_mensaje += `<div class="content" data-comentario-id="${tupla.numComentario}">`;
                     }
 
-                    html_mensaje += `<img class="foto-perfil" src="..DIR_API + //images/profilePics/${tupla.fotoPerfil}" alt="icono">`;
+                    html_mensaje += `<img class="foto-perfil" src="${DIR_API}/images/profilePics/${tupla.fotoPerfil}" alt="icono">`;
                     html_mensaje += '<div>';
                     html_mensaje += `<span class="nombre">${tupla.nombreUsuario}</span>`;
                     html_mensaje += `<span class="fecha">${tupla.fecCom}</span>`;
@@ -1133,7 +1133,8 @@ async function cargar_alertas(idUsu, link1, link2) {
             html_alertas += `<a class="alert-comentario-link" href="${postPath}" data-idcomentario="${alerta.numComentario}"><span>@${alerta.usuario_comentario} comentó en <strong>${alerta.nombre_obra}</strong></span></a></div>`;
         }        
         html_alertas += '</div>';
-        $('div#content-alerts').html(html_alertas);        // Actualizar el contador de alertas
+        $('div#content-alerts').html(html_alertas);        
+        // Actualizar el contador de alertas
         let num_alerts = response_seguidores.alertas_seguidores.length + response_likes.alertas_likes.length + response_comentarios.alertas_comentarios.length;
         $('span#num-alerts').text(num_alerts);
 
@@ -1339,7 +1340,7 @@ $(document).ready(function () {
                 if (!response.error && response.usuario && response.usuario.fotoPerfil) {
                     // Determinar la ruta correcta según si estamos en la página principal o en una subpágina
                     const imgPath = window.location.pathname.includes('paginas/') ?
-                        "..DIR_API + //images/profilePics/" + response.usuario.fotoPerfil :
+                        "../backend/servicios_rest_protect/images/profilePics/" + response.usuario.fotoPerfil :
                         DIR_API + "/images/profilePics/" + response.usuario.fotoPerfil;
 
                     // Actualizar la imagen del header
