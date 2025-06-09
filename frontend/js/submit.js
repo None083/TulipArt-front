@@ -1,6 +1,6 @@
 // Usa la configuración global para la API
 // Requiere que config.js esté incluido antes
-const DIR_API = (typeof appConfig !== 'undefined' ? appConfig.apiBaseUrl : '/backend/servicios_rest_protect');
+const DIR_API = (typeof appConfig !== 'undefined' ? appConfig.apiBaseUrl : 'https://tulipart-production.up.railway.app/backend/servicios_rest_protect');
 
 $(document).ready(function () {
 
