@@ -21,109 +21,97 @@
 <body>
     <div id="contenedor">
         <header class="fixed">
-            <h1>TulipArt, Galería de arte</h1>
-            <nav id="menu-principal" aria-label="menu-principal">
-                <div id="hamburguesa">
-                    <img id="menu-hamb" src="../imagenes/icons/icons-blanco/align-justify.svg"
-                        alt="icono menu principal">
-                </div>
-                <ul id="menu-desplegado">
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../index.html">New</a></li>
-                    <li><a href="../index.html">Trending</a></li>
-                    <li><a href="../index.html">For you</a></li>
-                    <li><a href="../index.html">Following</a></li>
-                    <li>
-                        <ul id="submenu">
-                            <li><a href="cookies.html">Privacy policy</a></li>
-                            <li><a href="cookies.html">Cookie policy</a></li>
-                            <li><a href="cookies.html">About us</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-            <a id="logo" href="../index.html">
-                <img id="tulip"
-                    src="../imagenes/tulips/LogoTulipArtPlanoIcon.webp"
-                    alt="Logo TulipArt">
-            </a>
-            <a id="nombreWeb" href="../../index.html">TulipArt</a>
-            <nav id="menu-iconos" aria-label="menu-iconos">
-                <div id="search">
-                    <img id="lupa-blanca"
-                        src="../imagenes/icons/icons-blanco/search.svg"
-                        alt="Icon search">
-                    <img id="lupa-negra" src="../imagenes/icons/search.svg"
-                        alt="Icon search">
-                    <input type="text" name="buscar" id="buscar" placeholder="Search">
-                </div>
-                <a href="profile.html" id="profile">
-                    <img src="../imagenes/icons/icons-blanco/user.svg"
-                        alt="Icon user">
-                    <span>Profile</span>
-                </a>
-                <a href="#" id="messages-header">
-                    <img src="../imagenes/icons/icons-blanco/message-square.svg"
-                        alt="Icon messages">
-                    <span>Messages</span>
-                </a>
-                <a href="#" id="alerts-header">
-                    <img src="../imagenes/icons/icons-blanco/bell.svg"
-                        alt="Icon alerts">
-                    <span>Alerts</span>
-                </a>
-                <a href="upload.html" id="submit-header">
-                    <img src="../imagenes/icons/icons-blanco/plus.svg"
-                        alt="Submit art">
-                    <span>Submit Art</span>
-                </a>
-            </nav>
-            <nav id="menu-adicional" aria-label="menu-adicional">
-                <img id="menu-albondigas"
-                    src="../imagenes/icons/icons-blanco/more-horizontal.svg"
-                    alt="Icon adittional menu">
-                <ul id="menu-iconos-adicional">
-                    <li>
-                        <a href="#">
-                            <img src="../imagenes/icons/message-square.svg"
-                                alt="Icon messages">
-                            <span>Messages</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img src="../imagenes/icons/bell.svg"
-                                alt="Icon alerts">
-                            <span>Alerts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="submit.html">
-                            <img src="../imagenes/icons/plus.svg"
-                                alt="Icon submit">
-                            <span>Post</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <nav id="capa-buscador" aria-label="capa-buscador">
-                <img id="equis" src="../imagenes/icons/x.svg" alt="Icon close">
-                <div>
-                    <input type="text" name="buscador" id="buscador" placeholder="Search">
-                    <a href="../index.html"><img id="lupa-negra-buscador"
-                            src="../imagenes/icons/search.svg"
-                            alt="Icon search"></a>
-                </div>
-                <span>SUGGESTED TAGS</span>
-                <ul id="tags">
-                    <li>tulip</li>
-                    <li>digital painting</li>
-                    <li>raining</li>
-                    <li>face tutorial</li>
-                    <li>landscape</li>
-                </ul>
-            </nav>
-        </header>
+			<h1>TulipArt, Galería de arte</h1>
+			<nav id="menu-principal" aria-label="menu-principal">
+				<div id="hamburguesa">
+					<img id="menu-hamb" src="../imagenes/icons/icons-blanco/align-justify.svg"
+						alt="icono menu principal">
+				</div>
+				<ul id="menu-desplegado">
+					<li><a href="../index.html">Home</a></li>
+					<li><a href="../index.html">New</a></li>
+					<li><a href="../index.html">Trending</a></li>
+					<li><a href="../index.html">For you</a></li>
+					<li><a href="../index.html">Following</a></li>
+					<li>
+						<ul id="submenu">
+							<li><a href="cookies.html">Privacy policy</a></li>
+							<li><a href="cookies.html">Cookie policy</a></li>
+							<li><a href="cookies.html">About us</a></li>
+						</ul>
+					</li>
+					<li><a id="logout-page" href="../index.html">Log Out</a></li>
+				</ul>
+			</nav>
+			<a id="logo" href="../index.html">
+				<img id="tulip" src="../imagenes/tulips/LogoTulipArtPlanoIcon.webp" alt="Logo TulipArt">
+			</a>
+			<a id="nombreWeb" href="../index.html">TulipArt</a>
+			<nav id="menu-iconos" aria-label="menu-iconos">
+				<div id="search">
+					<img id="lupa-blanca" src="../imagenes/icons/icons-blanco/search.svg" alt="Icon search">
+					<img id="lupa-negra" src="../imagenes/icons/search.svg" alt="Icon search">
+					<input type="text" name="buscar" id="buscar" placeholder="Search">
+				</div>
+				<a href="profile.html" id="profile" class="no-logged">
+					<img src="../imagenes/icons/icons-blanco/user.svg" alt="Icon user">
+					<span>Profile</span>
+				</a>
+				<div id="contenedor-alerts">
+					<a href="#" id="alerts-header" class="no-logged">
+						<img id="icon-alerts" src="../imagenes/icons/icons-blanco/bell.svg" alt="Icon alerts">
+						<span id="num-alerts">0</span>
+						<span id="text">Alerts</span>
+					</a>
+					<nav id="caja-alertas" aria-label="caja-alertas">
+						<div class="pico-bocadillo"></div>
+						<div id="content-alerts"><span>hola</span></div>
+					</nav>
+				</div>
+				<a href="#" id="messages-header">
+					<img src="../imagenes/icons/icons-blanco/message-square.svg" alt="Icon messages">
+					<span>Messages</span>
+				</a>
+				<a href="upload.html" id="submit-header">
+					<img src="../imagenes/icons/icons-blanco/plus.svg" alt="Submit art">
+					<span>Submit Art</span>
+				</a>
+			</nav>
+			<nav id="menu-adicional" aria-label="menu-adicional">
+				<img id="menu-albondigas" src="../imagenes/icons/icons-blanco/more-horizontal.svg"
+					alt="Icon adittional menu">
+				<ul id="menu-iconos-adicional">
+					<li>
+						<a href="#">
+							<img src="../imagenes/icons/message-square.svg" alt="Icon messages">
+							<span>Messages</span>
+						</a>
+					</li>
+					<li>
+						<a href="submit.html">
+							<img src="../imagenes/icons/plus.svg" alt="Icon submit">
+							<span>Post</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<nav id="capa-buscador" aria-label="capa-buscador">
+				<img id="equis" src="../imagenes/icons/x.svg" alt="Icon close">
+				<div>
+					<input type="text" name="buscador" id="buscador" placeholder="Search">
+					<a href="../index.html"><img id="lupa-negra-buscador" src="../imagenes/icons/search.svg"
+							alt="Icon search"></a>
+				</div>
+				<span>SUGGESTED TAGS</span>
+				<ul id="tags">
+					<li>tulip</li>
+					<li>digital painting</li>
+					<li>raining</li>
+					<li>face tutorial</li>
+					<li>landscape</li>
+				</ul>
+			</nav>
+		</header>
         <main id="cookies">
             <div id="accept-conditions">
                 <span>We need your consent to set cookies on your device</span>
