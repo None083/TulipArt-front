@@ -43,7 +43,7 @@ $(function () {
         // URL a la que se enviarán las imágenes
         // Usa la configuración global para la API
         // Requiere que config.js esté incluido antes
-        url: (typeof appConfig !== 'undefined' ? appConfig.apiBaseUrl : '/backend/servicios_rest_protect') + '/subir_imagen_temporal',
+        url: 'https://tulipart-production.up.railway.app/subir_imagen_temporal',
         dataType: 'json',
         // Establecer la zona de drop
         dropZone: $('#drop'),
