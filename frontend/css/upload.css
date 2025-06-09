@@ -44,7 +44,7 @@
     color: #D83C2D;
     margin-bottom: 15px;
     text-align: center;
-    visibility: hidden;
+    display: none; /* Cambiado de visibility: hidden a display: none */
 }
 
 #upload ul li {

@@ -5,15 +5,21 @@ $(function () {
     var ul = $('#upload ul');
 
     // Almacenar información de imágenes temporales
-    var imagenesTemporal = [];    // Si hay imágenes almacenadas previamente, recuperarlas
+    var imagenesTemporal = [];
+
+    // Inicializar el estado del mensaje de error
+    if ($('#error-message-upload').length) {
+        $('#error-message-upload').hide();
+    }
+
+    // Si hay imágenes almacenadas previamente, recuperarlas
     var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
     if (imagenesGuardadas) {
         try {
-            imagenesTemporal = JSON.parse(imagenesGuardadas);
-            // Si ya hay imágenes, activar el botón de continuar y ocultar mensaje de error
+            imagenesTemporal = JSON.parse(imagenesGuardadas);            // Si ya hay imágenes, activar el botón de continuar y ocultar mensaje de error
             if (imagenesTemporal.length > 0) {
-                $('button[type="submit"]').prop('disabled', false).addClass('active');
-                $('#error-message-upload').css('visibility', 'hidden');
+                $('#upload-submit').prop('disabled', false).addClass('active');
+                $('#error-message-upload').hide();
             }
         } catch (e) {
             localStorage.removeItem('imagenesTemporal');
@@ -185,18 +191,16 @@ $(function () {
                     data.context.fadeOut(function () {
                         $(this).remove();                    // Desactivar el botón y mostrar mensaje de error si no quedan imágenes
                         if (imagenesTemporal.length === 0) {
-                            $('button[type="submit"]').prop('disabled', true).removeClass('active');
-                            $('#error-message-upload').css('visibility', 'visible');
+                            $('#upload-submit').prop('disabled', true).removeClass('active');
+                            $('#error-message-upload').show();
                         }
                     });
                 });                // Guardar la información en localStorage
-                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
-
-                // Ocultar el mensaje de error si estaba visible
-                $('#error-message-upload').css('visibility', 'hidden');
+                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));                // Ocultar el mensaje de error si estaba visible
+                $('#error-message-upload').hide();
 
                 // Activar el botón de submit cuando haya al menos una imagen
-                $('button[type="submit"]').prop('disabled', false).addClass('active');
+                $('#upload-submit').prop('disabled', false).addClass('active');
             }
         },
 
@@ -226,10 +230,25 @@ $(function () {
         // Comprobar que hay imágenes subidas
         if (imagenesTemporal.length === 0) {
             // Mostrar el mensaje de error
-            $('#error-message-upload').css('visibility', 'visible');
+            $('#error-message-upload').show();
             return;
         }
 
+        // Redireccionar a la página de submit
+        window.location.href = 'submit.html';
+    });
+
+    // Manejar también el clic directo en el botón de submit
+    $('#upload-submit').on('click', function (e) {
+        e.preventDefault();
+        
+        // Comprobar que hay imágenes subidas
+        if (imagenesTemporal.length === 0) {
+            // Mostrar el mensaje de error
+            $('#error-message-upload').show();
+            return;
+        }
+        
         // Redireccionar a la página de submit
         window.location.href = 'submit.html';
     });
