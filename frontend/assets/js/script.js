@@ -12,10 +12,9 @@ $(function () {
     if (imagenesGuardadas) {
         try {
             imagenesTemporal = JSON.parse(imagenesGuardadas);
-            // Si ya hay imágenes, activar el botón de continuar y ocultar mensaje de error
+            // Si ya hay imágenes, activar el botón de continuar
             if (imagenesTemporal.length > 0) {
-                $('#upload-submit').prop('disabled', false).addClass('active');
-                $('#error-message-upload').css('visibility', 'hidden');
+                $('button[type="submit"]').prop('disabled', false).addClass('active');
             }
         } catch (e) {
             localStorage.removeItem('imagenesTemporal');
@@ -185,18 +184,20 @@ $(function () {
 
                     // Eliminar el elemento visual con animación
                     data.context.fadeOut(function () {
-                        $(this).remove();                    // Desactivar el botón y mostrar mensaje de error si no quedan imágenes
+                        $(this).remove();                        // Desactivar el botón y mostrar mensaje de error si no quedan imágenes
                         if (imagenesTemporal.length === 0) {
-                            $('#upload-submit').prop('disabled', true).removeClass('active');
+                            $('button[type="submit"]').prop('disabled', true).removeClass('active');
                             $('#error-message-upload').css('visibility', 'visible');
                         }
                     });
                 });                // Guardar la información en localStorage
-                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));                // Ocultar el mensaje de error si estaba visible
+                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
+
+                // Ocultar mensaje de error si está visible
                 $('#error-message-upload').css('visibility', 'hidden');
 
                 // Activar el botón de submit cuando haya al menos una imagen
-                $('#upload-submit').prop('disabled', false).addClass('active');
+                $('button[type="submit"]').prop('disabled', false).addClass('active');
             }
         },
 
@@ -225,7 +226,7 @@ $(function () {
 
         // Comprobar que hay imágenes subidas
         if (imagenesTemporal.length === 0) {
-            // Mostrar el mensaje de error
+            // Mostrar mensaje de error
             $('#error-message-upload').css('visibility', 'visible');
             return;
         }
@@ -233,20 +234,15 @@ $(function () {
         // Redireccionar a la página de submit
         window.location.href = 'submit.html';
     });
-
-    // Manejar también el clic directo en el botón de submit
-    $('#upload-submit').on('click', function (e) {
-        e.preventDefault();
-
-        // Comprobar que hay imágenes subidas
-        if (imagenesTemporal.length === 0) {
-            // Mostrar el mensaje de error
+    
+    // Manejar clic en el botón de submit
+    $('button[type="submit"]').on('click', function(e) {
+        // Si el botón está deshabilitado, mostrar el mensaje de error
+        if ($(this).prop('disabled') || imagenesTemporal.length === 0) {
             $('#error-message-upload').css('visibility', 'visible');
-            return;
+            e.preventDefault();
+            return false;
         }
-
-        // Redireccionar a la página de submit
-        window.location.href = 'submit.html';
     });
 
     // Función auxiliar que formatea los tamaños de archivo
