@@ -26,6 +26,8 @@ $(document).ready(function () {
 
     if (!localStorage.token) {
         $('#logout').hide();
+    }else{
+        $('#logout').show();
     }
 
     $('#profile, #profile-header').on('click', function (e) {
