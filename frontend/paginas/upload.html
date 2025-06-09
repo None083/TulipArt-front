@@ -1,0 +1,90 @@
+<!-- filepath: c:\xampp\htdocs\Proyectos\TulipArt\frontend\paginas\upload.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <title>TulipArt - Upload</title>
+    <link rel="icon" type="image/jpg"
+        href="https://imagenes-tulipart.s3.amazonaws.com/imagenes/tulips/LogoTulipArtPlanoIcon.webp">
+    <link rel="stylesheet" type="text/css" href="../css/estilos.css">
+    <link rel="stylesheet" type="text/css" href="../css/upload.css">
+    <link rel="stylesheet" href="../jq/jquery-ui-1.14.1.custom/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/tulipart-dialog.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="../assets/js/jquery.knob.js"></script>
+    <script src="../assets/js/jquery.ui.widget.js"></script>
+    <script src="../assets/js/jquery.iframe-transport.js"></script>
+    <script src="../assets/js/jquery.fileupload.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script src="../jq/jquery-ui-1.14.1.custom/jquery-ui.min.js"></script>
+    <script src="../js/submit.js"></script>
+</head>
+
+<body>
+    <div id="contenedor2">
+        <header class="submit">
+            <h1>TulipArt, Galería de arte</h1>
+            <span class="h1">Upload art</span>
+            <a id="upload-atras" href="javascript:history.go(-1)">
+                <img alt="Icono x" src="../imagenes/icons/x.svg">
+            </a>
+        </header>
+        <main class="upload">
+            <form id="upload">
+                <div id="tulipanes-upload">
+                    <img src="../imagenes/tulips/tulip1.webp" alt="Lineart de tulipán">
+                    <img src="../imagenes/tulips/tulip2.webp" alt="Color plano de tulipán">
+                    <img src="../imagenes/tulips/tulip3.webp" alt="Color y detalles de tulipán">
+                </div>
+                <span>Let's water those tulips with a fresh JPEG, PNG or GIF</span>
+                <div id="drop">
+                    <div id="drop-here">Press here or drop your art</div>
+                    <ul>
+                        <!-- Las imágenes subidas aparecerán aquí -->
+                    </ul>
+                </div>
+                <button id="upload-submit" type="submit" disabled>Continue to add details</button>
+            </form>
+        </main>
+    </div>
+    <script>
+        // Manejar clic en el botón de volver
+        $('#upload-atras').on('click', function (e) {
+            e.preventDefault();
+
+            // Obtener las imágenes temporales del localStorage
+            const imagenesTemporal = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
+
+            // Si hay imágenes temporales, eliminarlas
+            if (imagenesTemporal.length > 0) {
+                // Llamar al servicio para eliminar las imágenes temporales
+                $.ajax({
+                    url: DIR_API + "/limpiar_imagenes_temporales",
+                    type: "POST",
+                    data: {
+                        imagenes: JSON.stringify(imagenesTemporal)
+                    },
+                    dataType: "json",
+                    headers: { Authorization: "Bearer " + localStorage.token },
+                    complete: function () {
+                        // Limpiar localStorage y volver atrás
+                        localStorage.removeItem('imagenesTemporal');
+                        window.history.back();
+                    }
+                });
+            } else {
+                // Si no hay imágenes, simplemente volver atrás
+                window.history.back();
+            }
+        });
+
+    </script>
+</body>
+
+</html>

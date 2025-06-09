@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <title>TulipArt - Submit</title>
+    <link rel="icon" type="image/jpg" href="../imagenes/tulips/LogoTulipArtPlanoIcon.webp">
+    <link rel="stylesheet" type="text/css" href="../css/estilos.css">
+    <link rel="stylesheet" type="text/css" href="../css/submit-autocomplete.css">
+    <link rel="stylesheet" href="../jq/jquery-ui-1.14.1.custom/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/tulipart-dialog.css">
+    <script src="../jq/jquery-3.7.1.min.js"></script>
+    <script src="../jq/jquery-ui-1.14.1.custom/jquery-ui.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/funciones_consumir_servicios.js"></script>
+    <script src="../js/submit.js"></script>
+</head>
+
+<body>
+    <div id="contenedor2">
+        <header class="submit">
+            <h1>TulipArt, Galería de arte</h1>
+            <span class="h1">Submit art</span>
+            <a id="submit-atras" href="#">
+                <img alt="Icono x" src="../imagenes/icons/arrow-back.svg">
+            </a>
+        </header>
+        <main class="submit">
+            <div id="imageContainer">
+                <img alt="Obra arte" src="../imagenes/arte/obra-submit.webp">
+            </div>
+            <form id="submit-form">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" placeholder="Title" required>
+                <label for="tags">Tags</label>
+                <div class="tags-wrapper">
+                    <input autocomplete="off" type="text" id="tags" name="tags"
+                        placeholder="E.g.: tulip, digital, painting, raining, tutorial" required>
+                    <div id="sugerencias-container"></div>
+                </div>
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="3"
+                    placeholder="Write a brief description of your artwork. How'd you made it? How much did it take? Materials?"
+                    required></textarea>
+                <div id="columns">
+                    <div id="column1">
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkSubmit" id="check1" checked>
+                            <label for="check1">
+                                Allow to download the source file
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkSubmit" id="check2">
+                            <label for="check2">
+                                Contains mature content
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkSubmit" id="check3">
+                            <label for="check3">
+                                Content created utilizing AI tools
+                            </label>
+                        </div>
+                    </div>
+                    <div id="raya"></div>
+                    <div id="column2">
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkSubmit" id="check4" checked>
+                            <label for="check4">
+                                Not authorized for inclusion in third-party AI datasets.
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkSubmit" id="check5" checked>
+                            <label for="check5">
+                                I have read and agree to the Submission Policy and the Terms of Service.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button id="submit-obra" type="submit">Submit</button>
+            </form>
+        </main>
+    </div>
+    <div id="errores"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Manejador para el botón submit-atras
+            document.getElementById('submit-atras').onclick = function (e) {
+                e.preventDefault();
+
+                // Obtener las imágenes temporales
+                var imagenesTemporal = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');                
+                // Si hay imágenes temporales, eliminarlas
+                if (imagenesTemporal.length > 0) {                    
+                    $("<div title='Confirm exit'>If you leave now, uploaded images will be lost. Are you sure?</div>").dialog({
+                        modal: true,
+                        dialogClass: 'tulipart-warning',
+                        width: 400,
+                        buttons: {
+                            "Cancel": function() {
+                                $(this).dialog("close");
+                            },
+                            "Exit": function() {
+                                $(this).dialog("close");
+                                // Llamar al servicio para eliminar las imágenes temporales usando fetch (no jQuery)
+                                fetch(DIR_API + "/limpiar_imagenes_temporales", {
+                                    method: "POST",
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                    },
+                                    body: "imagenes=" + encodeURIComponent(JSON.stringify(imagenesTemporal))
+                                })
+                                .then(function () {
+                                    // Limpiar localStorage y volver atrás
+                                    localStorage.removeItem('imagenesTemporal');
+                                    window.history.back();
+                                })
+                                .catch(function () {
+                                    // Si hay error, igualmente volver atrás
+                                    localStorage.removeItem('imagenesTemporal');
+                                    window.history.back();
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    // Si no hay imágenes, simplemente volver atrás
+                    window.history.back();
+                }
+
+                return false;
+            };
+        });
+    </script>
+</body>
+
+</html>

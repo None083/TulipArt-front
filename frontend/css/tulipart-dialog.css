@@ -1,0 +1,75 @@
+/* Estilos personalizados para diálogos jQuery UI en TulipArt */
+
+/* Aplicar la fuente Kumbh Sans a todos los diálogos */
+.ui-dialog {
+    font-family: 'Kumbh Sans', sans-serif !important;
+}
+
+/* Estilos para el botón de cerrar (la X) */
+.ui-dialog .ui-dialog-titlebar-close {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Resetear estilos del icono original */
+.ui-dialog .ui-dialog-titlebar-close .ui-icon,
+.ui-dialog .ui-dialog-titlebar-close .ui-icon-closethick {
+    background-image: none !important;
+    background: none !important;
+    text-indent: 0 !important;
+    overflow: visible !important;
+}
+
+/* Aplicar la X como contenido */
+.ui-dialog .ui-dialog-titlebar-close .ui-icon:before,
+.ui-dialog .ui-dialog-titlebar-close:before {
+    content: '×';
+    font-size: 24px;
+    font-weight: 100;
+    position: absolute;
+    top: -5px;
+    left: 3px;
+    color: #2A2121 !important;
+    text-indent: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Asegurar que el texto en los diálogos use la misma fuente */
+.ui-dialog .ui-dialog-title,
+.ui-dialog .ui-dialog-content,
+.ui-dialog .ui-dialog-buttonpane button {
+    font-family: 'Kumbh Sans', sans-serif !important;
+}
+
+/* Clases de diálogos especiales */
+.tulipart-success .ui-dialog-titlebar {
+    background: #28a745 !important;
+    color: white !important;
+}
+
+.tulipart-error .ui-dialog-titlebar {
+    background: #dc3545 !important;
+    color: white !important;
+}
+
+.tulipart-warning .ui-dialog-titlebar {
+    background: #ffc107 !important;
+    color: #212529 !important;
+}
+
+/* Ícono de éxito para diálogos con clase success-dialog */
+.success-dialog .ui-dialog-content:before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background-image: url('../imagenes/icons/check-circle.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

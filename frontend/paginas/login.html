@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <title>TulipArt - Login</title>
+    <link rel="icon" type="image/jpg" href="../imagenes/tulips/LogoTulipArtPlanoIcon.webp">
+    <link rel="stylesheet" type="text/css" href="../css/estilos.css">
+    <script src="../jq/jquery-3.7.1.min.js"></script>
+    <script src="../jq/jquery.animate-colors-min.js"></script>
+    <script src="../jq/script-efectos.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/login.js"></script>
+</head>
+
+<body class="dsk-orange">
+    <div id="contenedor-login" class="dsk-orange">
+        <header class="white">
+            <h1>TulipArt, Galería de arte</h1>
+            <a href="../index.html">
+                <picture>
+                    <img alt="Logo TulipArt" src="../imagenes/tulips/LogoTulipArtPlanoIcon.webp">
+                </picture>
+                <span class="title">TulipArt</span>
+            </a>
+            <a class="close-mobil" href="../index.html">
+                <img alt="Icono cerrar" src="../imagenes/icons/x.svg">
+            </a>
+        </header>
+        <main id="login">
+            <div class="flower"></div>
+            <div class="containForm">
+                <form class="small" onsubmit="event.preventDefault(); hacer_login();">
+                    <div class="titulo">
+                        <span class="h1">Log In</span>
+                        <a class="close-desktop" href="../index.html">
+                            <img alt="Icono cerrar" src="../imagenes/icons/x.svg">
+                        </a>
+                    </div>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                    <span id="wrong-username" class="smaller warning">That was the wrong username. Please try again.</span>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <span id="wrong-password" class="smaller warning">That was the wrong password. Please try again.</span>
+                    <div id="checkform">
+                        <!---<div class="checkbox1">
+                            <input type="checkbox" class="checkSubmit" id="check1" checked>
+                            <label for="check1">
+                                Remember me
+                            </label>
+                        </div>--->
+                        <a class="smaller underlined" href="#">Forgot username or password</a>
+                    </div>
+                    <button type="submit" >Log In</button>
+                </form>
+                <div class="or">
+                    <div></div>
+                    <span class="small">or</span>
+                    <div></div>
+                </div>
+                <section class="contactWith">
+                    <a href="#">
+                        <div>
+                            <img alt="Icono google" src="../imagenes/icons/icon_circlegoogleplus_.svg">
+                            <span>Continue with Google</span>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div>
+                            <img src="../imagenes/icons/icon_circlefacebook_.svg" alt="Logo facebook">
+                            <span>Continue with Facebook</span>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div>
+                            <img alt="Icono apple" src="../imagenes/icons/icon_circleapple_.svg">
+                            <span>Continue with Apple</span>
+                        </div>
+                    </a>
+                    <span class="small"> You don't have an account?
+                        <a href="login.html" class="orange">Join TulipArt</a>
+                    </span>
+                </section>
+            </div>
+            <div class="terms">
+                <span class="smaller">By logging in to TulipArt, I confirm that I have read
+                    and agree to the TulipArt <a class="underlined" href="cookies.html">Terms of Service</a>, <a class="underlined
+                    " href="cookies.html">Privacy Policy,</a>
+                    and to receive emails and updates.</span>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

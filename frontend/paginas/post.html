@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <title>TulipArt - Post</title>
+    <link rel="icon" type="image/jpg" href="../imagenes/tulips/LogoTulipArtPlanoIcon.webp">
+    <link rel="stylesheet" type="text/css" href="../css/estilos.css">
+    <link rel="stylesheet" href="../jq/jquery-ui-1.14.1.custom/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/tulipart-dialog.css">
+    <script src="../jq/jquery-3.7.1.min.js"></script>
+    <script src="../jq/jquery.animate-colors-min.js"></script>
+    <script src="../jq/jquery-ui-1.14.1.custom/jquery-ui.min.js"></script>
+    <script src="../jq/script-efectos.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/funciones_consumir_servicios.js"></script>
+    <script src="../js/funciones_obras_relacionadas.js"></script>
+    <script src="../js/funciones_comentarios.js"></script>
+    <script src="../js/filtro_header.js"></script>
+</head>
+
+<body>
+    <div id="contenedor">
+        <header class="fixed">
+            <h1>TulipArt, Galería de arte</h1>
+            <nav id="menu-principal" aria-label="menu-principal">
+                <div id="hamburguesa">
+                    <img id="menu-hamb" src="../imagenes/icons/icons-blanco/align-justify.svg"
+                        alt="icono menu principal">
+                </div>
+                <ul id="menu-desplegado">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html">New</a></li>
+                    <li><a href="../index.html">Trending</a></li>
+                    <li><a href="../index.html">For you</a></li>
+                    <li><a href="../index.html">Following</a></li>
+                    <li>
+                        <ul id="submenu">
+                            <li><a href="cookies.html">Privacy policy</a></li>
+                            <li><a href="cookies.html">Cookie policy</a></li>
+                            <li><a href="cookies.html">About us</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <a id="logo" href="../index.html">
+                <img id="tulip" src="../imagenes/tulips/LogoTulipArtPlanoIcon.webp" alt="Logo TulipArt">
+            </a>
+            <a id="nombreWeb" href="../index.html">TulipArt</a>
+            <nav id="menu-iconos" aria-label="menu-iconos">
+                <div id="search">
+                    <img id="lupa-blanca" src="../imagenes/icons/icons-blanco/search.svg" alt="Icon search">
+                    <img id="lupa-negra" src="../imagenes/icons/search.svg" alt="Icon search">
+                    <input type="text" name="buscar" id="buscar" placeholder="Search">
+                </div>
+                <a href="profile.html" id="profile" class="no-logged">
+                    <img src="../imagenes/icons/icons-blanco/user.svg" alt="Icon user">
+                    <span>Profile</span>
+                </a>
+                <div id="contenedor-alerts">
+                    <a href="#" id="alerts-header" class="no-logged">
+                        <img id="icon-alerts" src="../imagenes/icons/icons-blanco/bell.svg" alt="Icon alerts">
+                        <span id="num-alerts">0</span>
+                        <span id="text">Alerts</span>
+                    </a>
+                    <nav id="caja-alertas" aria-label="caja-alertas">
+                        <div class="pico-bocadillo"></div>
+                        <div id="content-alerts"><span>hola</span></div>
+                    </nav>
+                </div>
+                <a href="#" id="messages-header">
+                    <img src="../imagenes/icons/icons-blanco/message-square.svg" alt="Icon messages">
+                    <span>Messages</span>
+                </a>
+                <a href="upload.html" id="submit-header">
+                    <img src="../imagenes/icons/icons-blanco/plus.svg" alt="Submit art">
+                    <span>Submit Art</span>
+                </a>
+            </nav>
+            <nav id="menu-adicional" aria-label="menu-adicional">
+                <img id="menu-albondigas" src="../imagenes/icons/icons-blanco/more-horizontal.svg"
+                    alt="Icon adittional menu">
+                <ul id="menu-iconos-adicional">
+                    <li>
+                        <a href="#">
+                            <img src="../imagenes/icons/message-square.svg" alt="Icon messages">
+                            <span>Messages</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="submit.html">
+                            <img src="../imagenes/icons/plus.svg" alt="Icon submit">
+                            <span>Post</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <nav id="capa-buscador" aria-label="capa-buscador">
+                <img id="equis" src="../imagenes/icons/x.svg" alt="Icon close">
+                <div>
+                    <input type="text" name="buscador" id="buscador" placeholder="Search">
+                    <a href="../index.html"><img id="lupa-negra-buscador" src="../imagenes/icons/search.svg"
+                            alt="Icon search"></a>
+                </div>
+                <span>SUGGESTED TAGS</span>
+                <ul id="tags">
+                    <li>digital</li>
+                    <li>naturaleza</li>
+                    <li>sky</li>
+                    <li>paisaje</li>
+                    <li>morado</li>
+                </ul>
+            </nav>
+        </header>
+        <main class="post">
+            <section class="post">
+                <div id="user">
+                    <a class="user-link-post" href="profile.html"><img id="user-photo" src="..." alt="Perfil usuario">
+                    </a>
+                    <div class="nombre">
+                        <a class="user-link-post" href="profile.html" aria-label="user-profile">
+                            <span id="user-nombre" class="nombre"></span>
+                        </a>
+                        <span id="fecha-obra" class="fecha"></span>
+                    </div>
+                </div>
+                <div class="slider-wrapper">
+                    <ul class="slider-img" id="slider-images">
+                        <!-- Las imágenes se cargarán dinámicamente aquí -->
+                    </ul>
+                    <ul class="slider-arrow">
+                        <li id="prev-slide">&lt;</li>
+                        <li id="next-slide">&gt;</li>
+                    </ul>
+                    <ul class="slider-dot" id="slider-dots">
+                        <!-- Los puntos indicadores se cargarán dinámicamente aquí -->
+                    </ul>
+                </div>
+                <div id="option">
+                    <div id="izq">
+                        <img class="corazon" src="../imagenes/icons/Favorite.svg" alt="icono">
+                        <img class="message" src="../imagenes/icons/message-circle.svg" alt="icono">
+                        <img class="menu" src="../imagenes/icons/MenuVertical.svg" alt="icono">
+                    </div>
+                    <div id="der"></div>
+                </div>
+                <span id="title"></span>
+                <div class="icons">
+                    <span><img class="corazon" src="../imagenes/icons/Heart.svg" alt="icono">
+                        123</span>
+                    <span id="message-count"><img class="menu" src="../imagenes/icons/message-circle.svg"
+                            alt="icono">123</span>
+                    <span><img class="menu" src="../imagenes/icons/eye.svg" alt="icono">123</span>
+                    <div></div>
+                    <span id="ai-info"><img class="delete" src="../imagenes/icons/slash.svg" alt="icono">No
+                        AI</span>
+                </div>
+                <span id="description"></span>
+                <span id="tags-title">Tags:</span>
+                <div id="tags-buttons"></div>
+                <span id="copy"></span>
+                <div id="comments">
+                    <span>Comments <span>2</span></span>
+                    <div id="writeComments">
+                        <div id="writeComment">
+                            <img id="user-photo-logged" src="..." alt="icono">
+                            <div>
+                                <textarea id="new-comment" placeholder="Add a new comment..."></textarea>
+                                <div id="comment-actions">
+                                    <span id="cancel">Cancel</span>
+                                    <span class="comment">Comment</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="all-comments"></div>
+                </div>
+            </section>
+            <aside>
+                <span>More by <span id="name-author"></span></span>
+                <section id="more-by"></section>
+                <span>Related by tags</span>
+                <section id="related-by-tags"></section>
+            </aside>
+            <img id="volver-arriba" src="../imagenes/icons/flecha-arriba.svg" alt="flecha arriba">
+        </main>
+        <footer>
+            <div id="iconos-footer">
+                <div id="logo-footer">
+                    <a href="../index.html"><img src="../imagenes/tulips/LogoTulipArtPlanoIcon.webp"
+                            alt="Logo TulipArt">
+                    </a>
+                    <a href="../index.html">TulipArt</a>
+                </div>
+                <ul id="socials">
+                    <li><a href="https://www.facebook.com/?locale=es_ES"><img
+                                src="../imagenes/icons/icon_circlefacebook_.svg" alt="Logo facebook"></a></li>
+                    <li><a href="https://twitter.com/?lang=es"><img src="../imagenes/icons/icon_circletwitterbird_.svg"
+                                alt="Logo twitter"></a></li>
+                    <li><a href="https://www.instagram.com/"><img src="../imagenes/icons/icon_circleinstagram_.svg"
+                                alt="Logo instagram"></a></li>
+                </ul>
+            </div>
+            <ul id="policies">
+                <li><a href="#">Privacy policy</a></li>
+                <li><a href="#">Copyright policy</a></li>
+                <li><a href="#">Cookie policy</a></li>
+            </ul>
+            <ul id="info-footer">
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Help and FAQ</a></li>
+            </ul>
+            <div id="other-info-footer">
+                <span class="border-right">
+                    <span>&#169;</span>
+                    2023 TulipArt
+                </span>
+                <span>All rights reserved</span>
+            </div>
+        </footer>
+    </div>
+    <!-- Overlay para el zoom -->
+    <div class="zoom-overlay">
+        <img class="zoom-img" src="..." alt="Imagen ampliada">
+    </div>
+    <script>
+        $(document).ready(function () {
+            if (localStorage.token) {
+                const idUsu = localStorage.getItem('idUsu');
+                cargar_alertas(idUsu, "../imagenes/", "../../");
+            }
+            // Obtener el ID de la obra de la URL
+            const params = new URLSearchParams(window.location.search);
+            const idObra = params.get('id');
+            const idUsu = localStorage.getItem('idUsu');
+            let currentSlide = 0;
+
+            if (idObra) {
+                // Cargar los datos de la obra
+                cargar_obra_pagina_post(idObra);
+
+                // Cargar las fotos de la obra para el slider
+                obtener_fotos_obra(idObra).then(fotos => {
+                    if (fotos && fotos.length > 0) {
+                        // Limpiar el contenedor del slider
+                        $('#slider-images').empty();
+                        $('#slider-dots').empty();
+
+                        // Añadir cada foto al slider
+                        fotos.forEach((foto, index) => {
+                            // Añadir la imagen al slider
+                            $('#slider-images').append(`
+                                <li>
+                                    <img src="../../backend/images/obras/${foto.foto}" alt="Foto ${index + 1} de la obra" data-index="${index}">
+                                </li>
+                            `);
+
+                            // Añadir el punto indicador correspondiente
+                            $('#slider-dots').append(`
+                                <li class="${index === 0 ? 'active' : ''}" data-index="${index}">●</li>
+                            `);
+                        });
+
+                        // Inicializar el slider
+                        initSlider();
+                    } else {
+                        // Si no hay fotos, mostrar una imagen por defecto
+                        $('#slider-images').html(`
+                            <li>
+                                <img src="../imagenes/arte/default.webp" alt="Imagen no disponible">
+                            </li>
+                        `);
+                        $('#slider-dots').html('');
+                    }
+                });
+
+                //Borrar obra
+                $(document).on('click', 'img#delete-post', async function () {
+                    if (confirm('¿Estás seguro de que quieres eliminar esta obra?')) {
+                        const resultado = await borrar_obra(idObra);
+                        if (resultado) {
+                            $("<div title='Artwork Deleted'>The artwork has been deleted successfully.</div>").dialog({
+                                modal: true,
+                                dialogClass: 'tulipart-warning',
+                                width: 400,
+                                buttons: {
+                                    "Accept": function () {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            });
+                            window.location.href = 'profile.html';
+                        } else {
+                            $("<div title='Error'>There was an error deleting the artwork.</div>").dialog({
+                                modal: true,
+                                dialogClass: 'tulipart-warning',
+                                width: 400,
+                                buttons: {
+                                    "Accept": function () {
+                                        $(this).dialog("close");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+                // Cargar comentarios
+                obtener_comentarios_obra(idObra).then(comentarios => {
+                    $('#comments > span > span').text(comentarios.length);
+                    $('#message-count').html(`<img class="menu" src="../imagenes/icons/message-circle.svg" alt="icono">${comentarios.length}`);
+                });
+
+                // Obtener datos del usuario y actualizar la imagen
+                obtener_datos_usuario(idUsu).then(usuario => {
+                    if (usuario && usuario.fotoPerfil) {
+                        $('#user-photo-logged').attr('src', "../../backend/images/profilePics/" + usuario.fotoPerfil);
+                    } else {
+                        // Usar imagen por defecto si no hay foto de perfil
+                        $('#user-photo-logged').attr('src', "../../backend/images/profilePics/no_image.jpg");
+                    }
+                });
+
+                cargar_comentarios_obra(idObra);
+
+                // Cargar likes
+                obtener_likes_obra(idObra).then(likes => {
+                    $('.icons > span:first-child').html(`<img class="corazon" src="../imagenes/icons/Heart.svg" alt="icono"> ${likes.length}`);
+
+                    // Comprobar si el usuario actual ha dado like
+                    if (idUsu) {
+                        const yaDioLike = likes.some(like => like.idUsuLike == idUsu);
+                        if (yaDioLike) {
+                            $('.corazon').attr('src', '../imagenes/icons/Heart.svg');
+                        } else {
+                            $('.corazon').attr('src', '../imagenes/icons/Favorite.svg');
+                        }
+                    }
+                });
+            } else {
+                // Mostrar error si no se proporciona ID
+                $('#title').text('Error: No se ha especificado una obra');
+                $('#description').text('Por favor, vuelve a la página anterior e intenta de nuevo.');
+            }
+
+            // Función para inicializar el slider
+            function initSlider() {
+                const sliderImg = $('#slider-images');
+                const sliderDots = $('#slider-dots li');
+                const totalSlides = sliderDots.length;
+
+                if (totalSlides <= 1) {
+                    // Ocultar flechas y puntos si solo hay una imagen
+                    $('.slider-arrow, .slider-dot').hide();
+                    return;
+                }
+
+                // Función para mostrar un slide específico
+                function showSlide(index) {
+                    if (index >= totalSlides) index = 0;
+                    if (index < 0) index = totalSlides - 1;
+
+                    currentSlide = index;
+
+                    // Actualizar la posición del slider con transform
+                    sliderImg.css('transform', `translateX(-${currentSlide * 100}%)`);
+
+                    // Actualizar los puntos indicadores
+                    sliderDots.removeClass('active');
+                    $(sliderDots[currentSlide]).addClass('active');
+                }
+
+                // Mostrar el primer slide
+                showSlide(0);
+
+                // Evento para el botón siguiente
+                $('#next-slide').on('click', function () {
+                    showSlide(currentSlide + 1);
+                });
+
+                // Evento para el botón anterior
+                $('#prev-slide').on('click', function () {
+                    showSlide(currentSlide - 1);
+                });
+
+                // Evento para los puntos indicadores
+                sliderDots.on('click', function () {
+                    const index = $(this).data('index');
+                    showSlide(index);
+                });
+
+                // Avance automático (opcional)
+                // setInterval(() => showSlide(currentSlide + 1), 5000);
+            }
+
+            // Implementar funcionalidad de los botones de like
+            $(document).on('click', '.corazon', async function () {
+                const idUsu = localStorage.getItem('idUsu');
+                if (!idUsu) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                // Obtener referencia al elemento actual
+                const $this = $(this);
+
+                // Alternar like
+                const resultado = await toggle_like_obra(idObra, idUsu);
+
+                // Aplicar el efecto visual
+                efectoLikePost($this, resultado);
+
+                // Actualizar contador
+                const likes = await obtener_likes_obra(idObra);
+                $('.icons > span:first-child').html(`<img class="corazon" src="${resultado ? '../imagenes/icons/Heart.svg' : '../imagenes/icons/Favorite.svg'}" alt="icono"> ${likes.length}`);
+            });
+
+            // Función para mostrar el overlay con la imagen ampliada
+            function showZoomOverlay(imgSrc) {
+                const zoomOverlay = $('.zoom-overlay');
+                const zoomImg = $('.zoom-img');
+
+                zoomImg.attr('src', imgSrc);
+                zoomOverlay.addClass('zoom-active');
+
+                // Ocultar el overlay al hacer clic fuera de la imagen
+                zoomOverlay.off('click').on('click', function (e) {
+                    if (e.target === this) {
+                        hideZoomOverlay();
+                    }
+                });
+            }
+
+            // Función para ocultar el overlay
+            function hideZoomOverlay() {
+                const zoomOverlay = $('.zoom-overlay');
+                zoomOverlay.removeClass('zoom-active');
+                $('.zoom-img').attr('src', '');
+            }            // Delegación de eventos para las imágenes del slider
+            $('#slider-images').on('click', 'li img', function () {
+                const imgSrc = $(this).attr('src');
+                showZoomOverlay(imgSrc);
+            });
+
+            // Manejar evento del botón Cancel en el formulario de comentarios
+            $('#cancel').on('click', function () {
+                // Limpiar el textarea
+                $('#new-comment').val('');
+            });
+            // Variables para el modo de edición
+            let modoEdicion = false;
+            let idComentarioEditando = null;
+
+            // Manejar evento del botón Comment para crear un nuevo comentario o editar uno existente
+            $('.comment').on('click', async function () {
+                const idUsu = localStorage.getItem('idUsu');
+
+                // Verificar si el usuario está logueado
+                if (!idUsu) {
+                    $("<div title='No logged'>You must be logged in to comment.</div>").dialog({
+                        modal: true,
+                        dialogClass: 'tulipart-warning',
+                        width: 400,
+                        buttons: {
+                            "Accept": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                // Obtener el texto del comentario
+                const textoComentario = $('#new-comment').val().trim();
+
+                // Validar que el comentario no esté vacío
+                if (!textoComentario) {
+                    $("<div title='Empty comment'>The comment cannot be empty.</div>").dialog({
+                        modal: true,
+                        dialogClass: 'tulipart-warning',
+                        width: 400,
+                        buttons: {
+                            "Accept": function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                if (modoEdicion && idComentarioEditando) {
+                    // Editar comentario existente
+                    const resultado = await editar_comentario(idComentarioEditando, textoComentario);
+                    if (resultado) {
+                        // Limpiar el textarea y restablecer el botón
+                        $('#new-comment').val('');
+                        $('.comment').text('Comment');
+                        $('.comment').removeClass('editing');
+                        $('#cancel').hide();
+
+                        // Restablecer variables de edición
+                        modoEdicion = false;
+                        idComentarioEditando = null;
+                        // Efecto visual para mostrar que la edición fue exitosa
+                        const $comentarioEditado = $(`.comment-block .content[data-comentario-id="${idComentarioEditando}"]`);
+                        $comentarioEditado.css('background-color', '#f0f7ff');
+                        setTimeout(() => {
+                            $comentarioEditado.css('transition', 'background-color 1.5s ease');
+                            $comentarioEditado.css('background-color', '');
+                        }, 100);
+
+                        // Recargar los comentarios para mostrar los cambios
+                        await cargar_comentarios_obra(idObra);
+                    }
+                } else {
+                    // Crear un nuevo comentario
+                    const resultado = await crear_comentario_obra(idUsu, idObra, textoComentario);
+
+                    if (resultado) {
+                        // Limpiar el textarea
+                        $('#new-comment').val('');
+
+                        // Recargar los comentarios para mostrar el nuevo
+                        await cargar_comentarios_obra(idObra);
+                    }
+                }
+            });
+
+            // Manejar el evento de cancelar edición
+            $('#cancel').on('click', function () {
+                // Limpiar el textarea
+                $('#new-comment').val('');                    // Si estamos en modo edición, revertir al modo normal
+                if (modoEdicion) {
+                    $('.comment').text('Comment');
+                    $('.comment').removeClass('editing');
+                    $(this).hide();
+                    modoEdicion = false;
+                    idComentarioEditando = null;
+                }
+            });
+
+            // Delegación de eventos para el botón de editar comentario
+            $(document).on('click', '.edit-comment', function () {
+                const idComentario = $(this).data('id');
+                const textoComentario = $(this).data('texto');
+
+                // Cargar el texto del comentario en el textarea
+                $('#new-comment').val(textoComentario);                // Cambiar el botón a "Edit"
+                $('.comment').text('Edit');
+                $('.comment').addClass('editing');
+
+                // Mostrar el botón de cancelar
+                $('#cancel').show();
+
+                // Establecer el modo de edición
+                modoEdicion = true;
+                idComentarioEditando = idComentario;
+
+                // Hacer scroll al área de comentario
+                $('#writeComment')[0].scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Delegación de eventos para el botón de eliminar comentario
+            $(document).on('click', '.delete-comment', async function () {
+                const idComentario = $(this).data('id');
+
+                // Confirmar si el usuario realmente desea eliminar el comentario
+                if (confirm('¿Estás seguro de que deseas eliminar este comentario?')) {
+                    const resultado = await eliminar_comentario(idComentario);
+                    if (resultado) {
+                        // Si estábamos editando este comentario, cancelar la edición
+                        if (idComentarioEditando === idComentario) {
+                            $('#new-comment').val('');
+                            $('.comment').text('Comment');
+                            $('#cancel').hide();
+                            modoEdicion = false;
+                            idComentarioEditando = null;
+                        }
+                        // Efecto visual de eliminación
+                        const $comentarioEliminado = $(`.content[data-comentario-id="${idComentario}"]`);
+                        const $accionesComentario = $comentarioEliminado.next('.actions-comment');
+
+                        // Aplicar la animación a ambos elementos
+                        $comentarioEliminado.add($accionesComentario).css('transition', 'opacity 0.5s ease, height 0.5s ease');
+                        $comentarioEliminado.add($accionesComentario).css('opacity', '0');
+                        $comentarioEliminado.add($accionesComentario).css('height', '0');
+                        $comentarioEliminado.add($accionesComentario).css('margin', '0');
+                        $comentarioEliminado.add($accionesComentario).css('padding', '0');
+                        $comentarioEliminado.add($accionesComentario).css('overflow', 'hidden');
+
+                        // Esperar a que termine la animación y luego recargar los comentarios
+                        setTimeout(async () => {
+                            await cargar_comentarios_obra(idObra);
+                        }, 500);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

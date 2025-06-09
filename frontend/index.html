@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
+	<title>TulipArt - Inicio</title>
+	<link rel="icon" type="image/jpg" href="imagenes/tulips/LogoTulipArtPlanoIcon.webp">
+	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	<script src="jq/jquery-3.7.1.min.js"></script>
+	<script src="jq/jquery.animate-colors-min.js"></script>
+	<script src="jq/script-efectos.js"></script>
+	<script src="js/config.js"></script>
+	<script src="js/funciones_consumir_servicios.js"></script>
+	<script>
+		$(document).ready(function () {
+
+			if (localStorage.token) {
+				const idUsu = localStorage.getItem('idUsu');
+				cargar_alertas(idUsu, "imagenes/", "../");
+			}
+
+			// Procesar parámetros de URL para filtros y búsquedas
+			const urlParams = new URLSearchParams(window.location.search);
+			const searchParam = urlParams.get('search');
+			const filtroParam = urlParams.get('filtro');
+
+			// Si hay parámetro de búsqueda, realizar búsqueda
+			if (searchParam) {
+				const termino = decodeURIComponent(searchParam);
+				$('#foryou, #following, #new, #trending').removeClass('borderbottom');
+				// Eliminar búsquedas activas anteriores
+				$('#busqueda-activa').remove();
+				// Agregar indicador de búsqueda activa
+				$('#tab').append('<span id="busqueda-activa">Results for: "' + termino + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
+				buscar_obras(termino);
+			}
+			// Si hay parámetro de filtro, aplicar el filtro correspondiente
+			else if (filtroParam) {
+				switch (filtroParam) {
+					case 'foryou':
+						if (localStorage.token) {
+							cargar_for_you();
+							$('#foryou').addClass('borderbottom').siblings().removeClass('borderbottom');
+						} else {
+							cargar_recientes();
+							$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
+						}
+						break;
+					case 'following':
+						if (localStorage.token) {
+							cargar_following();
+							$('#following').addClass('borderbottom').siblings().removeClass('borderbottom');
+						} else {
+							window.location.href = "paginas/login.html";
+						}
+						break;
+					case 'new':
+						cargar_recientes();
+						$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
+						break;
+					case 'trending':
+						cargar_trending();
+						$('#trending').addClass('borderbottom').siblings().removeClass('borderbottom');
+						break;
+					default:
+						// Si no se reconoce el filtro, cargar recientes
+						cargar_recientes();
+						$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
+				}
+			} else {
+				// Cargar filtro predeterminado (New/recientes) si no hay parámetros
+				cargar_recientes();
+				$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
+			}
+
+			// Configurar eventos para los diferentes filtros
+			$('#foryou').on('click', function () {
+				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
+				if (localStorage.token) {
+					cargar_for_you();
+				} else {
+					cargar_recientes();
+				}
+			});
+			$('#following').on('click', function () {
+				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
+				if (localStorage.token) {
+					cargar_following();
+				} else {
+					// Si no hay usuario logueado, redirigir al login
+					window.location.href = "paginas/login.html";
+				}
+			});
+
+			$('#new').on('click', function () {
+				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
+				cargar_recientes();
+			});
+
+			$('#trending').on('click', function () {
+				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
+				cargar_trending();
+			});
+
+			// Agregar eventos para los elementos del menú principal
+			$('nav#menu-principal ul#menu-desplegado li a').on('click', function (e) {
+				const seccion = $(this).text().toLowerCase();
+				if (seccion === 'home') {
+					e.preventDefault();
+					if (localStorage.token) {
+						cargar_for_you();
+						$('#foryou').addClass('borderbottom').siblings().removeClass('borderbottom');
+					} else {
+						cargar_recientes();
+						$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
+					}
+				} else if (seccion === 'new') {
+					e.preventDefault();
+					cargar_recientes();
+					$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
+				} else if (seccion === 'trending') {
+					e.preventDefault();
+					cargar_trending();
+					$('#trending').addClass('borderbottom').siblings().removeClass('borderbottom');
+				} else if (seccion === 'for you') {
+					e.preventDefault();
+					cargar_for_you();
+					$('#foryou').addClass('borderbottom').siblings().removeClass('borderbottom');
+				} else if (seccion === 'following') {
+					e.preventDefault();
+					if (localStorage.token) {
+						cargar_following();
+						$('#following').addClass('borderbottom').siblings().removeClass('borderbottom');
+					} else {
+						window.location.href = "paginas/login.html";
+					}
+				}
+			});
+
+			// Agregar evento para la búsqueda en el input del buscador expandido
+			$('#buscador').on('keypress', function (e) {
+				if (e.which === 13) { // Tecla Enter
+					e.preventDefault();
+					const textoBusqueda = $(this).val().trim();
+					if (textoBusqueda) {
+						buscar_obras(textoBusqueda);
+						// Cerrar la capa de búsqueda
+						$('#capa-buscador').fadeOut();
+						// Mostrar texto de búsqueda
+						$('#foryou').removeClass('borderbottom');
+						$('#following').removeClass('borderbottom');
+						$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
+					}
+				}
+			});
+
+			// Agregar evento para la búsqueda en el input de la barra de navegación
+			$('#buscar').on('keypress', function (e) {
+				if (e.which === 13) { // Tecla Enter
+					e.preventDefault();
+					const textoBusqueda = $(this).val().trim();
+					if (textoBusqueda) {
+						buscar_obras(textoBusqueda);
+						// Limpiar el input
+						$(this).val('');
+						// Mostrar texto de búsqueda y quitar el borde inferior de los filtros
+						$('#foryou, #following, #new, #trending').removeClass('borderbottom');
+						// Eliminar búsquedas activas anteriores
+						$('#busqueda-activa').remove();
+						// Agregar indicador de búsqueda activa
+						$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
+					}
+				}
+			});
+
+			// Evento para cerrar la búsqueda activa
+			$('#tab').on('click', '#cerrar-busqueda', function () {
+				$(this).parent().remove();
+				$('#new').addClass('borderbottom');
+				cargar_recientes();
+			});
+
+			// Evento para cargar más obras al hacer clic en "Cargar más"
+			$('#cargar-mas-container').on('click', '#cargar-mas', function () {
+				cargar_mas_obras();
+			});
+			// Evento para dar like a una obra
+			$('#galery-index').on('click', '.btn-like', function () {
+				if (localStorage.token) {
+					const idUsu = localStorage.getItem('idUsu');
+					const idObra = $(this).data('idobra');
+
+					if (idUsu && idObra) {
+						// Llamar a la función para alternar el like
+						toggle_like_obra(idObra, idUsu).then(estado => {
+							if (estado === true) {
+								// Se añadió like
+								$(this).attr('src', 'imagenes/icons/Heart.svg');
+								let numLikesSpan = $(this).siblings('.num-likes');
+								let numLikes = parseInt(numLikesSpan.text()) + 1;
+								numLikesSpan.text(numLikes);
+							} else if (estado === false) {
+								// Se quitó like
+								$(this).attr('src', 'imagenes/icons/Favorite.svg');
+								let numLikesSpan = $(this).siblings('.num-likes');
+								let numLikes = parseInt(numLikesSpan.text()) - 1;
+								numLikesSpan.text(numLikes);
+							}
+						});
+					}
+				} else {
+					// Redirigir al login si no hay usuario logueado
+					window.location.href = "paginas/login.html";
+				}
+			});
+			// Evento para seguir/dejar de seguir a un usuario
+			$('#galery-index').on('click', '.boton-seguir', function () {
+				if (localStorage.token) {
+					const idUsu = localStorage.getItem('idUsu');
+					const idAutor = $(this).data('idautor');
+
+					if (idUsu && idAutor) {
+						// Comprobar si ya lo sigue
+						const esSiguiendo = $(this).text() === 'Following';
+
+						// Llamada a la API para seguir/dejar de seguir
+						if (!esSiguiendo) {
+							// Seguir al usuario
+							seguir_usuario(idUsu, idAutor).then(resultado => {
+								if (resultado) {
+									$(this).text('Following');
+									$(this).css({
+										'color': 'orange',
+										'border-color': 'orange'
+									});
+								}
+							});
+						} else {
+							// Dejar de seguir al usuario
+							dejar_seguir_usuario(idUsu, idAutor).then(resultado => {
+								if (resultado) {
+									$(this).text('Follow');
+									$(this).css({
+										'color': '',
+										'border-color': ''
+									});
+								}
+							});
+						}
+					}
+				} else {
+					// Redirigir al login si no hay usuario logladeo
+					window.location.href = "paginas/login.html";
+				}
+			});
+
+			// Evento para mostrar menú de opciones (albóndiga) cuando se hace clic
+			$('#galery-index').on('click', '.icon-albondiga', function (e) {
+				e.stopPropagation();
+				$(this).closest('article').find('.menu-post').fadeToggle('fast');
+			});
+
+			// Cerrar el menú al hacer clic fuera
+			$(document).on('click', function (e) {
+				if (!$(e.target).closest('.icon-albondiga, .menu-post').length) {
+					$('.menu-post').fadeOut('fast');
+				}
+			});
+
+			// Clicks en tags sugeridos
+			$('#tags li').on('click', function () {
+				const tag = $(this).text();
+				$('#buscador').val(tag);
+				buscar_obras(tag);
+				$('#capa-buscador').fadeOut();
+				// Mostrar texto de búsqueda
+				$('#foryou').removeClass('borderbottom');
+				$('#following').removeClass('borderbottom');
+				$('#tab').append('<span id="busqueda-activa">Results for: "' + tag + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="contenedor">
+		<header class="fixed">
+			<h1>TulipArt, Galería de arte</h1>
+			<nav id="menu-principal" aria-label="menu-principal">
+				<div id="hamb">
+					<img id="menu-hamb" src="imagenes/icons/icons-blanco/align-justify.svg" alt="icono menu principal">
+				</div>
+				<ul id="menu-desplegado">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="index.html">New</a></li>
+					<li><a href="index.html">Trending</a></li>
+					<li><a href="index.html">For you</a></li>
+					<li><a href="index.html">Following</a></li>
+					<li>
+						<ul id="submenu">
+							<li><a href="paginas/cookies.html">Privacy policy</a></li>
+							<li><a href="paginas/cookies.html">Cookie policy</a></li>
+							<li><a href="paginas/cookies.html">About us</a></li>
+						</ul>
+					</li>
+					<li><a id="logout" href="index.html">Log Out</a></li>
+				</ul>
+			</nav>
+			<a id="logo" href="index.html">
+				<img id="tulip" src="imagenes/tulips/LogoTulipArtPlanoIcon.webp" alt="Logo TulipArt">
+			</a>
+			<a id="nombreWeb" href="index.html">TulipArt</a>
+			<nav id="menu-iconos" aria-label="menu-iconos">
+				<div id="search">
+					<img id="lupa-blanca" src="imagenes/icons/icons-blanco/search.svg" alt="Icon search">
+					<img id="lupa-negra" src="imagenes/icons/search.svg" alt="Icon search">
+					<input type="text" name="buscar" id="buscar" placeholder="Search">
+				</div>
+				<a href="paginas/profile.html" id="profile" class="no-logged">
+					<img src="imagenes/icons/icons-blanco/user.svg" alt="Icon user">
+					<span>Profile</span>
+				</a>
+				<div id="contenedor-alerts">
+					<a href="#" id="alerts-header" class="no-logged">
+						<img id="icon-alerts" src="imagenes/icons/icons-blanco/bell.svg" alt="Icon alerts">
+						<span id="num-alerts">0</span>
+						<span id="text">Alerts</span>
+					</a>
+					<nav id="caja-alertas" aria-label="caja-alertas">
+						<div class="pico-bocadillo"></div>
+						<div id="content-alerts"></div>
+					</nav>
+				</div>
+				<a href="#" id="messages-header" class="no-logged">
+					<img src="imagenes/icons/icons-blanco/message-square.svg" alt="Icon messages">
+					<span>Messages</span>
+				</a>
+				<a href="paginas/upload.html" id="submit-header" class="no-logged">
+					<img src="imagenes/icons/icons-blanco/plus.svg" alt="Submit art">
+					<span>Submit Art</span>
+				</a>
+			</nav>
+			<nav id="menu-adicional" aria-label="menu-adicional">
+				<img id="menu-albondigas" src="imagenes/icons/icons-blanco/more-horizontal.svg"
+					alt="Icon adittional menu">
+				<ul id="menu-iconos-adicional">
+					<li>
+						<a href="#">
+							<img src="imagenes/icons/message-square.svg" alt="Icon messages">
+							<span>Messages</span>
+						</a>
+					</li>
+					<li>
+						<a href="paginas/upload.html">
+							<img src="imagenes/icons/plus.svg" alt="Icon submit">
+							<span>Post</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<nav id="capa-buscador" aria-label="capa-buscador">
+				<img id="equis" src="imagenes/icons/x.svg" alt="Icon close">
+				<div>
+					<input type="text" name="buscador" id="buscador" placeholder="Search">
+					<a href="index.html"><img id="lupa-negra-buscador" src="imagenes/icons/search.svg"
+							alt="Icon search"></a>
+				</div>
+				<span>SUGGESTED TAGS</span>
+				<ul id="tags">
+					<li>tulip</li>
+					<li>digital painting</li>
+					<li>raining</li>
+					<li>face tutorial</li>
+					<li>landscape</li>
+				</ul>
+			</nav>
+		</header>
+		<main id="index">
+			<nav id="tab" aria-label="tab">
+				<span id="new">New</span>
+				<span id="following">Following</span>
+				<span id="trending">Trending</span>
+				<span id="foryou">For you</span>
+			</nav>
+			<div id="joinOrLogin">
+				<img id="equisjoin" src="imagenes/icons/x.svg" alt="Icono x">
+				<span>Join the new Art and Crafts community and start sharing your artworks</span>
+				<a class="btn-joinOrLogin" href="paginas/login.html">Log In</a>
+				<a class="btn-joinOrLogin" href="paginas/login.html">Join</a>
+			</div>
+			<section id="errores"></section>
+			<section id="galery-index"></section>
+			<div id="cargar-mas-container"></div>
+			<img id="volver-arriba" src="imagenes/icons/flecha-arriba.svg" alt="flecha arriba">
+		</main>
+		<footer>
+			<div id="iconos-footer">
+				<div id="logo-footer">
+					<a href="index.html"><img src="imagenes/tulips/LogoTulipArtPlanoIcon.webp" alt="Logo TulipArt">
+					</a>
+					<a href="index.html">TulipArt</a>
+				</div>
+				<ul id="socials">
+					<li><a href="https://www.facebook.com/?locale=es_ES"><img
+								src="imagenes/icons/icon_circlefacebook_.svg" alt="Logo facebook"></a></li>
+					<li><a href="https://twitter.com/?lang=es"><img src="imagenes/icons/icon_circletwitterbird_.svg"
+								alt="Logo twitter"></a></li>
+					<li><a href="https://www.instagram.com/"><img src="imagenes/icons/icon_circleinstagram_.svg"
+								alt="Logo instagram"></a></li>
+				</ul>
+			</div>
+			<ul id="policies">
+				<li><a href="paginas/cookies.html">Privacy policy</a></li>
+				<li><a href="paginas/cookies.html">Copyright policy</a></li>
+				<li><a href="paginas/cookies.html">Cookie policy</a></li>
+			</ul>
+			<ul id="info-footer">
+				<li><a href="paginas/cookies.html">About</a></li>
+				<li><a href="paginas/cookies.html">Contact</a></li>
+				<li><a href="paginas/cookies.html">Help and FAQ</a></li>
+			</ul>
+			<div id="other-info-footer">
+				<span class="border-right">
+					<span>&#169;</span>
+					2023 TulipArt
+				</span>
+				<span>All rights reserved</span>
+			</div>
+		</footer>
+	</div>
+</body>
+
+</html>
