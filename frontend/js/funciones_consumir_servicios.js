@@ -66,12 +66,12 @@ async function cargar_obras() {
                 const primeraFoto = fotos.length > 0 ? fotos[0]["foto"] : "imagenes/arte/default.webp"; // Usar una imagen por defecto si no hay fotos
 
                 // Esperar a que se cargue la imagen y determinar la clase
-                const classArticle = await determinarClaseImagen('../backend/images/obras/' + primeraFoto);
+                const classArticle = await determinarClaseImagen(DIR_API + '/images/obras/' + primeraFoto);
 
                 // Obtener los datos del usuario dueño de la obra
                 const usuario = await obtener_datos_usuario(tupla["idUsu"]);
                 const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // Nombre del usuario o valor por defecto
-                const iconoUsuario = usuario.fotoPerfil ? "../backend/images/profilePics/" + usuario.fotoPerfil : "../backend/images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
+                const iconoUsuario = usuario.fotoPerfil ? DIR_API + "/images/profilePics/" + usuario.fotoPerfil : DIR_API + "/images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
 
                 // Obtener número de likes obra
                 const likes = await obtener_likes_obra(tupla["idObra"]);
@@ -109,7 +109,7 @@ async function cargar_obras() {
                     html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //boton seguir
                 }
                 html_obras += "<img class='icon-albondiga' src='imagenes/icons/MenuVertical.svg' alt='menu-post'></div>";
-                html_obras += `<picture class='obra-arte'><img src='../backend/images/obras/${primeraFoto}' alt='Obra de arte'></picture>`; // Primera foto de la obra
+                html_obras += `<picture class='obra-arte'><img src=DIR_API + '/images/obras/${primeraFoto}' alt='Obra de arte'></picture>`; // Primera foto de la obra
                 html_obras += `<ul class='icons-post'><li><img id='btn-like-index' class='btn-like' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //dar like
                 html_obras += "<li><img src='imagenes/icons/message-circle.svg' alt='Icon message post'><span id='num-comments'>" + numComentarios + "</span></li></ul></article>"; //comentar *
             }
@@ -166,12 +166,12 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
                 const primeraFoto = fotos.length > 0 ? fotos[0]["foto"] : "imagenes/arte/default.webp"; // Usar una imagen por defecto si no hay fotos
 
                 // Esperar a que se cargue la imagen y determinar la clase
-                const classArticle = await determinarClaseImagen('../backend/images/obras/' + primeraFoto);
+                const classArticle = await determinarClaseImagen(DIR_API + '/images/obras/' + primeraFoto);
 
                 // Obtener los datos del usuario dueño de la obra
                 const usuario = await obtener_datos_usuario(tupla["idUsu"]);
                 const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // Nombre del usuario o valor por defecto
-                const iconoUsuario = usuario.fotoPerfil ? "../backend/images/profilePics/" + usuario.fotoPerfil : "../backend/images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
+                const iconoUsuario = usuario.fotoPerfil ? DIR_API + "/images/profilePics/" + usuario.fotoPerfil : DIR_API + "/images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
 
                 // Obtener número de likes obra
                 const likes = await obtener_likes_obra(tupla["idObra"]);
@@ -209,7 +209,7 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
                     html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //boton seguir
                 }
                 html_obras += "<img class='icon-albondiga' src='imagenes/icons/MenuVertical.svg' alt='menu-post'></div>";
-                html_obras += `<picture class='obra-arte'><img src='../backend/images/obras/${primeraFoto}' alt='Obra de arte ${tupla["nombreObra"]}'></picture>`; // Primera foto de la obra
+                html_obras += `<picture class='obra-arte'><img src=DIR_API + '/images/obras/${primeraFoto}' alt='Obra de arte ${tupla["nombreObra"]}'></picture>`; // Primera foto de la obra
                 html_obras += `<ul class='icons-post'><li><img class='btn-like' data-idobra='${tupla["idObra"]}' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //dar like
                 html_obras += `<li><img src='imagenes/icons/message-circle.svg' alt='Icon message post'><span class='num-comments'>${numComentarios}</span></li></ul></article>`; //comentar *
             }
@@ -542,7 +542,7 @@ async function cargar_obras_usuario(idUsu) {
                 // Obtener los datos del usuario dueño de la obra
                 const usuario = await obtener_datos_usuario(tupla["idUsu"]);
                 const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // Nombre del usuario o valor por defecto
-                const iconoUsuario = usuario.fotoPerfil ? "../../backend/images/profilePics/" + usuario.fotoPerfil : "../../backend/images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
+                const iconoUsuario = usuario.fotoPerfil ? "..DIR_API + //images/profilePics/" + usuario.fotoPerfil : "..DIR_API + //images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
 
                 const likes = await obtener_likes_obra(tupla["idObra"]);
                 const numLikes = likes.length;
@@ -562,7 +562,7 @@ async function cargar_obras_usuario(idUsu) {
                 html_posts += '</div>';
                 html_posts += '</div>';
                 html_posts += `<a id="enlace-post-perfil" href="post.html?id=${tupla["idObra"]}">`;
-                html_posts += '<picture class="obra-arte"><img src="../../backend/images/obras/' + primeraFoto + '" alt="Obra de arte ' + tupla["nombreObra"] + '"></picture>';
+                html_posts += '<picture class="obra-arte"><img src="..DIR_API + //images/obras/' + primeraFoto + '" alt="Obra de arte ' + tupla["nombreObra"] + '"></picture>';
                 html_posts += '</a>';
                 html_posts += '<ul class="icons-post">';
                 html_posts += `<li><img src="${iconoLike}" alt="Icon like"><span class="num-likes">${numLikes}</span></li>`;
@@ -730,7 +730,7 @@ async function cargar_usuario_pagina_post(idUsu) {
             localStorage.clear();
         } else {
             $('.user-link-post').attr('href', "profile.html?id=" + idUsu);
-            $('#user-photo').attr('src', "../../backend/images/profilePics/" + response.usuario.fotoPerfil);
+            $('#user-photo').attr('src', "..DIR_API + //images/profilePics/" + response.usuario.fotoPerfil);
             $('#user-nombre').text(response.usuario.nombreUsuario);
             return response.usuario;
         }
@@ -781,7 +781,7 @@ async function cargar_more_by(idUsuAutor, idObraActual, contenedor = '#more-by',
                 const fotosResponse = await obtener_fotos_obra(obra.idObra);
                 const fotos = fotosResponse || [];
                 const primeraFoto = fotos.length > 0
-                    ? `../../backend/images/obras/${fotos[0].foto}`
+                    ? `..DIR_API + //images/obras/${fotos[0].foto}`
                     : "../imagenes/arte/default.webp";
 
                 // Crear el artículo de la obra
@@ -1024,7 +1024,7 @@ async function cargar_comentarios_obra(idObra) {
                         html_mensaje += `<div class="content" data-comentario-id="${tupla.numComentario}">`;
                     }
 
-                    html_mensaje += `<img class="foto-perfil" src="../../backend/images/profilePics/${tupla.fotoPerfil}" alt="icono">`;
+                    html_mensaje += `<img class="foto-perfil" src="..DIR_API + //images/profilePics/${tupla.fotoPerfil}" alt="icono">`;
                     html_mensaje += '<div>';
                     html_mensaje += `<span class="nombre">${tupla.nombreUsuario}</span>`;
                     html_mensaje += `<span class="fecha">${tupla.fecCom}</span>`;
@@ -1081,7 +1081,7 @@ async function cargar_alertas(idUsu, link1, link2) {
             const usuario = await obtener_datos_usuario(alerta.idUsu);
             const fotoUsu = usuario.fotoPerfil || 'no_image.jpg';
 
-            html_alertas += `<div id="alert-row"><img class="profile-pic-alert" src="${link2}backend/images/profilePics/${fotoUsu}" alt="Icon user ${alerta.nombreUsuario}">`;
+            html_alertas += `<div id="alert-row"><img class="profile-pic-alert" src="${DIR_API}/images/profilePics/${fotoUsu}" alt="Icon user ${alerta.nombreUsuario}">`;
             html_alertas += `<a id="alert-seguidor-${alerta.idUsu}" class="alert-seguidor-link" href="${profilePath}" data-idseguidor="${alerta.idUsu}" data-idseguido="${idUsu}"><span><strong>@${alerta.nombreUsuario}</strong> ha comenzado a seguirte</span></a></div>`;   
         }
 
@@ -1104,7 +1104,7 @@ async function cargar_alertas(idUsu, link1, link2) {
             const usuario = await obtener_datos_usuario(alerta.idUsuLike);
             const fotoUsu = usuario.fotoPerfil || 'no_image.jpg';
 
-            html_alertas += `<div id="alert-row"><img class="profile-pic-alert" src="${link2}backend/images/profilePics/${fotoUsu}" alt="Icon user ${alerta.nombreUsuario}">`;
+            html_alertas += `<div id="alert-row"><img class="profile-pic-alert" src="${DIR_API}/images/profilePics/${fotoUsu}" alt="Icon user ${alerta.nombreUsuario}">`;
 
             html_alertas += `<a class="alert-like-link" href="${postPath}" data-idobra="${alerta.idObra}" data-idusulike="${alerta.idUsuLike}"><span>A @${alerta.usuario_like} le gusta <strong>${alerta.nombre_obra}</strong></span></a></div>`;
         }
@@ -1128,7 +1128,7 @@ async function cargar_alertas(idUsu, link1, link2) {
             const usuario = await obtener_datos_usuario(alerta.idUsu);
             const fotoUsu = usuario.fotoPerfil || 'no_image.jpg';
 
-            html_alertas += `<div id="alert-row"><img class="profile-pic-alert" src="${link2}backend/images/profilePics/${fotoUsu}" alt="Icon user ${alerta.nombreUsuario}">`;
+            html_alertas += `<div id="alert-row"><img class="profile-pic-alert" src="${DIR_API}/images/profilePics/${fotoUsu}" alt="Icon user ${alerta.nombreUsuario}">`;
 
             html_alertas += `<a class="alert-comentario-link" href="${postPath}" data-idcomentario="${alerta.numComentario}"><span>@${alerta.usuario_comentario} comentó en <strong>${alerta.nombre_obra}</strong></span></a></div>`;
         }        
@@ -1339,8 +1339,8 @@ $(document).ready(function () {
                 if (!response.error && response.usuario && response.usuario.fotoPerfil) {
                     // Determinar la ruta correcta según si estamos en la página principal o en una subpágina
                     const imgPath = window.location.pathname.includes('paginas/') ?
-                        "../../backend/images/profilePics/" + response.usuario.fotoPerfil :
-                        "../backend/images/profilePics/" + response.usuario.fotoPerfil;
+                        "..DIR_API + //images/profilePics/" + response.usuario.fotoPerfil :
+                        DIR_API + "/images/profilePics/" + response.usuario.fotoPerfil;
 
                     // Actualizar la imagen del header
                     $('#profile img').attr('src', imgPath);

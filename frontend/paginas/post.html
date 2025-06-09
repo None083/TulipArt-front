@@ -256,7 +256,7 @@
                             // Añadir la imagen al slider
                             $('#slider-images').append(`
                                 <li>
-                                    <img src="../../backend/images/obras/${foto.foto}" alt="Foto ${index + 1} de la obra" data-index="${index}">
+                                    <img src="${DIR_API}/images/obras/${foto.foto}" alt="Foto ${index + 1} de la obra" data-index="${index}">
                                 </li>
                             `);
 
@@ -319,10 +319,10 @@
                 // Obtener datos del usuario y actualizar la imagen
                 obtener_datos_usuario(idUsu).then(usuario => {
                     if (usuario && usuario.fotoPerfil) {
-                        $('#user-photo-logged').attr('src', "../../backend/images/profilePics/" + usuario.fotoPerfil);
+                        $('#user-photo-logged').attr('src', `${DIR_API}/images/profilePics/${usuario.fotoPerfil}`);
                     } else {
                         // Usar imagen por defecto si no hay foto de perfil
-                        $('#user-photo-logged').attr('src', "../../backend/images/profilePics/no_image.jpg");
+                        $('#user-photo-logged').attr('src', `${DIR_API}/images/profilePics/no_image.jpg`);
                     }
                 });
 
