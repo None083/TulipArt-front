@@ -85,6 +85,39 @@
             }
         });
 
+        // Script para manejar correctamente el mensaje de error
+        $(document).ready(function() {
+            // Ocultar el mensaje de error al inicio
+            $('#error-message-upload').hide();
+            
+            // Comprobar si hay imágenes almacenadas
+            const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
+            if (imagenes.length > 0) {
+                $('#error-message-upload').hide();
+            }
+            
+            // Manejar el clic en el botón de submit
+            $('#upload-submit').on('click', function(e) {
+                const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
+                if (imagenes.length === 0) {
+                    e.preventDefault();
+                    // Mostrar el mensaje de error con efecto de parpadeo para llamar la atención
+                    $('#error-message-upload').fadeIn(300).fadeOut(300).fadeIn(300);
+                    return false;
+                }
+            });
+            
+            // También manejar el evento submit del formulario
+            $('#upload').on('submit', function(e) {
+                const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
+                if (imagenes.length === 0) {
+                    e.preventDefault();
+                    // Mostrar el mensaje de error con efecto de parpadeo para llamar la atención
+                    $('#error-message-upload').fadeIn(300).fadeOut(300).fadeIn(300);
+                    return false;
+                }
+            });
+        });
     </script>
 </body>
 

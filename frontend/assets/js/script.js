@@ -184,17 +184,17 @@ $(function () {
 
                     // Eliminar el elemento visual con animación
                     data.context.fadeOut(function () {
-                        $(this).remove();                        // Desactivar el botón y mostrar mensaje de error si no quedan imágenes
+                        $(this).remove();
+
+                        // Desactivar el botón si no quedan imágenes
                         if (imagenesTemporal.length === 0) {
                             $('button[type="submit"]').prop('disabled', true).removeClass('active');
-                            $('#error-message-upload').css('visibility', 'visible');
                         }
                     });
-                });                // Guardar la información en localStorage
-                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
+                });
 
-                // Ocultar mensaje de error si está visible
-                $('#error-message-upload').css('visibility', 'hidden');
+                // Guardar la información en localStorage
+                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
 
                 // Activar el botón de submit cuando haya al menos una imagen
                 $('button[type="submit"]').prop('disabled', false).addClass('active');
@@ -220,29 +220,20 @@ $(function () {
         $(this).addClass('active');
     }).on('dragleave dragend drop', function () {
         $(this).removeClass('active');
-    });    // Manejar el envío del formulario
+    });
+
+    // Manejar el envío del formulario
     $('#upload').on('submit', function (e) {
         e.preventDefault();
 
         // Comprobar que hay imágenes subidas
         if (imagenesTemporal.length === 0) {
-            // Mostrar mensaje de error
-            $('#error-message-upload').css('visibility', 'visible');
+            alert('Por favor, sube al menos una imagen antes de continuar');
             return;
         }
 
         // Redireccionar a la página de submit
         window.location.href = 'submit.html';
-    });
-    
-    // Manejar clic en el botón de submit
-    $('button[type="submit"]').on('click', function(e) {
-        // Si el botón está deshabilitado, mostrar el mensaje de error
-        if ($(this).prop('disabled') || imagenesTemporal.length === 0) {
-            $('#error-message-upload').css('visibility', 'visible');
-            e.preventDefault();
-            return false;
-        }
     });
 
     // Función auxiliar que formatea los tamaños de archivo
