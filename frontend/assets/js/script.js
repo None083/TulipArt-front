@@ -5,16 +5,15 @@ $(function () {
     var ul = $('#upload ul');
 
     // Almacenar información de imágenes temporales
-    var imagenesTemporal = [];
-
-    // Si hay imágenes almacenadas previamente, recuperarlas
+    var imagenesTemporal = [];    // Si hay imágenes almacenadas previamente, recuperarlas
     var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
     if (imagenesGuardadas) {
         try {
             imagenesTemporal = JSON.parse(imagenesGuardadas);
-            // Si ya hay imágenes, activar el botón de continuar
+            // Si ya hay imágenes, activar el botón de continuar y ocultar mensaje de error
             if (imagenesTemporal.length > 0) {
                 $('button[type="submit"]').prop('disabled', false).addClass('active');
+                $('#error-message-upload').css('visibility', 'hidden');
             }
         } catch (e) {
             localStorage.removeItem('imagenesTemporal');
@@ -184,17 +183,17 @@ $(function () {
 
                     // Eliminar el elemento visual con animación
                     data.context.fadeOut(function () {
-                        $(this).remove();
-
-                        // Desactivar el botón si no quedan imágenes
+                        $(this).remove();                    // Desactivar el botón y mostrar mensaje de error si no quedan imágenes
                         if (imagenesTemporal.length === 0) {
                             $('button[type="submit"]').prop('disabled', true).removeClass('active');
+                            $('#error-message-upload').css('visibility', 'visible');
                         }
                     });
-                });
-
-                // Guardar la información en localStorage
+                });                // Guardar la información en localStorage
                 localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
+
+                // Ocultar el mensaje de error si estaba visible
+                $('#error-message-upload').css('visibility', 'hidden');
 
                 // Activar el botón de submit cuando haya al menos una imagen
                 $('button[type="submit"]').prop('disabled', false).addClass('active');
@@ -220,15 +219,14 @@ $(function () {
         $(this).addClass('active');
     }).on('dragleave dragend drop', function () {
         $(this).removeClass('active');
-    });
-
-    // Manejar el envío del formulario
+    });    // Manejar el envío del formulario
     $('#upload').on('submit', function (e) {
         e.preventDefault();
 
         // Comprobar que hay imágenes subidas
         if (imagenesTemporal.length === 0) {
-            alert('Por favor, sube al menos una imagen antes de continuar');
+            // Mostrar el mensaje de error
+            $('#error-message-upload').css('visibility', 'visible');
             return;
         }
 

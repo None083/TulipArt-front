@@ -40,6 +40,13 @@
     clear: both; /* Asegurar que no haya elementos flotantes alrededor */
 }
 
+#error-message-upload {
+    color: #D83C2D;
+    margin-bottom: 15px;
+    text-align: center;
+    visibility: hidden;
+}
+
 #upload ul li {
     flex: 0 0 calc(33.333% - 12px); 
     min-width: 120px;

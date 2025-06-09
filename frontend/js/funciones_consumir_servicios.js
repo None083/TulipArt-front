@@ -24,6 +24,10 @@ $(document).ready(function () {
         $('#joinOrLogin').hide();
     }
 
+    if (!localStorage.token) {
+        $('#logout').hide();
+    }
+
     $('#profile, #profile-header').on('click', function (e) {
         if (!localStorage.token) {
             e.preventDefault();
