@@ -27,6 +27,15 @@
     width: 100%;
 }
 
+/* Estilo para el mensaje de error */
+#error-message-upload {
+    display: block;
+    color: #cc0000;
+    margin-bottom: 10px;
+    opacity: 0;
+    visibility: hidden;
+}
+
 /* Estilos para organizar las imágenes en un grid */
 #upload ul {
     display: flex;
