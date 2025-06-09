@@ -232,7 +232,7 @@
         $(document).ready(function () {
             if (localStorage.token) {
                 const idUsu = localStorage.getItem('idUsu');
-                cargar_alertas(idUsu, "../imagenes/", "../../");
+                cargar_alertas(idUsu, "../imagenes/");
             }
             // Obtener el ID de la obra de la URL
             const params = new URLSearchParams(window.location.search);

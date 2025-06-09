@@ -20,7 +20,7 @@
 		$(document).ready(function () {
 			if (localStorage.token) {
 				const idUsu = localStorage.getItem('idUsu');
-				cargar_alertas(idUsu, "../imagenes/", "../../");
+				cargar_alertas(idUsu, "../imagenes/");
 			}
 			// Obtener los parámetros de la URL
 			const urlParams = new URLSearchParams(window.location.search);

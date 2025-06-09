@@ -16,6 +16,14 @@
     <script src="../js/config.js"></script>
     <script src="../js/funciones_consumir_servicios.js"></script>
     <script src="../js/filtro_header.js"></script>
+    <script>
+    $(document).ready(function () {
+			if (localStorage.token) {
+				const idUsu = localStorage.getItem('idUsu');
+				cargar_alertas(idUsu, "../imagenes/");
+			}
+        });
+    </script>
 </head>
 
 <body>

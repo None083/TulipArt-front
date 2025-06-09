@@ -1055,7 +1055,7 @@ async function cargar_comentarios_obra(idObra) {
 }
 
 // Mostrar alerts
-async function cargar_alertas(idUsu, link1, link2) {
+async function cargar_alertas(idUsu, link) {
     try {
         // Consumir servivcio de obtener seguidores
         const response_seguidores = await $.ajax({
@@ -1189,7 +1189,7 @@ async function cargar_alertas(idUsu, link1, link2) {
         // Función para actualizar la visibilidad del contador de alertas
         function actualizarVisibilidadContadorAlertas(numAlertas) {
             if (numAlertas > 0) {
-                $('img#icon-alerts').attr('src', link1 + 'icons/icons-blanco/bell-ringing.svg');
+                $('img#icon-alerts').attr('src', link + 'icons/icons-blanco/bell-ringing.svg');
                 if (window.innerWidth > 1024) {
                     $('span#num-alerts').show();
                 } else {
