@@ -139,42 +139,68 @@
 						window.location.href = "paginas/login.html";
 					}
 				}
-			});
-
-			// Agregar evento para la búsqueda en el input del buscador expandido
+			});			// Función para realizar la búsqueda desde el buscador expandido
+			function realizarBusquedaExpandido() {
+				const textoBusqueda = $('#buscador').val().trim();
+				if (textoBusqueda) {
+					buscar_obras(textoBusqueda);
+					// Cerrar la capa de búsqueda
+					$('#capa-buscador').fadeOut();
+					// Mostrar texto de búsqueda
+					$('#foryou').removeClass('borderbottom');
+					$('#following').removeClass('borderbottom');
+					// Eliminar búsquedas activas anteriores
+					$('#busqueda-activa').remove();
+					$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
+				}
+			}
+			
+			// Agregar evento para la búsqueda en el input del buscador expandido al pulsar Enter
 			$('#buscador').on('keypress', function (e) {
 				if (e.which === 13) { // Tecla Enter
 					e.preventDefault();
-					const textoBusqueda = $(this).val().trim();
-					if (textoBusqueda) {
-						buscar_obras(textoBusqueda);
-						// Cerrar la capa de búsqueda
-						$('#capa-buscador').fadeOut();
-						// Mostrar texto de búsqueda
-						$('#foryou').removeClass('borderbottom');
-						$('#following').removeClass('borderbottom');
-						$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
-					}
+					realizarBusquedaExpandido();
 				}
 			});
-
-			// Agregar evento para la búsqueda en el input de la barra de navegación
+			
+			// Agregar evento para la búsqueda al hacer clic en la lupa del buscador expandido
+			$('#btn-buscar').on('click', function (e) {
+				e.preventDefault();
+				e.stopPropagation(); // Prevenir que el evento se propague
+				realizarBusquedaExpandido();
+			});			// Función para realizar la búsqueda desde la barra de navegación
+			function realizarBusquedaNavegacion() {
+				const textoBusqueda = $('#buscar').val().trim();
+				if (textoBusqueda) {
+					buscar_obras(textoBusqueda);
+					// Limpiar el input
+					$('#buscar').val('');
+					// Mostrar texto de búsqueda y quitar el borde inferior de los filtros
+					$('#foryou, #following, #new, #trending').removeClass('borderbottom');
+					// Eliminar búsquedas activas anteriores
+					$('#busqueda-activa').remove();
+					// Agregar indicador de búsqueda activa
+					$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
+				}
+			}
+			
+			// Agregar evento para la búsqueda en el input de la barra de navegación al pulsar Enter
 			$('#buscar').on('keypress', function (e) {
 				if (e.which === 13) { // Tecla Enter
 					e.preventDefault();
-					const textoBusqueda = $(this).val().trim();
-					if (textoBusqueda) {
-						buscar_obras(textoBusqueda);
-						// Limpiar el input
-						$(this).val('');
-						// Mostrar texto de búsqueda y quitar el borde inferior de los filtros
-						$('#foryou, #following, #new, #trending').removeClass('borderbottom');
-						// Eliminar búsquedas activas anteriores
-						$('#busqueda-activa').remove();
-						// Agregar indicador de búsqueda activa
-						$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
-					}
+					realizarBusquedaNavegacion();
 				}
+			});
+			
+			// Agregar evento para la búsqueda al hacer clic en las lupas de la barra de navegación
+			$('#lupa-blanca, #lupa-negra').on('click', function (e) {
+				// Si hay texto en el buscador de la barra de navegación, realizar búsqueda
+				if ($('#buscar').val().trim()) {
+					e.preventDefault();
+					e.stopPropagation(); // Prevenir que el evento se propague
+					realizarBusquedaNavegacion();
+				}
+				// Si no hay texto, se comporta como antes (muestra el buscador expandido)
 			});
 
 			// Evento para cerrar la búsqueda activa
@@ -363,10 +389,9 @@
 				</ul>
 			</nav>
 			<nav id="capa-buscador" aria-label="capa-buscador">
-				<img id="equis" src="imagenes/icons/x.svg" alt="Icon close">
-				<div>
+				<img id="equis" src="imagenes/icons/x.svg" alt="Icon close">				<div>
 					<input type="text" name="buscador" id="buscador" placeholder="Search">
-					<a href="index.html"><img id="lupa-negra-buscador" src="imagenes/icons/search.svg"
+					<a href="#" id="btn-buscar"><img id="lupa-negra-buscador" src="imagenes/icons/search.svg"
 							alt="Icon search"></a>
 				</div>
 				<span>SUGGESTED TAGS</span>

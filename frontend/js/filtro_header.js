@@ -11,27 +11,44 @@ $(document).ready(function () {
             }
         }
     });
-    
-    // Evento para mostrar/ocultar capa de búsqueda
-    $('#lupa-blanca, #lupa-negra').on('click', function() {
-        $('#capa-buscador').fadeIn();
+      // Evento para mostrar/ocultar capa de búsqueda
+    $('#lupa-blanca, #lupa-negra').on('click', function(e) {
+        // Si hay texto en el buscador de la barra de navegación, redirigir con búsqueda
+        const textoBusqueda = $('#buscar').val().trim();
+        if (textoBusqueda) {
+            e.preventDefault();
+            window.location.href = "../index.html?search=" + encodeURIComponent(textoBusqueda);
+        } else {
+            // Si no hay texto, mostrar el buscador expandido
+            $('#capa-buscador').fadeIn();
+        }
     });
     
     $('#equis').on('click', function() {
         $('#capa-buscador').fadeOut();
     });
-      // Agregar evento para la búsqueda en el input del buscador expandido
+    
+    // Función para realizar búsqueda desde el buscador expandido
+    function realizarBusquedaExpandido() {
+        const textoBusqueda = $('#buscador').val().trim();
+        if (textoBusqueda) {
+            window.location.href = "../index.html?search=" + encodeURIComponent(textoBusqueda);
+        }
+    }
+    
+    // Agregar evento para la búsqueda en el input del buscador expandido
     $('#buscador').on('keypress', function(e) {
         if(e.which === 13) { // Tecla Enter
             e.preventDefault();
-            const textoBusqueda = $(this).val().trim();
-            if (textoBusqueda) {
-                // Redirigir al index con el parámetro de búsqueda
-                window.location.href = "../index.html?search=" + encodeURIComponent(textoBusqueda);
-                // Cerrar la capa de búsqueda
-                $('#capa-buscador').fadeOut();
-            }
+            realizarBusquedaExpandido();
         }
+    });
+      // Agregar evento para el botón de búsqueda del buscador expandido
+    $('#lupa-negra-buscador').parent().on('click', function(e) {
+        e.preventDefault();
+        realizarBusquedaExpandido();
+        // Cerrar la capa de búsqueda
+        $('#capa-buscador').fadeOut();
     });
     
     // Evento para las etiquetas sugeridas

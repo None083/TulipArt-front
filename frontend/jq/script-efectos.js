@@ -61,8 +61,8 @@ $(document).ready(function () {
         mouseleave: function () {
             $(this).children("span").stop().animate({ color: '#E1DBD5' }, 400);
         }
-    });
-
+    });    // Comportamiento básico de la lupa: abrir el buscador
+    // El comportamiento de búsqueda está implementado en el index.html
     $("div#search>img#lupa-blanca").on(
         "click", function (e) {
             e.stopPropagation(); // Prevenir que el evento se propague
