@@ -49,6 +49,24 @@
     display: none; /* Por defecto está oculto */
 }
 
+/* Estilo para el botón con apariencia de deshabilitado pero que sí puede recibir eventos */
+.disabled-look {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #666;
+    pointer-events: all !important; /* Aseguramos que reciba eventos */
+}
+
+.disabled-look.active {
+    opacity: 1;
+    cursor: pointer;
+    background-color: #2A2121;
+    border-color: #2A2121;
+    color: #E1DBD5;
+}
+
 #upload ul li {
     flex: 0 0 calc(33.333% - 12px); 
     min-width: 120px;

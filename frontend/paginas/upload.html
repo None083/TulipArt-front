@@ -48,9 +48,8 @@
                     <ul>
                         <!-- Las imágenes subidas aparecerán aquí -->
                     </ul>
-                </div>
-                <span id="error-message-upload">You must upload at least one image</span>
-                <button id="upload-submit" type="submit" disabled>Continue to add details</button>
+                </div>                <span id="error-message-upload">You must upload at least one image</span>
+                <button id="upload-submit" type="submit" class="disabled-look">Continue to add details</button>
             </form>
         </main>
     </div>
@@ -83,23 +82,37 @@
                 // Si no hay imágenes, simplemente volver atrás
                 window.history.back();
             }
-        });
-
-        // Script para manejar correctamente el mensaje de error
+        });        // Script para manejar correctamente el mensaje de error
         $(document).ready(function() {
             // Ocultar el mensaje de error al inicio
             $('#error-message-upload').hide();
             
             // Comprobar si hay imágenes almacenadas
-            const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
-            if (imagenes.length > 0) {
+            const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');            if (imagenes.length > 0) {
                 $('#error-message-upload').hide();
+                $('#upload-submit').removeClass('disabled-look').addClass('active');
+            } else {
+                $('#upload-submit').addClass('disabled-look').removeClass('active');
             }
             
-            // Manejar el clic en el botón de submit
+            // Usar delegación de eventos para capturar cualquier clic en el contenedor del formulario
+            $('#upload').on('click', function(e) {
+                // Verificar si se hizo clic en el botón submit
+                if ($(e.target).is('#upload-submit') || $(e.target).closest('#upload-submit').length) {
+                    const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
+                    if (imagenes.length === 0) {
+                        e.preventDefault();
+                        // Mostrar el mensaje de error con efecto de parpadeo para llamar la atención
+                        $('#error-message-upload').fadeIn(300).fadeOut(300).fadeIn(300);
+                        return false;
+                    }
+                }
+            });
+            
+            // Añadir un evento específico para el botón
             $('#upload-submit').on('click', function(e) {
                 const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
-                if (imagenes.length === 0) {
+                if (imagenes.length === 0 || $(this).hasClass('disabled-look')) {
                     e.preventDefault();
                     // Mostrar el mensaje de error con efecto de parpadeo para llamar la atención
                     $('#error-message-upload').fadeIn(300).fadeOut(300).fadeIn(300);
@@ -107,7 +120,7 @@
                 }
             });
             
-            // También manejar el evento submit del formulario
+            // También manejar el evento submit del formulario (por si acaso)
             $('#upload').on('submit', function(e) {
                 const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
                 if (imagenes.length === 0) {
