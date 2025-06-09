@@ -1339,9 +1339,7 @@ $(document).ready(function () {
             }).then(response => {
                 if (!response.error && response.usuario && response.usuario.fotoPerfil) {
                     // Determinar la ruta correcta según si estamos en la página principal o en una subpágina
-                    const imgPath = window.location.pathname.includes('paginas/') ?
-                        "../backend/servicios_rest_protect/images/profilePics/" + response.usuario.fotoPerfil :
-                        DIR_API + "/images/profilePics/" + response.usuario.fotoPerfil;
+                    const imgPath = DIR_API + "/images/profilePics/" + response.usuario.fotoPerfil;
 
                     // Actualizar la imagen del header
                     $('#profile img').attr('src', imgPath);
