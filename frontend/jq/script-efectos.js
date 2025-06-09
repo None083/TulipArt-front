@@ -1,11 +1,14 @@
-$(document).ready(function () {    // Inicio header
+$(document).ready(function () {    
+    // Inicio header
     $(window).on('resize', function () {
         $("ul#menu-desplegado").fadeOut();
         $("ul#menu-iconos-adicional").fadeOut();
         $('nav.menu-post').fadeOut();
         $("nav#capa-buscador").fadeOut();
         $("nav#caja-alertas").fadeOut(); // Cerrar también el menú de alertas
-    });    $(window).on('scroll', function () {
+    });    
+    
+    $(window).on('scroll', function () {
         var scroll = $(window).scrollTop();
         if (scroll > 0) {
             $('header.fixed').stop().animate({ opacity: 0.8 }, 500);
@@ -29,16 +32,27 @@ $(document).ready(function () {    // Inicio header
     });
 
     $("img#menu-hamb").on(
-        "click", function () {
+        "click", function (e) {
+            e.stopPropagation(); // Prevenir que el evento se propague
             $("ul#menu-desplegado").slideToggle(300);
         }
     );
+      // Prevenir que el clic dentro del menú desplegado lo cierre
+    $("ul#menu-desplegado").on('click', function(e) {
+        e.stopPropagation();
+    });
 
     $("img#menu-albondigas").on(
-        "click", function () {
+        "click", function (e) {
+            e.stopPropagation(); // Prevenir que el evento se propague
             $("ul#menu-iconos-adicional").slideToggle(300);
         }
     );
+    
+    // Prevenir que el clic dentro del menú de iconos adicional lo cierre
+    $("ul#menu-iconos-adicional").on('click', function(e) {
+        e.stopPropagation();
+    });
 
     $("nav#menu-iconos>a#profile, nav#menu-iconos>a#messages-header, nav#menu-iconos>div#contenedor-alerts>a#alerts-header, nav#menu-iconos>a#submit-header").on({
         mouseenter: function () {
@@ -50,10 +64,16 @@ $(document).ready(function () {    // Inicio header
     });
 
     $("div#search>img#lupa-blanca").on(
-        "click", function () {
+        "click", function (e) {
+            e.stopPropagation(); // Prevenir que el evento se propague
             $("nav#capa-buscador").fadeToggle();
         }
     );
+
+    // Prevenir que el clic dentro del buscador lo cierre
+    $("nav#capa-buscador").on('click', function(e) {
+        e.stopPropagation();
+    });
 
     $("nav#capa-buscador>img#equis").on(
         "click", function () {
@@ -61,7 +81,9 @@ $(document).ready(function () {    // Inicio header
         }
     );
 
-    // Fin header    // Control del menú de alertas
+    // Fin header    
+
+    // Control del menú de alertas
     $("a#alerts-header").on('click', function(e) {
         e.preventDefault();
         e.stopPropagation(); // Prevenir que el evento se propague
@@ -78,17 +100,17 @@ $(document).ready(function () {    // Inicio header
         $("ul#menu-iconos-adicional").fadeOut();
         $("nav#capa-buscador").fadeOut();
     });
-    
-    // Prevenir que el clic dentro del menú de alertas lo cierre
+      // Prevenir que el clic dentro del menú de alertas lo cierre
     $("nav#caja-alertas").on('click', function(e) {
         e.stopPropagation();
     });
     
-    // Cerrar el menú de alertas al hacer clic en cualquier otra parte
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('#contenedor-alerts').length) {
-            $("nav#caja-alertas").fadeOut(300);
-        }
+    // Cerrar todos los menús al hacer clic en cualquier otra parte del documento
+    $(document).on('click', function() {
+        $("ul#menu-desplegado").fadeOut(300);
+        $("ul#menu-iconos-adicional").fadeOut(300);
+        $("nav#caja-alertas").fadeOut(300);
+        $("nav#capa-buscador").fadeOut(300);
     });
 
     $("span#foryou").click(function () {
