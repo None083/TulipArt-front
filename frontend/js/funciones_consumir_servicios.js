@@ -211,7 +211,7 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
                 html_obras += "<img class='icon-albondiga' src='imagenes/icons/MenuVertical.svg' alt='menu-post'></div>";
                 html_obras += `<picture class='obra-arte'><img src='${DIR_API}/images/obras/${primeraFoto}' alt='Obra de arte ${tupla["nombreObra"]}'></picture>`; // Primera foto de la obra
                 html_obras += `<ul class='icons-post'><li><img class='btn-like' data-idobra='${tupla["idObra"]}' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //dar like
-                html_obras += `<li><img src='imagenes/icons/message-circle.svg' alt='Icon message post'><span class='num-comments'>${numComentarios}</span></li></ul></article>`; //comentar *
+                html_obras += `<li><a href='paginas/post.html?id=${tupla["idObra"]}#new-comment'><img src='imagenes/icons/message-circle.svg' alt='Icon message post'></a><span class='num-comments'>${numComentarios}</span></li></ul></article>`; //comentar *
             }
 
             $('#galery-index').append(html_obras);            // Agregar botón "Cargar más" si hay más páginas
