@@ -407,6 +407,7 @@ main#index>nav#tab {
     background-color: #B3CFCD;
     text-align: center;
     padding: 0.3rem;
+    padding-top: 0.5rem;
 }
 
 main#index>nav#tab>span {
@@ -415,10 +416,6 @@ main#index>nav#tab>span {
     color: #2A2121;
     font-size: 14px;
     cursor: pointer;
-}
-
-main#index>nav#tab>span#busqueda-activa {
-    margin-top: 2px;
 }
 
 .borderbottom {
