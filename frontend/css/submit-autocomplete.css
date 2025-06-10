@@ -35,7 +35,6 @@
     background-color: #f5f5f5;
 }
 
-/* Estilos adicionales para mejorar la visualización */
 #tags {
     width: 100%;
     box-sizing: border-box;
@@ -48,13 +47,11 @@
     outline: none;
 }
 
-/* Forzar visibilidad para depuración */
 .debug-visible {
     display: block !important;
     border: 2px solid #D83C2D !important;
 }
 
-/* Estilos para el slider de imágenes */
 .slider-container {
     position: relative;
     width: 100%;
@@ -109,7 +106,6 @@
     right: 10px;
 }
 
-/* Imagen única */
 #imageContainer {
     margin-bottom: 20px;
     text-align: center;

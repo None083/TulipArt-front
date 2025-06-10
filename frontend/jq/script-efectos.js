@@ -5,7 +5,7 @@ $(document).ready(function () {
         $("ul#menu-iconos-adicional").fadeOut();
         $('nav.menu-post').fadeOut();
         $("nav#capa-buscador").fadeOut();
-        $("nav#caja-alertas").fadeOut(); // Cerrar también el menú de alertas
+        $("nav#caja-alertas").fadeOut();
     });    
     
     $(window).on('scroll', function () {
@@ -16,7 +16,7 @@ $(document).ready(function () {
             $('nav.menu-post').fadeOut();
             $("ul#menu-iconos-adicional").fadeOut(1);
             $("nav#capa-buscador").fadeOut();
-            $("nav#caja-alertas").fadeOut(1); // Cerrar el menú de alertas al hacer scroll
+            $("nav#caja-alertas").fadeOut(1);
         } else {
             $('header.fixed').stop().animate({ opacity: 1 }, 500);
         }
@@ -33,23 +33,22 @@ $(document).ready(function () {
 
     $("img#menu-hamb").on(
         "click", function (e) {
-            e.stopPropagation(); // Prevenir que el evento se propague
+            e.stopPropagation();
             $("ul#menu-desplegado").slideToggle(300);
         }
     );
-      // Prevenir que el clic dentro del menú desplegado lo cierre
+
     $("ul#menu-desplegado").on('click', function(e) {
         e.stopPropagation();
     });
 
     $("img#menu-albondigas").on(
         "click", function (e) {
-            e.stopPropagation(); // Prevenir que el evento se propague
+            e.stopPropagation();
             $("ul#menu-iconos-adicional").slideToggle(300);
         }
     );
-    
-    // Prevenir que el clic dentro del menú de iconos adicional lo cierre
+
     $("ul#menu-iconos-adicional").on('click', function(e) {
         e.stopPropagation();
     });
@@ -61,11 +60,11 @@ $(document).ready(function () {
         mouseleave: function () {
             $(this).children("span").stop().animate({ color: '#E1DBD5' }, 400);
         }
-    });    // Comportamiento básico de la lupa: abrir el buscador
-    // El comportamiento de búsqueda está implementado en el index.html
+    });
+
     $("div#search>img#lupa-blanca").on(
         "click", function (e) {
-            e.stopPropagation(); // Prevenir que el evento se propague
+            e.stopPropagation();
             $("nav#capa-buscador").fadeToggle();
         }
     );
@@ -86,26 +85,20 @@ $(document).ready(function () {
     // Control del menú de alertas
     $("a#alerts-header").on('click', function(e) {
         e.preventDefault();
-        e.stopPropagation(); // Prevenir que el evento se propague
-        
-        // Ajustar la posición del menú de alertas según el tamaño de la ventana
+        e.stopPropagation();
         var alertButton = $(this);
         var alertMenu = $("nav#caja-alertas");
-        
-        // Toggle del menú de alertas
         alertMenu.fadeToggle(300);
-        
-        // Cerrar otros menús abiertos
         $("ul#menu-desplegado").fadeOut();
         $("ul#menu-iconos-adicional").fadeOut();
         $("nav#capa-buscador").fadeOut();
     });
-      // Prevenir que el clic dentro del menú de alertas lo cierre
+
     $("nav#caja-alertas").on('click', function(e) {
         e.stopPropagation();
     });
     
-    // Cerrar todos los menús al hacer clic en cualquier otra parte del documento
+    // cerrar los menús al hacer clic fuera
     $(document).on('click', function() {
         $("ul#menu-desplegado").fadeOut(300);
         $("ul#menu-iconos-adicional").fadeOut(300);
@@ -123,7 +116,7 @@ $(document).ready(function () {
         $("#foryou").removeClass("borderbottom");
     });
 
-    // Hover sobre imagenes del index y profile, modo escritorio
+    // hover imagenes del index y profile, modo escritorio
     $(window).resize(function () {
         if ($(window).width() > 1024) {
             // Modo escritorio
@@ -139,44 +132,44 @@ $(document).ready(function () {
                 }
             });
 
-            // Ocultar los elementos al cambiar a modo escritorio
+            // ocultar elementos en modo escritorio
             $("article.post").children("div.capa-post, div.post-info, ul.icons-post").stop().hide();
         } else {
-            // Modo móvil
+            // modo móvil
             $("article.post").off("mouseenter mouseleave");
 
-            // Mostrar los elementos de forma permanente en modo móvil
+            // mostrar los elementos permanente en modo móvil
             $("main#index>section#galery-index>article.post").children("div.post-info, ul.icons-post").stop().css("display", "flex").show();
         }
     }).resize();
 
-    // Desplegar mini-menu de post en escritorio
+    // desplegar mini-menu post escritorio
     $(document).on("click", "img.icon-albondiga", function () {
         $(this).closest('article').children('nav.menu-post').fadeToggle(200);
     });
 
-    // Botón de volver arriba
+    // volver arriba
     $('img#volver-arriba').on("click", function () {
         $('html, body').animate({
             scrollTop: 0
         }, 400);
     });
 
-    // Cerrar el vídeo de promo en index
+    // cerrar vídeo
     $("div#video-promo>img").on(
         "click", function () {
             $("div#video-promo").fadeOut(200);
         }
     );
 
-    // Cerrar el banner de loguearse en index
+    // cerrar banner loguearse
     $("div#joinOrLogin>img#equisjoin").on(
         "click", function () {
             $("div#joinOrLogin").fadeOut(200);
         }
     );
 
-    // Aceptar las cookies en la página de cookies
+    // aceptar cookies
     $("span.btn-cookies").on(
         "click", function () {
             $("div#accept-conditions").fadeOut(200);
@@ -185,12 +178,12 @@ $(document).ready(function () {
 })
 
 function efectoLikeIndex(img, darLike) {
-    if (darLike) { // Dar like (cambiar a corazón lleno)
+    if (darLike) {
         img.fadeOut(400, function () {
             img.attr('src', "imagenes/icons/Heart.svg");
             img.fadeIn(400);
         });
-    } else { // Quitar like (cambiar a corazón vacío)
+    } else {
         img.fadeOut(400, function () {
             img.attr('src', "imagenes/icons/Favorite.svg");
             img.fadeIn(400);
@@ -198,14 +191,13 @@ function efectoLikeIndex(img, darLike) {
     }
 }
 
-// Función para cambiar visualmente el icono de like (profile)
 function efectoLikeProfile(img, darLike) {
-    if (darLike) { // Dar like (cambiar a corazón lleno)
+    if (darLike) {
         img.fadeOut(400, function () {
             img.attr('src', "../imagenes/icons/Heart.svg");
             img.fadeIn(400);
         });
-    } else { // Quitar like (cambiar a corazón vacío)
+    } else {
         img.fadeOut(400, function () {
             img.attr('src', "../imagenes/icons/Favorite.svg");
             img.fadeIn(400);
@@ -245,14 +237,13 @@ function efectoFollowProfile(boton, seguir) {
     });
 }
 
-// Función para cambiar visualmente el icono de like (página post)
 function efectoLikePost(img, darLike) {
-    if (darLike) { // Dar like (cambiar a corazón lleno)
+    if (darLike) {
         img.fadeOut(400, function () {
             img.attr('src', "../imagenes/icons/Heart.svg");
             img.fadeIn(400);
         });
-    } else { // Quitar like (cambiar a corazón vacío)
+    } else {
         img.fadeOut(400, function () {
             img.attr('src', "../imagenes/icons/Favorite.svg");
             img.fadeIn(400);

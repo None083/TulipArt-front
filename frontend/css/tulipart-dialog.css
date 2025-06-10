@@ -1,17 +1,12 @@
-/* Estilos personalizados para diálogos jQuery UI en TulipArt */
-
-/* Aplicar la fuente Kumbh Sans a todos los diálogos */
 .ui-dialog {
     font-family: 'Kumbh Sans', sans-serif !important;
 }
 
-/* Estilos para el botón de cerrar (la X) */
 .ui-dialog .ui-dialog-titlebar-close {
     background: transparent !important;
     border: none !important;
 }
 
-/* Resetear estilos del icono original */
 .ui-dialog .ui-dialog-titlebar-close .ui-icon,
 .ui-dialog .ui-dialog-titlebar-close .ui-icon-closethick {
     background-image: none !important;
@@ -20,7 +15,6 @@
     overflow: visible !important;
 }
 
-/* Aplicar la X como contenido */
 .ui-dialog .ui-dialog-titlebar-close .ui-icon:before,
 .ui-dialog .ui-dialog-titlebar-close:before {
     content: '×';
@@ -38,14 +32,12 @@
     justify-content: center;
 }
 
-/* Asegurar que el texto en los diálogos use la misma fuente */
 .ui-dialog .ui-dialog-title,
 .ui-dialog .ui-dialog-content,
 .ui-dialog .ui-dialog-buttonpane button {
     font-family: 'Kumbh Sans', sans-serif !important;
 }
 
-/* Clases de diálogos especiales */
 .tulipart-success .ui-dialog-titlebar {
     background: #28a745 !important;
     color: white !important;
@@ -61,7 +53,6 @@
     color: #212529 !important;
 }
 
-/* Ícono de éxito para diálogos con clase success-dialog */
 .success-dialog .ui-dialog-content:before {
     content: '';
     display: block;

@@ -1,4 +1,3 @@
-/* Corregir el contenedor drop para que se expanda correctamente */
 #drop {
     background-color: #eeece8;
     padding: 0.5rem 1rem;
@@ -9,10 +8,10 @@
     transition: all 0.3s ease;
     cursor: pointer;
     width: 100%;
-    display: block; /* Cambiar flex por block */
+    display: block;
     min-height: 150px;
-    height: auto !important; /* Forzar altura automática */
-    box-sizing: border-box; /* Asegurar que padding no afecte el ancho */
+    height: auto !important;
+    box-sizing: border-box;
 }
 
 #drop.active {
@@ -27,7 +26,6 @@
     width: 100%;
 }
 
-/* Estilo para el mensaje de error */
 #error-message-upload {
     color: #D83C2D;
     margin-bottom: 10px;
@@ -36,27 +34,25 @@
     font-weight: 600;
 }
 
-/* Estilos para organizar las imágenes en un grid */
 #upload ul {
     display: flex;
-    flex-flow: row wrap; /* Permitir que los elementos se ajusten en varias filas */
+    flex-flow: row wrap;
     gap: 12px;
     margin-top: 15px;
     padding: 0;
     list-style: none;
-    width: 100%; /* Ocupar todo el ancho disponible */
+    width: 100%;
     justify-content: center;
-    clear: both; /* Asegurar que no haya elementos flotantes alrededor */
+    clear: both;
 }
 
-/* Estilo para el botón con apariencia de deshabilitado pero que sí puede recibir eventos */
 .disabled-look {
     opacity: 0.5;
     cursor: not-allowed;
     background-color: #ccc;
     border-color: #ccc;
     color: #666;
-    pointer-events: all !important; /* Aseguramos que reciba eventos */
+    pointer-events: all !important;
 }
 
 .disabled-look.active {
@@ -76,11 +72,11 @@
     border-radius: 6px;
     box-shadow: 0 2px 5px rgba(42, 33, 33, 0.1);
     background-color: rgba(238, 236, 232, 0.5);
-    display: inline-block; /* Cambiar a inline-block */
+    display: inline-block;
     text-align: center;
     vertical-align: top;
     transition: transform 0.2s ease;
-    box-sizing: border-box; /* Asegurar que el padding no afecte el ancho */
+    box-sizing: border-box;
 }
 
 #upload ul li:hover {
@@ -121,7 +117,7 @@
 }
 
 .cancel-upload {
-    position: absolute; /* Mantener absoluto para el botón */
+    position: absolute;
     top: 5px;
     right: 5px;
     background: rgba(238, 236, 232, 0.8);
@@ -137,21 +133,18 @@
     z-index: 2;
 }
 
-/* Corregir los estilos del contenedor de la imagen */
 .img-container {
     width: 100%;
     position: relative;
 }
 
-/* Sobreescribir los estilos de estilos.css que puedan afectar */
 main.upload>form>div#drop {
-    display: block !important; /* Forzar display:block */
+    display: block !important;
     width: 100% !important;
     height: auto !important;
     min-height: 150px;
 }
 
-/* Responsive - ajustar a 2 columnas en dispositivos medianos */
 @media (max-width: 768px) {
     #upload ul li {
         flex: 0 0 calc(50% - 12px);
@@ -163,7 +156,6 @@ main.upload>form>div#drop {
     }
 }
 
-/* Responsive - ajustar a 1 columna en dispositivos pequeños */
 @media (max-width: 480px) {
     #upload ul li {
         flex: 0 0 100%;
