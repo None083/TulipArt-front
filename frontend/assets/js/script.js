@@ -8,11 +8,10 @@ $(function () {
 
     var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
     if (imagenesGuardadas) {
-        try {
-            imagenesTemporal = JSON.parse(imagenesGuardadas);
+        try {            imagenesTemporal = JSON.parse(imagenesGuardadas);
             // si ya hay imágenes activar botón continuar
             if (imagenesTemporal.length > 0) {
-                $('button[type="submit"]').prop('disabled', false).addClass('active');
+                $('#upload-submit').removeClass('disabled-look').addClass('active');
             }
         } catch (e) {
             localStorage.removeItem('imagenesTemporal');
@@ -142,18 +141,15 @@ $(function () {
                     }
 
                     data.context.fadeOut(function () {
-                        $(this).remove();
-
-                        // desactivar el botón si no quedan imágenes
+                        $(this).remove();                        // desactivar el botón si no quedan imágenes
                         if (imagenesTemporal.length === 0) {
-                            $('button[type="submit"]').prop('disabled', true).removeClass('active');
+                            $('#upload-submit').addClass('disabled-look').removeClass('active');
                         }
                     });
                 });
 
-                // guardar la información en localStorage
-                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));                // activar botón submit cuando haya al menos una imagen
-                $('button[type="submit"]').prop('disabled', false).addClass('active');
+                // guardar la información en localStorage                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));                // activar botón submit cuando haya al menos una imagen
+                $('#upload-submit').removeClass('disabled-look').addClass('active');
                 
                 // Ocultar el mensaje de error si estaba visible
                 $('#error-message-upload').css({
@@ -194,16 +190,16 @@ $(function () {
 
         window.location.href = 'submit.html';
     });
-    
-    // Añadir evento click al botón de submit aunque esté deshabilitado
+      // Añadir evento click al botón de submit aunque parezca deshabilitado
     $('#upload-submit').on('click', function(e) {
-        if ($(this).prop('disabled')) {
+        if ($(this).hasClass('disabled-look')) {
             e.preventDefault();
             // Mostrar el mensaje de error cambiando su visibilidad
             $('#error-message-upload').css({
                 'opacity': '1',
                 'visibility': 'visible'
             });
+            return false;
         }
     });
 
