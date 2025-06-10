@@ -1,4 +1,3 @@
-<!-- filepath: c:\xampp\htdocs\Proyectos\TulipArt\frontend\paginas\upload.html -->
 <!DOCTYPE html>
 <html lang="es">
 
@@ -47,23 +46,22 @@
                     <div id="drop-here">Press here or drop your art</div>
                     <ul>
                         <!-- Las imágenes subidas aparecerán aquí -->
-                    </ul>                </div>
+                    </ul>
+                </div>
                 <span id="error-message-upload">You must upload at least one image</span>
-                <button id="upload-submit" type="submit" class="disabled-look">Continue to add details</button>
+                <button id="upload-submit" type="submit" disabled>Continue to add details</button>
             </form>
         </main>
     </div>
     <script>
-        // Manejar clic en el botón de volver
+        // botón volver
         $('#upload-atras').on('click', function (e) {
             e.preventDefault();
 
-            // Obtener las imágenes temporales del localStorage
             const imagenesTemporal = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
 
-            // Si hay imágenes temporales, eliminarlas
+            // si hay imágenes temporales, eliminarlas
             if (imagenesTemporal.length > 0) {
-                // Llamar al servicio para eliminar las imágenes temporales
                 $.ajax({
                     url: DIR_API + "/limpiar_imagenes_temporales",
                     type: "POST",
@@ -73,13 +71,12 @@
                     dataType: "json",
                     headers: { Authorization: "Bearer " + localStorage.token },
                     complete: function () {
-                        // Limpiar localStorage y volver atrás
+                        // limpiar localStorage y volver atrás
                         localStorage.removeItem('imagenesTemporal');
                         window.history.back();
                     }
                 });
             } else {
-                // Si no hay imágenes, simplemente volver atrás
                 window.history.back();
             }
         });

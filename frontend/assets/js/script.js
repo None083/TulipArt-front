@@ -1,19 +1,16 @@
-// Modificar script.js para el nuevo enfoque de imágenes temporales
-
-// Variable global para que esté disponible entre páginas
-window.imagenesTemporal = [];
-
 $(function () {
 
     var ul = $('#upload ul');
-    
-    // Usar la variable global
-    window.imagenesTemporal = [];    var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
+
+    var imagenesTemporal = [];
+
+    var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
     if (imagenesGuardadas) {
-        try {            window.imagenesTemporal = JSON.parse(imagenesGuardadas);
+        try {
+            imagenesTemporal = JSON.parse(imagenesGuardadas);
             // si ya hay imágenes activar botón continuar
-            if (window.imagenesTemporal.length > 0) {
-                $('#upload-submit').removeClass('disabled-look').addClass('active');
+            if (imagenesTemporal.length > 0) {
+                $('button[type="submit"]').prop('disabled', false).addClass('active');
             }
         } catch (e) {
             localStorage.removeItem('imagenesTemporal');
@@ -109,7 +106,9 @@ $(function () {
                     nombreTemporal: data.result.nombreTemporal,
                     nombreOriginal: data.files[0].name,
                     urlTemporal: data.result.urlTemporal
-                };                window.imagenesTemporal.push(infoImagen);
+                };
+
+                imagenesTemporal.push(infoImagen);
                 data.context.empty();
                 const $imgContainer = $('<div class="img-container" style="position:relative;"></div>');
                 const $cancelBtn = $('<span class="cancel-upload">✖</span>');
@@ -126,34 +125,35 @@ $(function () {
                 $imgContainer.appendTo(data.context);
 
                 $cancelBtn.on('click', function (e) {
-                    e.stopPropagation();                    // encontrar índice imagen en el array
-                    const index = window.imagenesTemporal.findIndex(img =>
+                    e.stopPropagation();
+
+                    // encontrar índice imagen en el array
+                    const index = imagenesTemporal.findIndex(img =>
                         img.nombreTemporal === infoImagen.nombreTemporal
                     );
 
                     if (index !== -1) {
                         // eliminar la imagen del array
-                        window.imagenesTemporal.splice(index, 1);
+                        imagenesTemporal.splice(index, 1);
                         // actualizar el localStorage
-                        localStorage.setItem('imagenesTemporal', JSON.stringify(window.imagenesTemporal));
+                        localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
                     }
 
                     data.context.fadeOut(function () {
-                        $(this).remove();                        // desactivar el botón si no quedan imágenes
-                        if (window.imagenesTemporal.length === 0) {
-                            $('#upload-submit').addClass('disabled-look').removeClass('active');
+                        $(this).remove();
+
+                        // desactivar el botón si no quedan imágenes
+                        if (imagenesTemporal.length === 0) {
+                            $('button[type="submit"]').prop('disabled', true).removeClass('active');
                         }
                     });
                 });
 
-                // guardar la información en localStorage                localStorage.setItem('imagenesTemporal', JSON.stringify(window.imagenesTemporal));                // activar botón submit cuando haya al menos una imagen
-                $('#upload-submit').removeClass('disabled-look').addClass('active');
-                
-                // Ocultar el mensaje de error si estaba visible
-                $('#error-message-upload').css({
-                    'opacity': '0',
-                    'visibility': 'hidden'
-                });
+                // guardar la información en localStorage
+                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
+
+                // activar botón submit cuando haya al menos una imagen
+                $('button[type="submit"]').prop('disabled', false).addClass('active');
             }
         },
 
@@ -173,32 +173,18 @@ $(function () {
         $(this).addClass('active');
     }).on('dragleave dragend drop', function () {
         $(this).removeClass('active');
-    });    // envío formulario
+    });
+
+    // envío formulario
     $('#upload').on('submit', function (e) {
         e.preventDefault();
 
-        if (window.imagenesTemporal.length === 0) {
-            // Mostrar el mensaje de error cambiando su visibilidad
-            $('#error-message-upload').css({
-                'opacity': '1',
-                'visibility': 'visible'
-            });
+        if (imagenesTemporal.length === 0) {
+            alert('Por favor, sube al menos una imagen antes de continuar');
             return;
         }
 
         window.location.href = 'submit.html';
-    });
-      // Añadir evento click al botón de submit aunque parezca deshabilitado
-    $('#upload-submit').on('click', function(e) {
-        if ($(this).hasClass('disabled-look')) {
-            e.preventDefault();
-            // Mostrar el mensaje de error cambiando su visibilidad
-            $('#error-message-upload').css({
-                'opacity': '1',
-                'visibility': 'visible'
-            });
-            return false;
-        }
     });
 
 });
