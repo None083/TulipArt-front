@@ -152,10 +152,14 @@ $(function () {
                 });
 
                 // guardar la información en localStorage
-                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
-
-                // activar botón submit cuando haya al menos una imagen
+                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));                // activar botón submit cuando haya al menos una imagen
                 $('button[type="submit"]').prop('disabled', false).addClass('active');
+                
+                // Ocultar el mensaje de error si estaba visible
+                $('#error-message-upload').css({
+                    'opacity': '0',
+                    'visibility': 'hidden'
+                });
             }
         },
 
@@ -175,18 +179,32 @@ $(function () {
         $(this).addClass('active');
     }).on('dragleave dragend drop', function () {
         $(this).removeClass('active');
-    });
-
-    // envío formulario
+    });    // envío formulario
     $('#upload').on('submit', function (e) {
         e.preventDefault();
 
         if (imagenesTemporal.length === 0) {
-            alert('Por favor, sube al menos una imagen antes de continuar');
+            // Mostrar el mensaje de error cambiando su visibilidad
+            $('#error-message-upload').css({
+                'opacity': '1',
+                'visibility': 'visible'
+            });
             return;
         }
 
         window.location.href = 'submit.html';
+    });
+    
+    // Añadir evento click al botón de submit aunque esté deshabilitado
+    $('#upload-submit').on('click', function(e) {
+        if ($(this).prop('disabled')) {
+            e.preventDefault();
+            // Mostrar el mensaje de error cambiando su visibilidad
+            $('#error-message-upload').css({
+                'opacity': '1',
+                'visibility': 'visible'
+            });
+        }
     });
 
 });
