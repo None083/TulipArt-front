@@ -1,19 +1,19 @@
 // Modificar script.js para el nuevo enfoque de imágenes temporales
 
+
+// Hacer la variable global
+window.imagenesTemporal = [];
+
 $(function () {
-
     var ul = $('#upload ul');
-
-    // Almacenar información de imágenes temporales
-    var imagenesTemporal = [];
 
     // Si hay imágenes almacenadas previamente, recuperarlas
     var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
     if (imagenesGuardadas) {
         try {
-            imagenesTemporal = JSON.parse(imagenesGuardadas);
+            window.imagenesTemporal = JSON.parse(imagenesGuardadas);
             // Si ya hay imágenes, activar el botón de continuar
-            if (imagenesTemporal.length > 0) {
+            if (window.imagenesTemporal.length > 0) {
                 $('button[type="submit"]').prop('disabled', false).addClass('active');
             }
         } catch (e) {
@@ -129,6 +129,7 @@ $(function () {
             data.context.addClass('success');
 
             // Guardar la información de la imagen temporal
+
             if (data.result.nombreTemporal && data.result.urlTemporal) {
                 // Almacenar información de la imagen
                 const infoImagen = {
@@ -137,7 +138,7 @@ $(function () {
                     urlTemporal: data.result.urlTemporal
                 };
 
-                imagenesTemporal.push(infoImagen);
+                window.imagenesTemporal.push(infoImagen);
 
                 // Reorganizar el contenido del elemento li
                 data.context.empty();
@@ -167,19 +168,20 @@ $(function () {
                 $imgContainer.appendTo(data.context);
 
                 // Configurar el evento de cancelar
+
                 $cancelBtn.on('click', function (e) {
                     e.stopPropagation(); // Evitar que el evento se propague
 
-                    // Encontrar el índice de esta imagen en el array
-                    const index = imagenesTemporal.findIndex(img =>
+                    // Encontrar el índice de esta imagen en el array global
+                    const index = window.imagenesTemporal.findIndex(img =>
                         img.nombreTemporal === infoImagen.nombreTemporal
                     );
 
                     if (index !== -1) {
-                        // Eliminar la imagen del array
-                        imagenesTemporal.splice(index, 1);
+                        // Eliminar la imagen del array global
+                        window.imagenesTemporal.splice(index, 1);
                         // Actualizar el localStorage
-                        localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
+                        localStorage.setItem('imagenesTemporal', JSON.stringify(window.imagenesTemporal));
                     }
 
                     // Eliminar el elemento visual con animación
@@ -187,14 +189,14 @@ $(function () {
                         $(this).remove();
 
                         // Desactivar el botón si no quedan imágenes
-                        if (imagenesTemporal.length === 0) {
+                        if (window.imagenesTemporal.length === 0) {
                             $('button[type="submit"]').prop('disabled', true).removeClass('active');
                         }
                     });
                 });
 
                 // Guardar la información en localStorage
-                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
+                localStorage.setItem('imagenesTemporal', JSON.stringify(window.imagenesTemporal));
 
                 // Activar el botón de submit cuando haya al menos una imagen
                 $('button[type="submit"]').prop('disabled', false).addClass('active');
@@ -227,7 +229,7 @@ $(function () {
         e.preventDefault();
 
         // Comprobar que hay imágenes subidas
-        if (imagenesTemporal.length === 0) {
+        if (window.imagenesTemporal.length === 0) {
             alert('Por favor, sube al menos una imagen antes de continuar');
             return;
         }

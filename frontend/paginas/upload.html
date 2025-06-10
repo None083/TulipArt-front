@@ -83,13 +83,15 @@
                 // Si no hay imágenes, simplemente volver atrás
                 window.history.back();
             }
-        });        // Script para manejar correctamente el mensaje de error
+        });        
+        // Script para manejar correctamente el mensaje de error
         $(document).ready(function() {
             // Ocultar el mensaje de error al inicio
             $('#error-message-upload').css('visibility', 'hidden');
             
             // Comprobar si hay imágenes almacenadas
-            const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');            if (imagenes.length > 0) {
+            const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');            
+            if (imagenes.length > 0) {
                 $('#error-message-upload').css('visibility', 'hidden');
                 $('#upload-submit').removeClass('disabled-look').addClass('active');
             } else {
@@ -97,7 +99,8 @@
             }
             
             // Usar delegación de eventos para capturar cualquier clic en el contenedor del formulario
-            $('#upload').on('click', function(e) {            // Verificar si se hizo clic en el botón submit
+            $('#upload').on('click', function(e) {            
+                // Verificar si se hizo clic en el botón submit
                 if ($(e.target).is('#upload-submit') || $(e.target).closest('#upload-submit').length) {
                     const imagenes = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
                     if (imagenes.length === 0) {
