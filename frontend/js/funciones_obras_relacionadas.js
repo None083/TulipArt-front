@@ -1,4 +1,3 @@
-const DIR_API = "https://tulipart-production.up.railway.app/";
 // Función para cargar obras relacionadas por etiquetas
 async function cargar_obras_relacionadas_por_tags(idObra, contenedor = '#related-by-tags', limite = 6) {
     try {
