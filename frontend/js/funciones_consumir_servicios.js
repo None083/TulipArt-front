@@ -1,4 +1,4 @@
-const DIR_API = (typeof appConfig !== 'undefined' ? appConfig.apiBaseUrl : 'https://tulipart-production.up.railway.app');
+const DIR_API = 'https://tulipart-production.up.railway.app';
 
 $(document).ready(function () {
     $('.no-logged').on('click', function (e) {
@@ -30,17 +30,15 @@ $(document).ready(function () {
         $('#logout').show();
     }
 
+    // enlace al perfil
     $('#profile, #profile-header').on('click', function (e) {
         if (!localStorage.token) {
             e.preventDefault();
             const loginPath = window.location.pathname.includes('paginas/') ? "login.html" : "paginas/login.html";
             window.location.href = loginPath;
         } else {
-            // Asegurar que lleve al perfil del usuario logueado usando solo el ID
             const idUsu = localStorage.getItem('idUsu');
-            const profilePath = window.location.pathname.includes('paginas/') ?
-                `profile.html?id=${idUsu}` :
-                `paginas/profile.html?id=${idUsu}`;
+            const profilePath = window.location.pathname.includes('paginas/') ? `profile.html?id=${idUsu}` : `paginas/profile.html?id=${idUsu}`;
 
             e.preventDefault();
             window.location.href = profilePath;
@@ -48,8 +46,6 @@ $(document).ready(function () {
     });
 
 });
-
-// Index
 
 async function cargar_obras() {
     try {
@@ -1212,6 +1208,53 @@ async function cargar_alertas(idUsu, link) {
 
     } catch (error) {
         $('#errores').html("Error al cargar las alertas: " + error);
+    }
+}
+
+async function eliminar_comentario(idComentario) {
+    try {
+        const response = await $.ajax({
+            url: DIR_API + "/eliminar_comentario_obra/" + idComentario,
+            type: "DELETE",
+            dataType: "json",
+            headers: { Authorization: "Bearer " + localStorage.token }
+        });
+
+        if (response.error) {
+            $('#errores').html("Error al eliminar comentario: " + response.error);
+            return false;
+        } else {
+            $('#errores').html("Comentario eliminado correctamente");
+            return true;
+        }
+    } catch (error) {
+        $('#errores').html("Error al eliminar el comentario:", error);
+        return false;
+    }
+}
+
+async function editar_comentario(idComentario, nuevoTexto) {
+    try {
+        const response = await $.ajax({
+            url: DIR_API + "/editar_comentario_obra/" + idComentario,
+            type: "PUT",
+            data: {
+                'new-comment': nuevoTexto
+            },
+            dataType: "json",
+            headers: { Authorization: "Bearer " + localStorage.token }
+        });
+
+        if (response.error) {
+            $('#errores').html("Error al editar comentario: " + response.error);
+            return false;
+        } else {
+            $('#errores').html("Comentario editado correctamente");
+            return true;
+        }
+    } catch (error) {
+        $('#errores').html("Error al editar el comentario: " + error);
+        return false;
     }
 }
 

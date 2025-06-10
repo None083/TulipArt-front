@@ -1,25 +1,22 @@
-// Funcionalidades de filtrado y búsqueda para las páginas interiores
 $(document).ready(function () {
-    // Agregar evento para la búsqueda en el input de la barra de navegación
+    // enter en search header
     $('#buscar').on('keypress', function(e) {
-        if(e.which === 13) { // Tecla Enter
+        if(e.which === 13) {
             e.preventDefault();
             const textoBusqueda = $(this).val().trim();
             if (textoBusqueda) {
-                // Redirigir al index con el parámetro de búsqueda
                 window.location.href = "../index.html?search=" + encodeURIComponent(textoBusqueda);
             }
         }
     });
-      // Evento para mostrar/ocultar capa de búsqueda
+    
+    // click lupa: mostrar/ocultar search
     $('#lupa-blanca, #lupa-negra').on('click', function(e) {
-        // Si hay texto en el buscador de la barra de navegación, redirigir con búsqueda
         const textoBusqueda = $('#buscar').val().trim();
         if (textoBusqueda) {
             e.preventDefault();
             window.location.href = "../index.html?search=" + encodeURIComponent(textoBusqueda);
         } else {
-            // Si no hay texto, mostrar el buscador expandido
             $('#capa-buscador').fadeIn();
         }
     });
@@ -28,7 +25,7 @@ $(document).ready(function () {
         $('#capa-buscador').fadeOut();
     });
     
-    // Función para realizar búsqueda desde el buscador expandido
+    // buscar en buscador expandido
     function realizarBusquedaExpandido() {
         const textoBusqueda = $('#buscador').val().trim();
         if (textoBusqueda) {
@@ -36,14 +33,14 @@ $(document).ready(function () {
         }
     }
     
-    // Agregar evento para la búsqueda en el input del buscador expandido
+    // enter en input buscador expandido
     $('#buscador').on('keypress', function(e) {
         if(e.which === 13) { // Tecla Enter
             e.preventDefault();
             realizarBusquedaExpandido();
         }
     });
-      // Agregar evento para el botón de búsqueda del buscador expandido
+    // click lupa negra buscador expandido
     $('#lupa-negra-buscador').parent().on('click', function(e) {
         e.preventDefault();
         realizarBusquedaExpandido();
@@ -51,7 +48,7 @@ $(document).ready(function () {
         $('#capa-buscador').fadeOut();
     });
     
-    // Evento para las etiquetas sugeridas
+    // click en tag sugerido
     $('#tags li').on('click', function() {
         const tag = $(this).text();
         // Redirigir al index con el parámetro de búsqueda
@@ -60,7 +57,7 @@ $(document).ready(function () {
         $('#capa-buscador').fadeOut();
     });
     
-    // Configurar eventos para los elementos del menú principal
+    // click en menu principal
     $('nav#menu-principal ul#menu-desplegado li a').on('click', function(e) {
         const seccion = $(this).text().toLowerCase();
         if (seccion === 'home') {

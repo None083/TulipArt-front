@@ -1,65 +1,47 @@
 $(document).ready(function () {
 
-    // Cargar etiquetas para autocompletado
     var etiquetas = [];
     cargarEtiquetas();
 
-    // Recuperar la información de imágenes temporales del localStorage
     const imagenesTemporal = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');
 
-    // Si hay imágenes, cargarlas en el contenedor
+    // si hay imagenes mostrarlas
     if (imagenesTemporal.length > 0) {
-        // Limpiar el contenedor de imágenes
         $('#imageContainer').empty();
-
-        // Crear un slider si hay múltiples imágenes
         if (imagenesTemporal.length > 1) {
             const $slider = $('<div class="slider-container"></div>');
             const $sliderTrack = $('<div class="slider-track"></div>');
-
-            // Añadir imágenes al slider
             imagenesTemporal.forEach((imagen, index) => {
-                // Asegurarse de que la URL es correcta
                 const urlImagen = imagen.urlTemporal;
-
                 const $slide = $('<div class="slide"></div>');
                 const $img = $('<img>').attr({
                     src: urlImagen,
                     alt: imagen.nombreOriginal,
                     'data-nombre-temporal': imagen.nombreTemporal
                 });
-
                 $slide.append($img);
                 $sliderTrack.append($slide);
             });
-
-            // Añadir controles de navegación
             const $prevBtn = $('<button type="button" class="slider-btn prev">❮</button>');
             const $nextBtn = $('<button type="button" class="slider-btn next">❯</button>');
-
             $slider.append($sliderTrack, $prevBtn, $nextBtn);
             $('#imageContainer').append($slider);
-
-            // Funcionalidad de slider
             let currentSlide = 0;
             const totalSlides = imagenesTemporal.length;
-
             function updateSlider() {
                 const offset = -currentSlide * 100;
                 $sliderTrack.css('transform', `translateX(${offset}%)`);
             }
-
             $prevBtn.on('click', function () {
                 currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
                 updateSlider();
             });
-
             $nextBtn.on('click', function () {
                 currentSlide = (currentSlide + 1) % totalSlides;
                 updateSlider();
             });
         } else {
-            // Si solo hay una imagen, mostrarla directamente
+            // para solo una imagen
             const imagen = imagenesTemporal[0];
             const $img = $('<img>').attr({
                 src: imagen.urlTemporal,
@@ -70,7 +52,7 @@ $(document).ready(function () {
             $('#imageContainer').append($img);
         }
 
-        // Añadir campo oculto con la información de las imágenes
+        // campo oculto info imagenes
         if ($('#imagenes-temporal').length === 0) {
             $('<input>').attr({
                 type: 'hidden',
@@ -81,7 +63,6 @@ $(document).ready(function () {
         }
     }
 
-    // Función para cargar etiquetas para autocompletado
     async function cargarEtiquetas() {
         try {
             const response = await $.ajax({
@@ -89,12 +70,10 @@ $(document).ready(function () {
                 type: "GET",
                 dataType: "json"
             });
-
             if (response.error) {
                 console.error("Error al cargar etiquetas:", response.error);
                 return;
             }
-
             if (Array.isArray(response.etiquetas)) {
                 etiquetas = response.etiquetas.map(etiqueta => etiqueta.nombre.toLowerCase());
             }
@@ -103,44 +82,33 @@ $(document).ready(function () {
         }
     }
 
-    // Autocompletado de etiquetas
+    // recomendar etiquetas en input
     $('#tags').on('input', function () {
         const textoInput = $(this).val();
         actualizarSugerencias(textoInput);
     });
 
-    // Función para actualizar sugerencias
+    // actualizar sugerencias
     function actualizarSugerencias(texto) {
         const $sugerenciasContainer = $('#sugerencias-container');
-
-        // Limpiar sugerencias previas
         $sugerenciasContainer.empty();
-
         if (!texto) {
             $sugerenciasContainer.hide().removeClass('visible');
             return;
         }
-
-        // Obtener la última palabra después de la coma
         const palabras = texto.split(',');
         const ultimaPalabra = palabras[palabras.length - 1].trim().toLowerCase();
-
         if (!ultimaPalabra) {
             $sugerenciasContainer.hide().removeClass('visible');
             return;
         }
-
-        // Buscar etiquetas que coincidan
         const sugerencias = etiquetas.filter(etiqueta =>
             etiqueta.includes(ultimaPalabra) && etiqueta !== ultimaPalabra
         );
-
-        // Mostrar sugerencias
         if (sugerencias.length > 0) {
             sugerencias.forEach(sugerencia => {
                 const $sugerencia = $('<div class="sugerencia"></div>').text(sugerencia);
                 $sugerencia.on('click', function () {
-                    // Reemplazar la última palabra con la sugerencia seleccionada
                     palabras[palabras.length - 1] = sugerencia;
                     $('#tags').val(palabras.join(', ') + ', ');
                     $sugerenciasContainer.hide().removeClass('visible');
@@ -148,27 +116,22 @@ $(document).ready(function () {
                 });
                 $sugerenciasContainer.append($sugerencia);
             });
-
-            // Forzar la visualización de las sugerencias
             $sugerenciasContainer.addClass('visible').show();
-
         } else {
             $sugerenciasContainer.hide().removeClass('visible');
         }
     }
 
-    // Cerrar las sugerencias al hacer clic fuera
+    // cerrar sugerencias al hacer clic fuera
     $(document).on('click', function (e) {
         if (!$(e.target).closest('.tags-wrapper').length) {
             $('#sugerencias-container').hide().removeClass('visible');
         }
     });
 
-    // Gestionar envío del formulario
+    // submit form
     $('#submit-form').on('submit', async function (e) {
         e.preventDefault();
-
-        // Verificar si hay imágenes subidas
         const imagenesTempInfo = $('#imagenes-temporal').val();
         if (!imagenesTempInfo) {
             $("<div title='Missing Images'>There are no images associated with this artwork. Please upload at least one image.</div>").dialog({
@@ -183,12 +146,10 @@ $(document).ready(function () {
             });
             return;
         }
-
         const imagenesTemporal = JSON.parse(imagenesTempInfo);
-
         const title = $('#title').val().trim();
         const description = $('#description').val().trim();
-        const tags = $('#tags').val().trim();        // Verificar campos obligatorios
+        const tags = $('#tags').val().trim();
         if (!title || !description || !tags) {
             $("<div title='Incomplete Fields'>Please complete all required fields</div>").dialog({
                 modal: true,
@@ -202,16 +163,11 @@ $(document).ready(function () {
             });
             return;
         }
-
-        // Obtener valores de checkboxes
         const downloadable = $('#check1').is(':checked');
         const matureContent = $('#check2').is(':checked');
         const aiGenerated = $('#check3').is(':checked');
-
-        // ID de usuario
         const idUsu = localStorage.getItem('idUsu');
         try {
-            // Crear la obra y procesar las imágenes temporales
             const obraResponse = await $.ajax({
                 url: DIR_API + "/crear_obra_con_imagenes",
                 type: "POST",
@@ -239,13 +195,9 @@ $(document).ready(function () {
                 });
                 return;
             }
-            // Procesar etiquetas
             const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
             await procesarEtiquetas(tagsArray, obraResponse.idObra);
-
-            // Limpiar localStorage después de éxito
             localStorage.removeItem('imagenesTemporal');
-            // Mostrar mensaje de éxito
             $("<div title='Success!'>Artwork successfully published</div>").dialog({
                 modal: true,
                 dialogClass: 'tulipart-success success-dialog',
@@ -260,7 +212,6 @@ $(document).ready(function () {
                 buttons: {
                     "OK": function () {
                         $(this).dialog("close");
-                        // Redirigir al perfil del usuario
                         window.location.href = `profile.html?id=${idUsu}`;
                     }
                 }
@@ -281,20 +232,16 @@ $(document).ready(function () {
         }
     });
 
-    // Función para procesar etiquetas
     async function procesarEtiquetas(tagsArray, idObra) {
         for (const tag of tagsArray) {
-            try {                // Buscar si la etiqueta ya existe
+            try {
                 const responseCheck = await $.ajax({
                     url: DIR_API + `/buscar_etiqueta/${tag}`,
                     type: "GET",
                     dataType: "json",
                     headers: { Authorization: "Bearer " + localStorage.token }
                 });
-
                 let idEtiqueta;
-
-                // Si la etiqueta no existe, crearla
                 if (responseCheck.etiquetas.length === 0) {
                     const responseCreate = await $.ajax({
                         url: DIR_API + "/crear_etiqueta",
@@ -303,7 +250,6 @@ $(document).ready(function () {
                         dataType: "json",
                         headers: { Authorization: "Bearer " + localStorage.token }
                     });
-
                     if (responseCreate.error) {
                         console.error(`Error al crear etiqueta ${tag}:`, responseCreate.error);
                         continue;
@@ -311,8 +257,7 @@ $(document).ready(function () {
                     idEtiqueta = responseCreate.idEtiqueta;
                 } else {
                     idEtiqueta = responseCheck.etiquetas[0].idEtiqueta;
-                }                
-                // Crear relación etiqueta-obra
+                }
                 await $.ajax({
                     url: DIR_API + "/crear_etiqueta_obra",
                     type: "POST",
@@ -323,7 +268,6 @@ $(document).ready(function () {
                     dataType: "json",
                     headers: { Authorization: "Bearer " + localStorage.token }
                 });
-
             } catch (error) {
                 $('#errores').html(`Error al procesar etiqueta ${tag}: ${error}`);
             }

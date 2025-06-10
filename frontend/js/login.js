@@ -1,10 +1,7 @@
-// Usa la configuración global para la API
-// Requiere que config.js esté incluido antes
-const DIR_API = (typeof appConfig !== 'undefined' ? appConfig.apiBaseUrl : 'https://tulipart-production.up.railway.app');
+const DIR_API = 'https://tulipart-production.up.railway.app';
 
 $(function () {
     if (localStorage.token) {
-        //
         $.ajax({
             url: DIR_API + "/logueado",
             type: "GET",
@@ -26,7 +23,6 @@ $(function () {
                 else {
                     localStorage.setItem("ultm_accion", (new Date() / 1000));
                     localStorage.setItem("token", data.token);
-                    // Guarda el id del usuario logueado
                     localStorage.setItem("idUsu", data.usuario.idUsu);
                 }
 
@@ -246,7 +242,6 @@ function add32(a, b) {
 }
 
 // Error llamada ajax jquery
-
 function error_ajax_jquery(jqXHR, textStatus) {
     var respuesta;
     if (jqXHR.status === 0) {
