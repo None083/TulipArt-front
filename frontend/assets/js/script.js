@@ -1,16 +1,18 @@
 // Modificar script.js para el nuevo enfoque de imágenes temporales
 
+// Variable global para que esté disponible entre páginas
+window.imagenesTemporal = [];
+
 $(function () {
 
     var ul = $('#upload ul');
-
-    var imagenesTemporal = [];
-
-    var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
+    
+    // Usar la variable global
+    window.imagenesTemporal = [];    var imagenesGuardadas = localStorage.getItem('imagenesTemporal');
     if (imagenesGuardadas) {
-        try {            imagenesTemporal = JSON.parse(imagenesGuardadas);
+        try {            window.imagenesTemporal = JSON.parse(imagenesGuardadas);
             // si ya hay imágenes activar botón continuar
-            if (imagenesTemporal.length > 0) {
+            if (window.imagenesTemporal.length > 0) {
                 $('#upload-submit').removeClass('disabled-look').addClass('active');
             }
         } catch (e) {
@@ -107,9 +109,7 @@ $(function () {
                     nombreTemporal: data.result.nombreTemporal,
                     nombreOriginal: data.files[0].name,
                     urlTemporal: data.result.urlTemporal
-                };
-
-                imagenesTemporal.push(infoImagen);
+                };                window.imagenesTemporal.push(infoImagen);
                 data.context.empty();
                 const $imgContainer = $('<div class="img-container" style="position:relative;"></div>');
                 const $cancelBtn = $('<span class="cancel-upload">✖</span>');
@@ -126,29 +126,27 @@ $(function () {
                 $imgContainer.appendTo(data.context);
 
                 $cancelBtn.on('click', function (e) {
-                    e.stopPropagation();
-
-                    // encontrar índice imagen en el array
-                    const index = imagenesTemporal.findIndex(img =>
+                    e.stopPropagation();                    // encontrar índice imagen en el array
+                    const index = window.imagenesTemporal.findIndex(img =>
                         img.nombreTemporal === infoImagen.nombreTemporal
                     );
 
                     if (index !== -1) {
                         // eliminar la imagen del array
-                        imagenesTemporal.splice(index, 1);
+                        window.imagenesTemporal.splice(index, 1);
                         // actualizar el localStorage
-                        localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));
+                        localStorage.setItem('imagenesTemporal', JSON.stringify(window.imagenesTemporal));
                     }
 
                     data.context.fadeOut(function () {
                         $(this).remove();                        // desactivar el botón si no quedan imágenes
-                        if (imagenesTemporal.length === 0) {
+                        if (window.imagenesTemporal.length === 0) {
                             $('#upload-submit').addClass('disabled-look').removeClass('active');
                         }
                     });
                 });
 
-                // guardar la información en localStorage                localStorage.setItem('imagenesTemporal', JSON.stringify(imagenesTemporal));                // activar botón submit cuando haya al menos una imagen
+                // guardar la información en localStorage                localStorage.setItem('imagenesTemporal', JSON.stringify(window.imagenesTemporal));                // activar botón submit cuando haya al menos una imagen
                 $('#upload-submit').removeClass('disabled-look').addClass('active');
                 
                 // Ocultar el mensaje de error si estaba visible
@@ -179,7 +177,7 @@ $(function () {
     $('#upload').on('submit', function (e) {
         e.preventDefault();
 
-        if (imagenesTemporal.length === 0) {
+        if (window.imagenesTemporal.length === 0) {
             // Mostrar el mensaje de error cambiando su visibilidad
             $('#error-message-upload').css({
                 'opacity': '1',
