@@ -39,8 +39,7 @@ async function cargar_obras_relacionadas_por_tags(idObra, contenedor = '#related
                                 </div>
                             </div>
                         `).join('')}
-                    </div>                    
-                    ${obrasAMostrar.length > 1 ? `
+                    </div>                    ${obrasAMostrar.length > 1 ? `
                         <div class="related-slider-controls">
                             <button class="related-slider-prev">&lt;</button>
                             <div class="related-slider-dots">
@@ -104,7 +103,9 @@ async function buscar_obras_por_etiquetas(idsEtiquetas, idObraExcluir) {
             // Obtener la primera foto de la obra
             const fotosResponse = await obtener_fotos_obra(obra.idObra);
             const fotos = fotosResponse || [];
-            const primeraFoto = fotos.length > 0 ? `${DIR_API}/images/obras/${fotos[0].foto}` : "../imagenes/arte/default.webp";
+            const primeraFoto = fotos.length > 0
+                ? `${DIR_API}/images/obras/${fotos[0].foto}`
+                : "../imagenes/arte/default.webp";
 
             // Obtener datos del usuario autor
             const usuario = await obtener_datos_usuario(obra.idUsu);
