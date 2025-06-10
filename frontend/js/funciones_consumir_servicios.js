@@ -28,7 +28,8 @@ $(document).ready(function () {
         $('#logout').hide();
     }else{
         $('#logout').show();
-    }    // link perfil
+    }    
+    // link perfil
     $('#profile, #profile-header').on('click', function (e) {
         if (!localStorage.token) {
             e.preventDefault();

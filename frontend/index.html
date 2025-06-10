@@ -24,7 +24,8 @@
 			}			// params url para filtros y busquedas
 			const urlParams = new URLSearchParams(window.location.search);
 			const searchParam = urlParams.get('search');
-			const filtroParam = urlParams.get('filtro');			// si hay param de busqueda hacerla
+			const filtroParam = urlParams.get('filtro');			
+			// si hay param de busqueda hacerla
 			if (searchParam) {
 				const termino = decodeURIComponent(searchParam);
 				$('#foryou, #following, #new, #trending').removeClass('borderbottom');
@@ -33,7 +34,8 @@
 				// poner indicador de busqueda
 				$('#tab').append('<span id="busqueda-activa">Results for: "' + termino + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
 				buscar_obras(termino);
-			}			// aplico filtro si hay
+			}			
+			// aplico filtro si hay
 			else if (filtroParam) {
 				switch (filtroParam) {
 					case 'foryou':
@@ -61,11 +63,13 @@
 						cargar_trending();
 						$('#trending').addClass('borderbottom').siblings().removeClass('borderbottom');
 						break;
-					default:						// filtro no valido cargo recientes
+					default:						
+					// filtro no valido cargo recientes
 						cargar_recientes();
 						$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
 				}
-			} else {				// cargo filtro por defecto
+			} else {				
+				// cargo filtro por defecto
 				cargar_recientes();
 				$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
 			}
@@ -79,6 +83,7 @@
 					cargar_recientes();
 				}
 			});
+
 			$('#following').on('click', function () {
 				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
 				if (localStorage.token) {
@@ -96,7 +101,8 @@
 			$('#trending').on('click', function () {
 				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
 				cargar_trending();
-			});			// eventos menu principal
+			});			
+			// eventos menu principal
 			$('nav#menu-principal ul#menu-desplegado li a').on('click', function (e) {
 				const seccion = $(this).text().toLowerCase();
 				if (seccion === 'home') {
@@ -128,17 +134,19 @@
 					} else {
 						window.location.href = "paginas/login.html";
 					}
-				}			});			// busqueda desde buscador expandido
+				}			
+			});			
+			// busqueda desde buscador expandido
 			function realizarBusquedaExpandido() {
 				const textoBusqueda = $('#buscador').val().trim();
 				if (textoBusqueda) {
 					buscar_obras(textoBusqueda);
-					// cerrar capa
+
 					$('#capa-buscador').fadeOut();
-					// quitar borders
+
 					$('#foryou').removeClass('borderbottom');
 					$('#following').removeClass('borderbottom');
-					// quitar busqueda anterior
+
 					$('#busqueda-activa').remove();
 					$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
 				}
@@ -164,33 +172,33 @@
 				const textoBusqueda = $('#buscar').val().trim();
 				if (textoBusqueda) {
 					buscar_obras(textoBusqueda);
-					// limpio input
 					$('#buscar').val('');
-					// quito borders
 					$('#foryou, #following, #new, #trending').removeClass('borderbottom');
-					// quito busqueda prev
 					$('#busqueda-activa').remove();
-					// pongo texto busqueda
 					$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
 				}
 			}
-					// enter en busqueda nav
+					
+			// enter en busqueda nav
 			$('#buscar').on('keypress', function (e) {
 				if (e.which === 13) { // enter
 					e.preventDefault();
 					realizarBusquedaNavegacion();
 				}
 			});
-					// click lupas nav
+					
+			// click lupas nav
 			$('#lupa-blanca, #lupa-negra').on('click', function (e) {
 				// si hay texto hago busqueda
 				if ($('#buscar').val().trim()) {
 					e.preventDefault();
-					e.stopPropagation(); // stop propagacion
+					e.stopPropagation();
 					realizarBusquedaNavegacion();
 				}
-				// sin texto muestra el buscador expandido
-			});			// cerrar busqueda activa
+
+			});			
+			
+			// cerrar busqueda activa
 			$('#tab').on('click', '#cerrar-busqueda', function () {
 				$(this).parent().remove();
 				$('#new').addClass('borderbottom');
@@ -201,7 +209,7 @@
 			$('#cargar-mas-container').on('click', '#cargar-mas', function () {
 				cargar_mas_obras();
 			});
-			// Evento para dar like a una obra
+
 			$('#galery-index').on('click', '.btn-like', function () {
 				if (localStorage.token) {
 					const idUsu = localStorage.getItem('idUsu');
