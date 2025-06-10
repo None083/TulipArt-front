@@ -28,9 +28,7 @@ $(document).ready(function () {
         $('#logout').hide();
     }else{
         $('#logout').show();
-    }
-
-    // enlace al perfil
+    }    // link perfil
     $('#profile, #profile-header').on('click', function (e) {
         if (!localStorage.token) {
             e.preventDefault();
@@ -63,36 +61,36 @@ async function cargar_obras() {
             let html_obras = "";
             for (const tupla of response.obras) {
 
-                // Obtener las fotos de la obra
+                // fotos obra
                 const fotos = await obtener_fotos_obra(tupla["idObra"]);
-                const primeraFoto = fotos.length > 0 ? fotos[0]["foto"] : "imagenes/arte/default.webp"; // Usar una imagen por defecto si no hay fotos
+                const primeraFoto = fotos.length > 0 ? fotos[0]["foto"] : "imagenes/arte/default.webp"; // default si no hay
 
-                // Esperar a que se cargue la imagen y determinar la clase
+                // cargar imagen y definir clase
                 const classArticle = await determinarClaseImagen(DIR_API + '/images/obras/' + primeraFoto);
 
-                // Obtener los datos del usuario dueño de la obra
+                // datos usuario dueño
                 const usuario = await obtener_datos_usuario(tupla["idUsu"]);
-                const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // Nombre del usuario o valor por defecto
-                const iconoUsuario = usuario.fotoPerfil ? DIR_API + "/images/profilePics/" + usuario.fotoPerfil : DIR_API + "/images/profilePics/no_image.jpg"; // Icono del usuario o valor por defecto
+                const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // nombre o default
+                const iconoUsuario = usuario.fotoPerfil ? DIR_API + "/images/profilePics/" + usuario.fotoPerfil : DIR_API + "/images/profilePics/no_image.jpg"; // icono o default
 
-                // Obtener número de likes obra
+                // likes obra
                 const likes = await obtener_likes_obra(tupla["idObra"]);
-                const numLikes = likes.length; // Número de likes de la obra
+                const numLikes = likes.length; // total likes
 
-                // Verificar si el usuario actual ya dio like a esta obra
+                // check si usuario dio like
                 const yaDioLike = idUsu ? likes.some(like => like.idUsuLike == idUsu) : false;
                 const iconoLike = yaDioLike ? "imagenes/icons/Heart.svg" : "imagenes/icons/Favorite.svg";
 
-                // Verificar si el usuario actual sigue al autor
+                // check si usuario sigue autor
                 const yaSigue = idUsu ? await verificar_siguiendo(idUsu, tupla["idUsu"]) : false;
                 const textoBotonSeguir = yaSigue ? "Following" : "Follow";
                 const estilosBotonSeguir = yaSigue ?
                     'style="color: orange; border-color: orange;"' :
                     '';
 
-                // Obtener número de comentarios obra
+                // comentarios obra
                 const comentarios = await obtener_comentarios_obra(tupla["idObra"]);
-                const numComentarios = comentarios.length; // Número de comentarios de la obra
+                const numComentarios = comentarios.length; // total comentarios
 
 
                 html_obras += "<article class='post " + classArticle + "' data-idobra='" + tupla["idObra"] + "'><div class='capa-post'>"; // clase wide o vacía
@@ -100,19 +98,19 @@ async function cargar_obras() {
                 html_obras += "<a href='paginas/profile.html?id=" + tupla["idUsu"] + "'>"; //enlace perfil usuario autor *
                 html_obras += "<img src='imagenes/icons/user.svg' alt='pico bocadillo menu'><span>Profile</span></a><a href='#'><img src='imagenes/icons/share-2.svg' alt='pico bocadillo menu'><span>Share</span></a><a href='#'><img src='imagenes/icons/alert-circle.svg' alt='pico bocadillo menu'><span>Report</span></a></div></nav><div class='post-info'>";
                 html_obras += `<a href='paginas/profile.html?id=${tupla["idUsu"]}'>`; //enlace perfil usuario autor *
-                html_obras += `<img class='profile-pic' src='${iconoUsuario}' alt='Icon user ${nombreUsuario}'></a>`;// icono usuario
+                html_obras += `<img class='profile-pic' src='${iconoUsuario}' alt='Icon user ${nombreUsuario}'></a>`;// icono user
                 html_obras += "<div class='titulo-user'>";
-                html_obras += `<a id='enlace-post-index' href='paginas/post.html?id=${tupla["idObra"]}'>`;//enlace post
+                html_obras += `<a id='enlace-post-index' href='paginas/post.html?id=${tupla["idObra"]}'>`;//link post
                 html_obras += `<span class='titulo-obra'>${tupla["nombreObra"]}</span></a>`;//titulo obra
-                html_obras += "<a href='paginas/profile.html?id=" + tupla["idUsu"] + "'>";//enlace perfil usuario
-                html_obras += `<span class='nombre-user'>By ${nombreUsuario}</span></a></div>`;//nombre usuario
-                // Solo mostrar el botón seguir si el usuario logueado NO es el autor
+                html_obras += "<a href='paginas/profile.html?id=" + tupla["idUsu"] + "'>";//link perfil
+                html_obras += `<span class='nombre-user'>By ${nombreUsuario}</span></a></div>`;//nombre user
+                // mostrar boton seguir solo si user no es autor
                 if (idUsu && String(idUsu) !== String(tupla["idUsu"])) {
-                    html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //boton seguir
+                    html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //btn seguir
                 }
                 html_obras += "<img class='icon-albondiga' src='imagenes/icons/MenuVertical.svg' alt='menu-post'></div>";
-                html_obras += `<picture class='obra-arte'><img src='${DIR_API}/images/obras/${primeraFoto}' alt='Obra de arte'></picture>`; // Primera foto de la obra
-                html_obras += `<ul class='icons-post'><li><img id='btn-like-index' class='btn-like' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //dar like
+                html_obras += `<picture class='obra-arte'><img src='${DIR_API}/images/obras/${primeraFoto}' alt='Obra de arte'></picture>`; // primera foto
+                html_obras += `<ul class='icons-post'><li><img id='btn-like-index' class='btn-like' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //like
                 html_obras += "<li><img src='imagenes/icons/message-circle.svg' alt='Icon message post'><span id='num-comments'>" + numComentarios + "</span></li></ul></article>"; //comentar *
             }
             $('#galery-index').html(html_obras);
@@ -130,7 +128,7 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
         let url = DIR_API + "/obras";
         let params = {};
 
-        // Añadimos los parámetros de filtrado si existen
+        // params filtrado si existen
         if (filtro) params.filtro = filtro;
         if (valor) params.valor = valor;
         if (ordenar) params.ordenar = ordenar;
@@ -147,7 +145,7 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
             $('#galery-index').html("");
             return false;
         } else {
-            // Procesar cada obra y agregarla a la galería
+            // procesar cada obra y añadir a galeria
             const obras = response.obras;
             if (obras.length === 0) {
                 $('#galery-index').html("<p class='no-results'>No artworks matching your search were found.</p>");
@@ -200,31 +198,31 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
                 html_obras += "<a href='paginas/profile.html?id=" + tupla["idUsu"] + "'>"; //enlace perfil usuario autor *
                 html_obras += "<img src='imagenes/icons/user.svg' alt='pico bocadillo menu'><span>Profile</span></a><a href='#'><img src='imagenes/icons/share-2.svg' alt='pico bocadillo menu'><span>Share</span></a><a href='#'><img src='imagenes/icons/alert-circle.svg' alt='pico bocadillo menu'><span>Report</span></a></div></nav><div class='post-info'>";
                 html_obras += `<a href='paginas/profile.html?id=${tupla["idUsu"]}'>`; //enlace perfil usuario autor *
-                html_obras += `<img class='profile-pic' src='${iconoUsuario}' alt='Icon user ${nombreUsuario}'></a>`;// icono usuario
+                html_obras += `<img class='profile-pic' src='${iconoUsuario}' alt='Icon user ${nombreUsuario}'></a>`;// icono user
                 html_obras += "<div class='titulo-user'>";
-                html_obras += `<a id='enlace-post-index' href='paginas/post.html?id=${tupla["idObra"]}'>`;//enlace post
+                html_obras += `<a id='enlace-post-index' href='paginas/post.html?id=${tupla["idObra"]}'>`;//link post
                 html_obras += `<span class='titulo-obra'>${tupla["nombreObra"]}</span></a>`;//titulo obra
-                html_obras += "<a href='paginas/profile.html?id=" + tupla["idUsu"] + "'>";//enlace perfil usuario
-                html_obras += `<span class='nombre-user'>By ${nombreUsuario}</span></a></div>`;//nombre usuario
-                // Solo mostrar el botón seguir si el usuario logueado NO es el autor
+                html_obras += "<a href='paginas/profile.html?id=" + tupla["idUsu"] + "'>";//link perfil
+                html_obras += `<span class='nombre-user'>By ${nombreUsuario}</span></a></div>`;//nombre user
+                // mostrar boton seguir solo si user no es autor
                 if (idUsu && String(idUsu) !== String(tupla["idUsu"])) {
-                    html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //boton seguir
+                    html_obras += `<span class='boton-seguir' data-idautor='${tupla["idUsu"]}' ${estilosBotonSeguir}>${textoBotonSeguir}</span>`; //btn seguir
                 }
                 html_obras += "<img class='icon-albondiga' src='imagenes/icons/MenuVertical.svg' alt='menu-post'></div>";
-                html_obras += `<picture class='obra-arte'><img src='${DIR_API}/images/obras/${primeraFoto}' alt='Obra de arte ${tupla["nombreObra"]}'></picture>`; // Primera foto de la obra
-                html_obras += `<ul class='icons-post'><li><img class='btn-like' data-idobra='${tupla["idObra"]}' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //dar like
+                html_obras += `<picture class='obra-arte'><img src='${DIR_API}/images/obras/${primeraFoto}' alt='Obra de arte'></picture>`; // primera foto
+                html_obras += `<ul class='icons-post'><li><img class='btn-like' data-idobra='${tupla["idObra"]}' src='${iconoLike}' alt='Icon like'><span class='num-likes'>${numLikes}</span></li>`; //like
                 html_obras += `<li><a href='paginas/post.html?id=${tupla["idObra"]}#new-comment'><img src='imagenes/icons/message-circle.svg' alt='Icon message post'></a><span class='num-comments'>${numComentarios}</span></li></ul></article>`; //comentar *
             }
 
-            $('#galery-index').append(html_obras);            // Agregar botón "Cargar más" si hay más páginas
+            $('#galery-index').append(html_obras);            
+            // agregar botón cargar más si hay más páginas
             if (response.pagina_actual < response.total_paginas) {
-                // Asegurarse de que los valores son correctos y están codificados para HTML
+                // asegurarse valores correctos
                 const siguientePagina = parseInt(response.pagina_actual, 10) + 1;
                 const filtroSeguro = filtro ? filtro.replace(/"/g, '&quot;') : '';
                 const valorSeguro = valor ? valor.replace(/"/g, '&quot;') : '';
                 const ordenarSeguro = ordenar ? ordenar.replace(/"/g, '&quot;') : '';
 
-                // Limpiar contenedor antes de agregar el botón
                 $('#cargar-mas-container').empty();
 
                 const botonCargarMas = `
@@ -234,7 +232,7 @@ async function cargar_obras_filtradas(filtro = "", valor = "", ordenar = "", pag
                 `;
                 $('#cargar-mas-container').append(botonCargarMas);
             } else {
-                // Si no hay más páginas, asegurarse de que no quede ningún botón
+                // si no hay más páginas, asegurarse de que no quede ningún botón
                 $('#cargar-mas-container').empty();
             }
 
@@ -262,15 +260,14 @@ async function cargar_bio_perfil(idUsu) {
         } else {
             let seguidores = (await obtener_seguidores(idUsu)).length;
             let obras = (await obtener_obras_usuario(idUsu)).length;
-            // Actualiza los datos del perfil
-            $('#profile-photo').attr('src', DIR_API + "/images/profilePics/" + response.usuario.fotoPerfil);
-            $('#profile-name').text(response.usuario.nombre); // O response.usuario.nombre
-            $('#username').text('@' + response.usuario.nombreUsuario); // O response.usuario.username
 
-            // About me
+            $('#profile-photo').attr('src', DIR_API + "/images/profilePics/" + response.usuario.fotoPerfil);
+            $('#profile-name').text(response.usuario.nombre);
+            $('#username').text('@' + response.usuario.nombreUsuario);
+
             $('#aboutme-info').text(response.usuario.biografia);
 
-            // Números
+            // número follows y obras
             $('#follows .numbers').html(seguidores + ' Followers');
             $('#pieces .numbers').html(obras + ' Artworks');
             $('#views .numbers').html('123 Views');
@@ -282,7 +279,7 @@ async function cargar_bio_perfil(idUsu) {
     }
 }
 
-// Función para determinar la clase según las dimensiones de la imagen
+// determinar class segun dimensiones imagen
 function determinarClaseImagen(urlImagen) {
     return new Promise((resolve) => {
         const img = new Image();
@@ -295,12 +292,11 @@ function determinarClaseImagen(urlImagen) {
             }
         };
         img.onerror = function () {
-            resolve(""); // En caso de error al cargar la imagen
+            resolve("");
         };
     });
 }
 
-// Obtener fotos de una obra consumiendo el servicio /fotos_obra/idObra para usarlo en cargar_obras()
 async function obtener_fotos_obra(idObra) {
     try {
         const response = await $.ajax({
@@ -315,7 +311,7 @@ async function obtener_fotos_obra(idObra) {
             localStorage.clear();
             return [];
         } else {
-            return response.fotos; // Devolver el array de fotos
+            return response.fotos;
         }
     } catch (error) {
         $('#errores').html("Error al cargar las fotos de la obra.");
@@ -325,7 +321,6 @@ async function obtener_fotos_obra(idObra) {
     }
 }
 
-// funcion cosnsumir servicio obtener likes de una obra
 async function obtener_likes_obra(idObra) {
     try {
         const response = await $.ajax({
@@ -340,7 +335,7 @@ async function obtener_likes_obra(idObra) {
             localStorage.clear();
             return [];
         } else {
-            return response.likes_obra; // Devolver el array de likes
+            return response.likes_obra;
         }
     } catch (error) {
         $('#errores').html("Error al cargar los likes de la obra.");
@@ -350,16 +345,16 @@ async function obtener_likes_obra(idObra) {
     }
 }
 
-// Alterna el like: si ya existe lo quita, si no existe lo crea
+// alternar like, si existe quitar, si no crear
 async function toggle_like_obra(idObra, idUsu) {
     try {
-        // Obtener los likes actuales de la obra
+        // likes actuales
         const likes = await obtener_likes_obra(idObra);
-        // Comprobar si el usuario ya ha dado like a esta obra
+        // check si user ya dio like
         const yaDadoLike = likes.some(like => like.idUsuLike == idUsu);
 
         if (!yaDadoLike) {
-            // Si no ha dado like, lo creamos (POST)
+            // no like, crear
             const response = await $.ajax({
                 url: DIR_API + "/dar_like_obra",
                 type: "POST",
@@ -373,7 +368,7 @@ async function toggle_like_obra(idObra, idUsu) {
                 return false;
             }
         } else {
-            // Si ya ha dado like, lo borramos (DELETE)
+            // ya dio like, borrar
             const response = await $.ajax({
                 url: DIR_API + "/quitar_like_obra/" + idUsu + "/" + idObra,
                 type: "DELETE",
@@ -387,15 +382,13 @@ async function toggle_like_obra(idObra, idUsu) {
             }
         }
 
-        // Devolver el estado actual después de la operación
-        return !yaDadoLike; // true si se dio like, false si se quitó
+        return !yaDadoLike;
     } catch (error) {
         $('#errores').html("Error al alternar el like");
         return null;
     }
 }
 
-// funcion consumir servicio obtener comentarios de una obra
 async function obtener_comentarios_obra(idObra) {
     try {
         const response = await $.ajax({
@@ -420,7 +413,6 @@ async function obtener_comentarios_obra(idObra) {
     }
 }
 
-// Función para crear un comentario en una obra
 async function crear_comentario_obra(idUsu, idObra, textoComentario) {
     try {
         const response = await $.ajax({
@@ -445,8 +437,6 @@ async function crear_comentario_obra(idUsu, idObra, textoComentario) {
     }
 }
 
-//Profile
-
 async function obtener_datos_usuario(idUsu) {
     try {
         const response = await $.ajax({
@@ -459,17 +449,17 @@ async function obtener_datos_usuario(idUsu) {
             $('#errores').html(response.error);
             $('#principal').html("");
             localStorage.clear();
-            return {}; // Devolver un objeto vacío si hay un error
+            return {};
         } else if (!response.usuario) {
-            return {}; // Devolver un objeto vacío si no se encuentra el usuario
+            return {};
         } else {
-            return response.usuario; // Devolver el usuario encontrado
+            return response.usuario;
         }
     } catch (error) {
         $('#errores').html("Error al cargar los datos del usuario.");
         $('#principal').html("");
         localStorage.clear();
-        return {}; // Devolver un objeto vacío en caso de error
+        return {};
     }
 }
 
@@ -537,19 +527,19 @@ async function cargar_obras_usuario(idUsu) {
             const usuarioActual = localStorage.getItem('idUsu');
             let html_posts = '';
             for (const tupla of response.obras_usuario) {
-                // Obtener las fotos de la obra
+                // fotos obra
                 const fotos = await obtener_fotos_obra(tupla["idObra"]);
-                const primeraFoto = fotos.length > 0 ? fotos[0]["foto"] : "../imagenes/arte/default.webp"; // Usar una imagen por defecto si no hay fotos
+                const primeraFoto = fotos.length > 0 ? fotos[0]["foto"] : "../imagenes/arte/default.webp"; // default si no hay
 
-                // Obtener los datos del usuario dueño de la obra
+                // datos usuario dueño
                 const usuario = await obtener_datos_usuario(tupla["idUsu"]);
-                const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // Nombre del usuario o valor por defecto
-                const iconoUsuario = usuario.fotoPerfil ? `${DIR_API}/images/profilePics/${usuario.fotoPerfil}` : `${DIR_API}/images/profilePics/no_image.jpg`; // Icono del usuario o valor por defecto
+                const nombreUsuario = usuario.nombreUsuario || "Usuario desconocido"; // nombre o default
+                const iconoUsuario = usuario.fotoPerfil ? `${DIR_API}/images/profilePics/${usuario.fotoPerfil}` : `${DIR_API}/images/profilePics/no_image.jpg`; // icono o default
 
                 const likes = await obtener_likes_obra(tupla["idObra"]);
                 const numLikes = likes.length;
 
-                // Verificar si el usuario actual ya dio like a esta obra
+                // check si user dio like
                 const yaDioLike = usuarioActual ? likes.some(like => like.idUsuLike == usuarioActual) : false;
                 const iconoLike = yaDioLike ? "../imagenes/icons/Heart.svg" : "../imagenes/icons/Favorite.svg";
 
@@ -583,7 +573,7 @@ async function cargar_obras_usuario(idUsu) {
     }
 }
 
-// Verificar si un usuario sigue a otro
+// check si user sigue otro
 async function verificar_siguiendo(idUsuSeguidor, idUsuSeguido) {
     try {
         const seguidores = await obtener_seguidores(idUsuSeguido);
@@ -593,14 +583,14 @@ async function verificar_siguiendo(idUsuSeguidor, idUsuSeguido) {
     }
 }
 
-// Alternar seguir/dejar de seguir
+// alternar seguir/dejar seguir
 async function toggle_follow(idUsuSeguidor, idUsuSeguido) {
     try {
-        // Comprobar si ya sigue al usuario
+        // check si ya sigue
         const yaSigue = await verificar_siguiendo(idUsuSeguidor, idUsuSeguido);
 
         if (!yaSigue) {
-            // Si no le sigue, seguir
+            // no sigue, seguir
             const response = await $.ajax({
                 url: DIR_API + "/seguir_usuario",
                 type: "POST",
@@ -614,7 +604,7 @@ async function toggle_follow(idUsuSeguidor, idUsuSeguido) {
                 return false;
             }
         } else {
-            // Si ya le sigue, dejar de seguir
+            // ya sigue, dejar de seguir
             const response = await $.ajax({
                 url: DIR_API + "/dejar_seguir_usuario/" + idUsuSeguidor + "/" + idUsuSeguido,
                 type: "DELETE",
@@ -628,8 +618,7 @@ async function toggle_follow(idUsuSeguidor, idUsuSeguido) {
             }
         }
 
-        // Devolver el estado actual después de la operación
-        return !yaSigue; // true si empezó a seguir, false si dejó de seguir
+        return !yaSigue;
     } catch (error) {
         $('#errores').html("Error al alternar seguir/dejar de seguir");
         return null;
@@ -654,38 +643,38 @@ async function cargar_obra_pagina_post(idObra) {
             $('#title').text(response.obra.nombreObra);
             $('#description').text(response.obra.descObra);
 
-            // Mostrar si es contenido generado por IA o no
+            // check si es generado por ia
             const aiGenerated = response.obra.aiGenerated;
             const aiText = aiGenerated == 1 ? "AI" : "No AI";
             const aiIcon = aiGenerated == 1 ? "ai.png" : "slash.svg";
             $('#ai-info').html(`<img class="delete" src="../imagenes/icons/${aiIcon}" alt="icono">${aiText}`);
-            // Obtener el año de publicación de la obra
+            // año publicacion
             const fechaPublicacion = new Date(response.obra.fecPubli);
             const añoPublicacion = fechaPublicacion.getFullYear();
 
-            // Cargar datos del usuario autor
+            // datos user autor
             cargar_usuario_pagina_post(response.obra.idUsu).then(usuario => {
-                // Actualizar el título de la sección "More by" con el nombre del autor
+                // actualizar titulo more-by con nombre autor
                 $('aside > span > span#name-author').html(`<a href="profile.html?id=${response.obra.idUsu}">${usuario.nombreUsuario}</a>`);
 
-                // Actualizar el copyright con el nombre del autor y año de publicación
+                // copyright con nombre autor y año
                 $('#copy').text(`©${añoPublicacion} ${usuario.nombre}`);
             });
 
-            // Cargar obras del mismo autor en la sección "More by"
+            // obras mismo autor en more-by
             cargar_more_by(response.obra.idUsu, idObra);
-            // Cargar y mostrar las etiquetas de la obra
+            // cargar etiquetas obra
             cargar_etiquetas_post(idObra);
 
             const idUsu = localStorage.getItem('idUsu');
             if (idUsu == response.obra.idUsu) {
-                // Si el usuario actual es el autor de la obra, mostrar el botón de editar
+                // user actual es autor, mostrar btn editar
                 html_opciones = '<img id="delete-post" class="delete" src="../imagenes/icons/trash-2.svg" alt="icono">';
                 html_opciones += '<img id="edit" src="../imagenes/icons/edit.svg" alt="icono"></img>';
                 $('div#der').html(html_opciones);
             }
 
-            // Cargar obras relacionadas por etiquetas
+            // obras relacionadas por tags
             cargar_obras_relacionadas_por_tags(idObra);
 
             return response;
@@ -743,10 +732,9 @@ async function cargar_usuario_pagina_post(idUsu) {
     }
 }
 
-// Función para cargar obras en la sección "More by" de un autor
+// cargar obras en la sección More by del post
 async function cargar_more_by(idUsuAutor, idObraActual, contenedor = '#more-by', limite = 8) {
     try {
-        // Obtener las obras del usuario
         const response = await $.ajax({
             url: DIR_API + "/obras/" + idUsuAutor,
             type: "GET",
@@ -760,14 +748,13 @@ async function cargar_more_by(idUsuAutor, idObraActual, contenedor = '#more-by',
 
         const obras = response.obras_usuario;
 
-        // Limpiar el contenedor
         $(contenedor).empty();
 
         if (obras && obras.length > 0) {
-            // Filtrar la obra actual para no mostrarla
+            // excluir obra actual
             const obrasFiltradas = obras.filter(obra => obra.idObra != idObraActual);
 
-            // Limitar a máximo 8 obras
+            // máximo 8 obras
             const obrasAMostrar = obrasFiltradas.slice(0, limite);
 
             if (obrasAMostrar.length === 0) {
@@ -775,18 +762,18 @@ async function cargar_more_by(idUsuAutor, idObraActual, contenedor = '#more-by',
                 return;
             }
 
-            // Para cada obra, mostrar solo la primera imagen
+            // mostrar solo la primera imagen
             for (let i = 0; i < obrasAMostrar.length; i++) {
                 const obra = obrasAMostrar[i];
 
-                // Obtener la primera foto de la obra
+                // obtener primera foto de la obra
                 const fotosResponse = await obtener_fotos_obra(obra.idObra);
                 const fotos = fotosResponse || [];
                 const primeraFoto = fotos.length > 0
                     ? `${DIR_API}/images/obras/${fotos[0].foto}`
                     : "../imagenes/arte/default.webp";
 
-                // Crear el artículo de la obra
+                // Crear article de la obra
                 const articuloObra = `
                     <article class="post">
                         <a href="post.html?id=${obra.idObra}">
@@ -807,7 +794,6 @@ async function cargar_more_by(idUsuAutor, idObraActual, contenedor = '#more-by',
     }
 }
 
-// Función para seguir a un usuario
 async function seguir_usuario(idUsuSeguidor, idUsuSeguido) {
     try {
         const response = await $.ajax({
@@ -829,7 +815,6 @@ async function seguir_usuario(idUsuSeguidor, idUsuSeguido) {
     }
 }
 
-// Función para dejar de seguir a un usuario
 async function dejar_seguir_usuario(idUsuSeguidor, idUsuSeguido) {
     try {
         const response = await $.ajax({
@@ -850,79 +835,63 @@ async function dejar_seguir_usuario(idUsuSeguidor, idUsuSeguido) {
     }
 }
 
-// Función para buscar obras por texto
+// filtros
 function buscar_obras(texto) {
-    // Limpiar el contenedor de "Cargar más" antes de cargar nuevas obras
     $('#cargar-mas-container').empty();
     return cargar_obras_filtradas("buscar", texto, "recientes", 1);
 }
 
-// Función para cargar obras trending (con más likes)
 function cargar_trending() {
-    // Limpiar el contenedor de "Cargar más" antes de cargar nuevas obras
     $('#cargar-mas-container').empty();
     return cargar_obras_filtradas("", "", "trending", 1);
 }
 
-// Función para cargar obras recientes
 function cargar_recientes() {
-    // Limpiar el contenedor de "Cargar más" antes de cargar nuevas obras
     $('#cargar-mas-container').empty();
     return cargar_obras_filtradas("", "", "recientes", 1);
 }
 
-// Función para cargar obras "For you" (basadas en los likes del usuario)
 function cargar_for_you() {
-    // Limpiar el contenedor de "Cargar más" antes de cargar nuevas obras
     $('#cargar-mas-container').empty();
     const idUsu = localStorage.getItem('idUsu');
     if (!idUsu) {
-        // Si no hay usuario logueado, mostrar obras recientes
         return cargar_recientes();
     }
     return cargar_obras_filtradas("for_you", idUsu, "recientes", 1);
 }
 
-// Función para cargar obras de usuarios seguidos
 function cargar_following() {
-    // Limpiar el contenedor de "Cargar más" antes de cargar nuevas obras
     $('#cargar-mas-container').empty();
     const idUsu = localStorage.getItem('idUsu');
     if (!idUsu) {
-        // Si no hay usuario logueado, redirigir al login
         window.location.href = "paginas/login.html";
         return false;
     }
     return cargar_obras_filtradas("siguiendo", idUsu, "recientes", 1);
 }
 
-// Función para cargar más obras (paginación)
 async function cargar_mas_obras() {
     const boton = $('#cargar-mas');
-    const pagina = parseInt(boton.data('pagina'), 10); // Convertir explícitamente a número
+    const pagina = parseInt(boton.data('pagina'), 10);
     const filtro = boton.data('filtro') || "";
     const valor = boton.data('valor') || "";
     const ordenar = boton.data('ordenar') || "";
 
-    // Validación adicional
+    // validación
     if (isNaN(pagina) || pagina < 1) {
         console.error("Número de página inválido:", boton.data('pagina'));
         return false;
     }
 
-    // Eliminar el botón actual para evitar duplicados
     boton.remove();
 
-    // Mostrar indicador de carga
     $('#cargar-mas-container').html('<div class="cargar-mas-btn"><span>Loading...</span></div>');
 
-    // Cargar más obras
     const resultado = await cargar_obras_filtradas(filtro, valor, ordenar, pagina);
 
-    // Si falla, mostrar mensaje de error
     if (!resultado) {
         $('#cargar-mas-container').html('<div class="cargar-mas-error"><span>Error loading more artworks</span></div>');
-        // El mensaje desaparecerá después de 3 segundos
+        // mensaje desaparece en 3 segundos
         setTimeout(() => {
             $('#cargar-mas-container').empty();
         }, 3000);
@@ -931,7 +900,6 @@ async function cargar_mas_obras() {
     return resultado;
 }
 
-// Función para obtener las etiquetas de una obra
 async function obtener_etiquetas_obra(idObra) {
     try {
         const response = await $.ajax({
@@ -944,7 +912,7 @@ async function obtener_etiquetas_obra(idObra) {
             $('#errores').html("Error al cargar las etiquetas de la obra: " + response.error);
             return [];
         } else {
-            return response.etiquetas; // Devolver el array de etiquetas
+            return response.etiquetas;
         }
     } catch (error) {
         $('#errores').html("Error al cargar las etiquetas de la obra: " + error);
@@ -952,23 +920,20 @@ async function obtener_etiquetas_obra(idObra) {
     }
 }
 
-// Función para cargar y mostrar las etiquetas de una obra en post.html
 async function cargar_etiquetas_post(idObra) {
     try {
-        // Obtener las etiquetas de la obra
         const etiquetas = await obtener_etiquetas_obra(idObra);
 
-        // Limpiar el contenedor de etiquetas
         $('#tags-buttons').empty();
 
         if (etiquetas && etiquetas.length > 0) {
-            // Crear botones para cada etiqueta
+            // botones para cada etiqueta
             for (const etiqueta of etiquetas) {
                 const botonTag = $('<button class="tag-button">')
                     .text(etiqueta.nombre)
                     .attr('data-tag', etiqueta.nombre)
                     .on('click', function () {
-                        // Redirigir a index.html con filtro por esta etiqueta
+                        // redirigir a index con filtro por esta etiqueta
                         window.location.href = '../index.html?search=' + encodeURIComponent($(this).data('tag'));
                     });
 
@@ -982,9 +947,8 @@ async function cargar_etiquetas_post(idObra) {
     }
 }
 
-// Función para cargar comentarios de una obra
 async function cargar_comentarios_obra(idObra) {
-    $('#errores').html(""); // Limpiar mensajes de error
+    $('#errores').html("");
     try {
         const response = await $.ajax({
             url: DIR_API + "/comentarios_obra_user/" + idObra,
@@ -995,20 +959,19 @@ async function cargar_comentarios_obra(idObra) {
             $('#errores').html(response.error);
             return [];
         } else {
-            // Actualizar contador de comentarios
+            // contador comentarios
             const numComentarios = response.comentarios_info ? response.comentarios_info.length : 0;
             $('#comments > span > span').text(numComentarios);
             $('#message-count').html(`<img class="menu" src="../imagenes/icons/message-circle.svg" alt="icono">${numComentarios}`);
 
-            // Obtener ID del usuario actual para determinar permisos de edición/eliminación
             const usuarioActual = localStorage.getItem('idUsu');
 
             let html_mensaje = '';
             if (response.comentarios_info && response.comentarios_info.length > 0) {
                 for (const tupla of response.comentarios_info) {
-                    // Comprobar si el comentario pertenece al usuario actual
+                    // comprobar si el comentario pertenece al usuario logueado
                     const esMiComentario = usuarioActual && parseInt(usuarioActual) === parseInt(tupla.idUsu);
-                    // Escapar correctamente el texto del comentario para los atributos data
+
                     const textoComentarioHTML = tupla.textoComentario;
                     const textoComentarioAttr = tupla.textoComentario
                         .replace(/&/g, '&amp;')
@@ -1017,8 +980,6 @@ async function cargar_comentarios_obra(idObra) {
                         .replace(/</g, '&lt;')
                         .replace(/>/g, '&gt;');
 
-                    // Ajuste de la estructura para que coincida con los selectores CSS existentes
-                    // Cada comentario es un div.content con un atributo data para identificarlo
                     if (!esMiComentario) {
                         html_mensaje += `<div class="content m-1rem" data-comentario-id="${tupla.numComentario}">`;
 
@@ -1034,7 +995,7 @@ async function cargar_comentarios_obra(idObra) {
                     html_mensaje += '</div>';
                     html_mensaje += '</div>';
 
-                    // Solo mostrar opciones de editar/eliminar si el comentario es del usuario actual
+                    // mostrar editar/eliminar si el comentario es del usuario logueado
                     if (esMiComentario) {
                         html_mensaje += '<div class="actions-comment">';
                         html_mensaje += `<span class="edit-comment" data-id="${tupla.numComentario}" data-texto="${textoComentarioAttr}">
@@ -1056,10 +1017,8 @@ async function cargar_comentarios_obra(idObra) {
     }
 }
 
-// Mostrar alerts
 async function cargar_alertas(idUsu, link) {
     try {
-        // Consumir servivcio de obtener seguidores
         const response_seguidores = await $.ajax({
             url: DIR_API + "/alertas_seguidores/" + idUsu,
             type: "GET",
@@ -1073,13 +1032,12 @@ async function cargar_alertas(idUsu, link) {
 
         let html_alertas = '<span id="title-alerts">Alerts</span>';
         html_alertas += '<div id="alerts-container">';        
-        // Se añaden los seguidores nuevos
+        // añadir seguidores nuevos
         for (const alerta of response_seguidores.alertas_seguidores) {
             const profilePath = window.location.pathname.includes('paginas/') ?
                 `profile.html?id=${alerta.idUsu}` :
                 `paginas/profile.html?id=${alerta.idUsu}`;            
-            
-            // Obtener datos de usuario de forma asíncrona
+
             const usuario = await obtener_datos_usuario(alerta.idUsu);
             const fotoUsu = usuario.fotoPerfil || 'no_image.jpg';
 
@@ -1087,7 +1045,6 @@ async function cargar_alertas(idUsu, link) {
             html_alertas += `<a id="alert-seguidor-${alerta.idUsu}" class="alert-seguidor-link" href="${profilePath}" data-idseguidor="${alerta.idUsu}" data-idseguido="${idUsu}"><span><strong>@${alerta.nombreUsuario}</strong> ha comenzado a seguirte</span></a></div>`;   
         }
 
-        // Consumir servivcio de obtener likes
         const response_likes = await $.ajax({
             url: DIR_API + "/alertas_likes/" + idUsu,
             type: "GET",
@@ -1097,7 +1054,8 @@ async function cargar_alertas(idUsu, link) {
         if (response_likes.error) {
             $('#errores').html(response_likes.error);
             return;
-        }        // Se añaden los likes nuevos
+        }        
+        // añadir likes nuevos
         for (const alerta of response_likes.alertas_likes) {
             const postPath = window.location.pathname.includes('paginas/') ?
                 `post.html?id=${alerta.idObra}` :
@@ -1111,7 +1069,6 @@ async function cargar_alertas(idUsu, link) {
             html_alertas += `<a class="alert-like-link" href="${postPath}" data-idobra="${alerta.idObra}" data-idusulike="${alerta.idUsuLike}"><span>A @${alerta.usuario_like} le gusta <strong>${alerta.nombre_obra}</strong></span></a></div>`;
         }
 
-        // Consumir servivcio de obtener comentarios
         const response_comentarios = await $.ajax({
             url: DIR_API + "/alertas_comentarios/" + idUsu,
             type: "GET",
@@ -1121,7 +1078,8 @@ async function cargar_alertas(idUsu, link) {
         if (response_comentarios.error) {
             $('#errores').html(response_comentarios.error);
             return;
-        }        // Se añaden los comentarios nuevos
+        }        
+        // añadir comentarios nuevos
         for (const alerta of response_comentarios.alertas_comentarios) {
             const postPath = window.location.pathname.includes('paginas/') ?
                 `post.html?id=${alerta.idObra}` :
@@ -1135,16 +1093,17 @@ async function cargar_alertas(idUsu, link) {
             html_alertas += `<a class="alert-comentario-link" href="${postPath}" data-idcomentario="${alerta.numComentario}"><span>@${alerta.usuario_comentario} comentó en <strong>${alerta.nombre_obra}</strong></span></a></div>`;
         }        
         html_alertas += '</div>';
-        $('div#content-alerts').html(html_alertas);        
-        // Actualizar el contador de alertas
+        $('div#content-alerts').html(html_alertas);
+
+        // contador alertas
         let num_alerts = response_seguidores.alertas_seguidores.length + response_likes.alertas_likes.length + response_comentarios.alertas_comentarios.length;
         $('span#num-alerts').text(num_alerts);
 
-        // Actualizar la visibilidad del contador según el tamaño de la pantalla
+        // mostrar contador según ancho pantalla
         actualizarVisibilidadContadorAlertas(num_alerts);
         
-        // Añadir manejadores de eventos para marcar alertas como vistas al hacer clic
-        // Para alertas de seguidores
+        // manejadores eventos marcar alertas como vistas al hacer clic
+        // alertas de seguidores
         $('.alert-seguidor-link').on('click', async function(e) {
             const idSeguido = $(this).data('idseguido');
             const idSeguidor = $(this).data('idseguidor');
@@ -1159,7 +1118,7 @@ async function cargar_alertas(idUsu, link) {
             }
         });
         
-        // Para alertas de likes
+        // alertas de likes
         $('.alert-like-link').on('click', async function(e) {
             const idObra = $(this).data('idobra');
             const idUsuLike = $(this).data('idusulike');
@@ -1174,7 +1133,7 @@ async function cargar_alertas(idUsu, link) {
             }
         });
         
-        // Para alertas de comentarios
+        // alertas de comentarios
         $('.alert-comentario-link').on('click', async function(e) {
             const idComentario = $(this).data('idcomentario');
             try {
@@ -1188,7 +1147,7 @@ async function cargar_alertas(idUsu, link) {
             }
         });
 
-        // Función para actualizar la visibilidad del contador de alertas
+        // mostrar contador alertas
         function actualizarVisibilidadContadorAlertas(numAlertas) {
             if (numAlertas > 0) {
                 $('img#icon-alerts').attr('src', link + 'icons/icons-blanco/bell-ringing.svg');
@@ -1201,7 +1160,7 @@ async function cargar_alertas(idUsu, link) {
 
         }
 
-        // Evento resize para mostrar o no el contador de alertas
+        // evento resize mostrar o no contador alertas
         $(window).off('resize.alertas').on('resize.alertas', function () {
             actualizarVisibilidadContadorAlertas(num_alerts);
         });
@@ -1259,9 +1218,9 @@ async function editar_comentario(idComentario, nuevoTexto) {
 }
 
 
-// Manejar los clics en los botones de like usando delegación de eventos
+// manejador clics botones like y follow
 $(document).ready(function () {
-    // Like en la página de índice
+    // like index
     $("#galery-index").on("click", "article.post>ul.icons-post>li:first-child>img", async function () {
         const idUsu = localStorage.getItem('idUsu');
         if (!idUsu) {
@@ -1279,20 +1238,18 @@ $(document).ready(function () {
         const img = $(this);
         const numLikesSpan = img.siblings('.num-likes');
 
-        // Alternar like
         const resultado = await toggle_like_obra(idObra, idUsu);
 
-        // Actualizar recuento de likes
         const likes = await obtener_likes_obra(idObra);
         numLikesSpan.text(likes.length);
 
-        // Llamar a la función de efecto desde script-efectos.js
+        // efecto
         if (typeof efectoLikeIndex === 'function') {
             efectoLikeIndex(img, resultado === true);
         }
     });
 
-    // Like en la página de perfil
+    // like profile
     $("#profile-gallery").on("click", "article.post>ul.icons-post>li:first-child>img", async function () {
         const idUsu = localStorage.getItem('idUsu');
         if (!idUsu) {
@@ -1310,20 +1267,18 @@ $(document).ready(function () {
         const img = $(this);
         const numLikesSpan = img.siblings('.num-likes');
 
-        // Alternar like
         const resultado = await toggle_like_obra(idObra, idUsu);
 
-        // Actualizar recuento de likes
         const likes = await obtener_likes_obra(idObra);
         numLikesSpan.text(likes.length);
 
-        // Llamar a la función de efecto desde script-efectos.js
+        // efecto
         if (typeof efectoLikeProfile === 'function') {
             efectoLikeProfile(img, resultado === true);
         }
     });
 
-    // Follow en la página de índice
+    // follow index
     $("#galery-index").on("click", "span.boton-seguir", async function () {
         const idUsu = localStorage.getItem('idUsu');
         if (!idUsu) {
@@ -1347,7 +1302,7 @@ $(document).ready(function () {
         }
     });
 
-    // Follow en la página de perfil
+    // follow profile
     $("#boton-seguir-perfil").on("click", async function () {
         const idUsu = localStorage.getItem('idUsu');
         if (!idUsu) {
@@ -1362,14 +1317,12 @@ $(document).ready(function () {
             return;
         }
 
-        // Alternar follow
         const resultado = await toggle_follow(idUsu, idAutor);
 
-        // Actualizar contador de seguidores
         const seguidores = await obtener_seguidores(idAutor);
         $('#follows .numbers').text(seguidores.length + ' Followers');
 
-        // Llamar a la función de efecto
+        // efecto
         if (typeof efectoFollowProfile === 'function') {
             efectoFollowProfile(boton, resultado === true);
         }
@@ -1378,7 +1331,7 @@ $(document).ready(function () {
     if (localStorage.token) {
         $('#joinOrLogin').hide();
 
-        // Actualizar la imagen del perfil con la foto del usuario logueado
+        // icono usuario logueado header
         const idUsu = localStorage.getItem('idUsu');
         if (idUsu) {
             $.ajax({
@@ -1387,10 +1340,8 @@ $(document).ready(function () {
                 dataType: "json"
             }).then(response => {
                 if (!response.error && response.usuario && response.usuario.fotoPerfil) {
-                    // Determinar la ruta correcta según si estamos en la página principal o en una subpágina
                     const imgPath = DIR_API + "/images/profilePics/" + response.usuario.fotoPerfil;
 
-                    // Actualizar la imagen del header
                     $('#profile img').attr('src', imgPath);
                     $('#profile-header img').attr('src', imgPath);
                 }
