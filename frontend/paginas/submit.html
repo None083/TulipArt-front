@@ -89,13 +89,12 @@
     <div id="errores"></div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Manejador para el botón submit-atras
+            // botón submit-atras
             document.getElementById('submit-atras').onclick = function (e) {
                 e.preventDefault();
 
-                // Obtener las imágenes temporales
                 var imagenesTemporal = JSON.parse(localStorage.getItem('imagenesTemporal') || '[]');                
-                // Si hay imágenes temporales, eliminarlas
+                // si hay imágenes temporales eliminarlas
                 if (imagenesTemporal.length > 0) {                    
                     $("<div title='Confirm exit'>If you leave now, uploaded images will be lost. Are you sure?</div>").dialog({
                         modal: true,
@@ -107,7 +106,7 @@
                             },
                             "Exit": function() {
                                 $(this).dialog("close");
-                                // Llamar al servicio para eliminar las imágenes temporales usando fetch (no jQuery)
+
                                 fetch(DIR_API + "/limpiar_imagenes_temporales", {
                                     method: "POST",
                                     headers: {
@@ -116,12 +115,10 @@
                                     body: "imagenes=" + encodeURIComponent(JSON.stringify(imagenesTemporal))
                                 })
                                 .then(function () {
-                                    // Limpiar localStorage y volver atrás
                                     localStorage.removeItem('imagenesTemporal');
                                     window.history.back();
                                 })
                                 .catch(function () {
-                                    // Si hay error, igualmente volver atrás
                                     localStorage.removeItem('imagenesTemporal');
                                     window.history.back();
                                 });
@@ -129,7 +126,6 @@
                         }
                     });
                 } else {
-                    // Si no hay imágenes, simplemente volver atrás
                     window.history.back();
                 }
 

@@ -22,10 +22,9 @@
 				const idUsu = localStorage.getItem('idUsu');
 				cargar_alertas(idUsu, "../imagenes/");
 			}
-			// Obtener los parámetros de la URL
+
 			const urlParams = new URLSearchParams(window.location.search);
 
-			// Usar el ID de la URL si existe, o el ID almacenado localmente
 			let idUsu = urlParams.get('id') || localStorage.getItem('idUsu');
 			const idUsuLogueado = localStorage.getItem('idUsu');
 
@@ -33,13 +32,11 @@
 				cargar_bio_perfil(idUsu);
 				cargar_obras_usuario(idUsu);
 
-				// Si es el usuario logueado, ocultar botón de seguir
 				if (idUsu === idUsuLogueado) {
 					$('#boton-seguir-perfil').hide();
 				} else {
 					$('#boton-seguir-perfil').show();
 
-					// Verificar si ya sigue al usuario y actualizar el estilo del botón
 					if (idUsuLogueado) {
 						verificar_siguiendo(idUsuLogueado, idUsu).then(sigue => {
 							if (sigue) {
@@ -54,7 +51,6 @@
 								});
 							}
 
-							// Añadir el atributo data-idautor para usarlo luego
 							$('#boton-seguir-perfil').attr('data-idautor', idUsu);
 						});
 					} else {
@@ -62,7 +58,6 @@
 					}
 				}
 			} else {
-				// Redirige a login si no hay id de usuario
 				window.location.href = "login.html";
 			}
 		});

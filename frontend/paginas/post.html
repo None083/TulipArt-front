@@ -100,7 +100,8 @@
                 </ul>
             </nav>
             <nav id="capa-buscador" aria-label="capa-buscador">
-                <img id="equis" src="../imagenes/icons/x.svg" alt="Icon close">                <div>
+                <img id="equis" src="../imagenes/icons/x.svg" alt="Icon close">
+                <div>
                     <input type="text" name="buscador" id="buscador" placeholder="Search">
                     <a href="#" id="btn-buscar"><img id="lupa-negra-buscador" src="../imagenes/icons/search.svg"
                             alt="Icon search"></a>
@@ -118,7 +119,8 @@
         <main class="post">
             <section class="post">
                 <div id="user">
-                    <a class="user-link-post" href="profile.html"><img id="user-photo" src="../imagenes/arte/default.webp" alt="Perfil usuario">
+                    <a class="user-link-post" href="profile.html"><img id="user-photo"
+                            src="../imagenes/arte/default.webp" alt="Perfil usuario">
                     </a>
                     <div class="nombre">
                         <a class="user-link-post" href="profile.html" aria-label="user-profile">
@@ -233,52 +235,36 @@
                 const idUsu = localStorage.getItem('idUsu');
                 cargar_alertas(idUsu, "../imagenes/");
             }
-            // Obtener el ID de la obra de la URL
             const params = new URLSearchParams(window.location.search);
             const idObra = params.get('id');
             const idUsu = localStorage.getItem('idUsu');
-            let currentSlide = 0;
-
-            if (idObra) {
-                // Cargar los datos de la obra
+            let currentSlide = 0; if (idObra) {
                 cargar_obra_pagina_post(idObra);
 
-                // Cargar las fotos de la obra para el slider
                 obtener_fotos_obra(idObra).then(fotos => {
                     if (fotos && fotos.length > 0) {
-                        // Limpiar el contenedor del slider
                         $('#slider-images').empty();
                         $('#slider-dots').empty();
 
-                        // Añadir cada foto al slider
                         fotos.forEach((foto, index) => {
-                            // Añadir la imagen al slider
                             $('#slider-images').append(`
                                 <li>
                                     <img src="${DIR_API}/images/obras/${foto.foto}" alt="Foto ${index + 1} de la obra" data-index="${index}">
-                                </li>
-                            `);
-
-                            // Añadir el punto indicador correspondiente
-                            $('#slider-dots').append(`
-                                <li class="${index === 0 ? 'active' : ''}" data-index="${index}">●</li>
-                            `);
+                                </li>`
+                            ); 
+                            $('#slider-dots').append(`<li class="${index === 0 ? 'active' : ''}" data-index="${index}">●</li>`);
                         });
 
-                        // Inicializar el slider
                         initSlider();
                     } else {
-                        // Si no hay fotos, mostrar una imagen por defecto
                         $('#slider-images').html(`
                             <li>
                                 <img src="../imagenes/arte/default.webp" alt="Imagen no disponible">
-                            </li>
-                        `);
+                            </li>`
+                        );
                         $('#slider-dots').html('');
                     }
-                });
-
-                //Borrar obra
+                }); 
                 $(document).on('click', 'img#delete-post', async function () {
                     if (confirm('¿Estás seguro de que quieres eliminar esta obra?')) {
                         const resultado = await borrar_obra(idObra);
@@ -307,31 +293,24 @@
                             });
                         }
                     }
-                });
+                }); 
 
-                // Cargar comentarios
                 obtener_comentarios_obra(idObra).then(comentarios => {
                     $('#comments > span > span').text(comentarios.length);
                     $('#message-count').html(`<img class="menu" src="../imagenes/icons/message-circle.svg" alt="icono">${comentarios.length}`);
                 });
 
-                // Obtener datos del usuario y actualizar la imagen
                 obtener_datos_usuario(idUsu).then(usuario => {
                     if (usuario && usuario.fotoPerfil) {
                         $('#user-photo-logged').attr('src', `${DIR_API}/images/profilePics/${usuario.fotoPerfil}`);
                     } else {
-                        // Usar imagen por defecto si no hay foto de perfil
                         $('#user-photo-logged').attr('src', `${DIR_API}/images/profilePics/no_image.jpg`);
                     }
                 });
 
-                cargar_comentarios_obra(idObra);
-
-                // Cargar likes
-                obtener_likes_obra(idObra).then(likes => {
+                cargar_comentarios_obra(idObra); obtener_likes_obra(idObra).then(likes => {
                     $('.icons > span:first-child').html(`<img class="corazon" src="../imagenes/icons/Heart.svg" alt="icono"> ${likes.length}`);
 
-                    // Comprobar si el usuario actual ha dado like
                     if (idUsu) {
                         const yaDioLike = likes.some(like => like.idUsuLike == idUsu);
                         if (yaDioLike) {
@@ -342,62 +321,41 @@
                     }
                 });
             } else {
-                // Mostrar error si no se proporciona ID
                 $('#title').text('Error: No se ha especificado una obra');
                 $('#description').text('Por favor, vuelve a la página anterior e intenta de nuevo.');
             }
 
-            // Función para inicializar el slider
             function initSlider() {
                 const sliderImg = $('#slider-images');
                 const sliderDots = $('#slider-dots li');
-                const totalSlides = sliderDots.length;
-
-                if (totalSlides <= 1) {
-                    // Ocultar flechas y puntos si solo hay una imagen
+                const totalSlides = sliderDots.length; if (totalSlides <= 1) {
                     $('.slider-arrow, .slider-dot').hide();
                     return;
                 }
 
-                // Función para mostrar un slide específico
                 function showSlide(index) {
                     if (index >= totalSlides) index = 0;
                     if (index < 0) index = totalSlides - 1;
 
-                    currentSlide = index;
+                    currentSlide = index; sliderImg.css('transform', `translateX(-${currentSlide * 100}%)`);
 
-                    // Actualizar la posición del slider con transform
-                    sliderImg.css('transform', `translateX(-${currentSlide * 100}%)`);
-
-                    // Actualizar los puntos indicadores
                     sliderDots.removeClass('active');
                     $(sliderDots[currentSlide]).addClass('active');
                 }
 
-                // Mostrar el primer slide
-                showSlide(0);
-
-                // Evento para el botón siguiente
-                $('#next-slide').on('click', function () {
+                showSlide(0); $('#next-slide').on('click', function () {
                     showSlide(currentSlide + 1);
                 });
 
-                // Evento para el botón anterior
                 $('#prev-slide').on('click', function () {
                     showSlide(currentSlide - 1);
-                });
-
-                // Evento para los puntos indicadores
-                sliderDots.on('click', function () {
+                }); sliderDots.on('click', function () {
                     const index = $(this).data('index');
                     showSlide(index);
                 });
 
-                // Avance automático (opcional)
-                // setInterval(() => showSlide(currentSlide + 1), 5000);
-            }
-
-            // Implementar funcionalidad de los botones de like
+            } 
+            
             $(document).on('click', '.corazon', async function () {
                 const idUsu = localStorage.getItem('idUsu');
                 if (!idUsu) {
@@ -405,21 +363,15 @@
                     return;
                 }
 
-                // Obtener referencia al elemento actual
                 const $this = $(this);
 
-                // Alternar like
                 const resultado = await toggle_like_obra(idObra, idUsu);
 
-                // Aplicar el efecto visual
                 efectoLikePost($this, resultado);
-
-                // Actualizar contador
                 const likes = await obtener_likes_obra(idObra);
                 $('.icons > span:first-child').html(`<img class="corazon" src="${resultado ? '../imagenes/icons/Heart.svg' : '../imagenes/icons/Favorite.svg'}" alt="icono"> ${likes.length}`);
-            });
-
-            // Función para mostrar el overlay con la imagen ampliada
+            }); 
+            
             function showZoomOverlay(imgSrc) {
                 const zoomOverlay = $('.zoom-overlay');
                 const zoomImg = $('.zoom-img');
@@ -427,40 +379,34 @@
                 zoomImg.attr('src', imgSrc);
                 zoomOverlay.addClass('zoom-active');
 
-                // Ocultar el overlay al hacer clic fuera de la imagen
                 zoomOverlay.off('click').on('click', function (e) {
                     if (e.target === this) {
                         hideZoomOverlay();
                     }
                 });
-            }
 
-            // Función para ocultar el overlay
+            } 
+            
             function hideZoomOverlay() {
                 const zoomOverlay = $('.zoom-overlay');
                 zoomOverlay.removeClass('zoom-active');
                 $('.zoom-img').attr('src', '');
-            }            // Delegación de eventos para las imágenes del slider
+            }
+
             $('#slider-images').on('click', 'li img', function () {
                 const imgSrc = $(this).attr('src');
                 showZoomOverlay(imgSrc);
             });
 
-            // Manejar evento del botón Cancel en el formulario de comentarios
             $('#cancel').on('click', function () {
-                // Limpiar el textarea
                 $('#new-comment').val('');
             });
-            // Variables para el modo de edición
+
             let modoEdicion = false;
             let idComentarioEditando = null;
 
-            // Manejar evento del botón Comment para crear un nuevo comentario o editar uno existente
             $('.comment').on('click', async function () {
-                const idUsu = localStorage.getItem('idUsu');
-
-                // Verificar si el usuario está logueado
-                if (!idUsu) {
+                const idUsu = localStorage.getItem('idUsu'); if (!idUsu) {
                     $("<div title='No logged'>You must be logged in to comment.</div>").dialog({
                         modal: true,
                         dialogClass: 'tulipart-warning',
@@ -474,10 +420,8 @@
                     return;
                 }
 
-                // Obtener el texto del comentario
                 const textoComentario = $('#new-comment').val().trim();
 
-                // Validar que el comentario no esté vacío
                 if (!textoComentario) {
                     $("<div title='Empty comment'>The comment cannot be empty.</div>").dialog({
                         modal: true,
@@ -490,50 +434,38 @@
                         }
                     });
                     return;
-                }
-
+                } 
+                
                 if (modoEdicion && idComentarioEditando) {
-                    // Editar comentario existente
                     const resultado = await editar_comentario(idComentarioEditando, textoComentario);
+
                     if (resultado) {
-                        // Limpiar el textarea y restablecer el botón
                         $('#new-comment').val('');
                         $('.comment').text('Comment');
                         $('.comment').removeClass('editing');
                         $('#cancel').hide();
 
-                        // Restablecer variables de edición
                         modoEdicion = false;
                         idComentarioEditando = null;
-                        // Efecto visual para mostrar que la edición fue exitosa
                         const $comentarioEditado = $(`.comment-block .content[data-comentario-id="${idComentarioEditando}"]`);
                         $comentarioEditado.css('background-color', '#f0f7ff');
                         setTimeout(() => {
                             $comentarioEditado.css('transition', 'background-color 1.5s ease');
                             $comentarioEditado.css('background-color', '');
-                        }, 100);
-
-                        // Recargar los comentarios para mostrar los cambios
-                        await cargar_comentarios_obra(idObra);
+                        }, 100); await cargar_comentarios_obra(idObra);
                     }
                 } else {
-                    // Crear un nuevo comentario
                     const resultado = await crear_comentario_obra(idUsu, idObra, textoComentario);
 
                     if (resultado) {
-                        // Limpiar el textarea
                         $('#new-comment').val('');
-
-                        // Recargar los comentarios para mostrar el nuevo
                         await cargar_comentarios_obra(idObra);
                     }
                 }
-            });
 
-            // Manejar el evento de cancelar edición
+            }); 
             $('#cancel').on('click', function () {
-                // Limpiar el textarea
-                $('#new-comment').val('');                    // Si estamos en modo edición, revertir al modo normal
+                $('#new-comment').val('');
                 if (modoEdicion) {
                     $('.comment').text('Comment');
                     $('.comment').removeClass('editing');
@@ -542,37 +474,26 @@
                     idComentarioEditando = null;
                 }
             });
-
-            // Delegación de eventos para el botón de editar comentario
+            
             $(document).on('click', '.edit-comment', function () {
                 const idComentario = $(this).data('id');
                 const textoComentario = $(this).data('texto');
 
-                // Cargar el texto del comentario en el textarea
-                $('#new-comment').val(textoComentario);                // Cambiar el botón a "Edit"
+                $('#new-comment').val(textoComentario);
+
                 $('.comment').text('Edit');
                 $('.comment').addClass('editing');
 
-                // Mostrar el botón de cancelar
                 $('#cancel').show();
 
-                // Establecer el modo de edición
                 modoEdicion = true;
-                idComentarioEditando = idComentario;
-
-                // Hacer scroll al área de comentario
-                $('#writeComment')[0].scrollIntoView({ behavior: 'smooth' });
+                idComentarioEditando = idComentario; $('#writeComment')[0].scrollIntoView({ behavior: 'smooth' });
             });
 
-            // Delegación de eventos para el botón de eliminar comentario
             $(document).on('click', '.delete-comment', async function () {
                 const idComentario = $(this).data('id');
-
-                // Confirmar si el usuario realmente desea eliminar el comentario
                 if (confirm('¿Estás seguro de que deseas eliminar este comentario?')) {
-                    const resultado = await eliminar_comentario(idComentario);
-                    if (resultado) {
-                        // Si estábamos editando este comentario, cancelar la edición
+                    const resultado = await eliminar_comentario(idComentario); if (resultado) {
                         if (idComentarioEditando === idComentario) {
                             $('#new-comment').val('');
                             $('.comment').text('Comment');
@@ -580,20 +501,15 @@
                             modoEdicion = false;
                             idComentarioEditando = null;
                         }
-                        // Efecto visual de eliminación
+
                         const $comentarioEliminado = $(`.content[data-comentario-id="${idComentario}"]`);
                         const $accionesComentario = $comentarioEliminado.next('.actions-comment');
-
-                        // Aplicar la animación a ambos elementos
                         $comentarioEliminado.add($accionesComentario).css('transition', 'opacity 0.5s ease, height 0.5s ease');
                         $comentarioEliminado.add($accionesComentario).css('opacity', '0');
                         $comentarioEliminado.add($accionesComentario).css('height', '0');
                         $comentarioEliminado.add($accionesComentario).css('margin', '0');
                         $comentarioEliminado.add($accionesComentario).css('padding', '0');
-                        $comentarioEliminado.add($accionesComentario).css('overflow', 'hidden');
-
-                        // Esperar a que termine la animación y luego recargar los comentarios
-                        setTimeout(async () => {
+                        $comentarioEliminado.add($accionesComentario).css('overflow', 'hidden'); setTimeout(async () => {
                             await cargar_comentarios_obra(idObra);
                         }, 500);
                     }

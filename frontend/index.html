@@ -21,24 +21,19 @@
 			if (localStorage.token) {
 				const idUsu = localStorage.getItem('idUsu');
 				cargar_alertas(idUsu, "imagenes/");
-			}
-
-			// Procesar parámetros de URL para filtros y búsquedas
+			}			// params url para filtros y busquedas
 			const urlParams = new URLSearchParams(window.location.search);
 			const searchParam = urlParams.get('search');
-			const filtroParam = urlParams.get('filtro');
-
-			// Si hay parámetro de búsqueda, realizar búsqueda
+			const filtroParam = urlParams.get('filtro');			// si hay param de busqueda hacerla
 			if (searchParam) {
 				const termino = decodeURIComponent(searchParam);
 				$('#foryou, #following, #new, #trending').removeClass('borderbottom');
-				// Eliminar búsquedas activas anteriores
+				// quitar busquedas previas
 				$('#busqueda-activa').remove();
-				// Agregar indicador de búsqueda activa
+				// poner indicador de busqueda
 				$('#tab').append('<span id="busqueda-activa">Results for: "' + termino + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
 				buscar_obras(termino);
-			}
-			// Si hay parámetro de filtro, aplicar el filtro correspondiente
+			}			// aplico filtro si hay
 			else if (filtroParam) {
 				switch (filtroParam) {
 					case 'foryou':
@@ -66,18 +61,16 @@
 						cargar_trending();
 						$('#trending').addClass('borderbottom').siblings().removeClass('borderbottom');
 						break;
-					default:
-						// Si no se reconoce el filtro, cargar recientes
+					default:						// filtro no valido cargo recientes
 						cargar_recientes();
 						$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
 				}
-			} else {
-				// Cargar filtro predeterminado (New/recientes) si no hay parámetros
+			} else {				// cargo filtro por defecto
 				cargar_recientes();
 				$('#new').addClass('borderbottom').siblings().removeClass('borderbottom');
 			}
 
-			// Configurar eventos para los diferentes filtros
+			// eventos de filtros
 			$('#foryou').on('click', function () {
 				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
 				if (localStorage.token) {
@@ -90,8 +83,7 @@
 				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
 				if (localStorage.token) {
 					cargar_following();
-				} else {
-					// Si no hay usuario logueado, redirigir al login
+				} else {					// no hay user mando a login
 					window.location.href = "paginas/login.html";
 				}
 			});
@@ -104,9 +96,7 @@
 			$('#trending').on('click', function () {
 				$(this).addClass('borderbottom').siblings().removeClass('borderbottom');
 				cargar_trending();
-			});
-
-			// Agregar eventos para los elementos del menú principal
+			});			// eventos menu principal
 			$('nav#menu-principal ul#menu-desplegado li a').on('click', function (e) {
 				const seccion = $(this).text().toLowerCase();
 				if (seccion === 'home') {
@@ -138,79 +128,76 @@
 					} else {
 						window.location.href = "paginas/login.html";
 					}
-				}
-			});			// Función para realizar la búsqueda desde el buscador expandido
+				}			});			// busqueda desde buscador expandido
 			function realizarBusquedaExpandido() {
 				const textoBusqueda = $('#buscador').val().trim();
 				if (textoBusqueda) {
 					buscar_obras(textoBusqueda);
-					// Cerrar la capa de búsqueda
+					// cerrar capa
 					$('#capa-buscador').fadeOut();
-					// Mostrar texto de búsqueda
+					// quitar borders
 					$('#foryou').removeClass('borderbottom');
 					$('#following').removeClass('borderbottom');
-					// Eliminar búsquedas activas anteriores
+					// quitar busqueda anterior
 					$('#busqueda-activa').remove();
 					$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
 				}
 			}
-			
-			// Agregar evento para la búsqueda en el input del buscador expandido al pulsar Enter
+
+			// enter en buscador expandido
 			$('#buscador').on('keypress', function (e) {
-				if (e.which === 13) { // Tecla Enter
+				if (e.which === 13) {
 					e.preventDefault();
 					realizarBusquedaExpandido();
 				}
 			});
-			
-			// Agregar evento para la búsqueda al hacer clic en la lupa del buscador expandido
+
+			// click en lupa expandida
 			$('#btn-buscar').on('click', function (e) {
 				e.preventDefault();
-				e.stopPropagation(); // Prevenir que el evento se propague
+				e.stopPropagation();
 				realizarBusquedaExpandido();
-			});			// Función para realizar la búsqueda desde la barra de navegación
+			});
+
+			// busqueda desde nav
 			function realizarBusquedaNavegacion() {
 				const textoBusqueda = $('#buscar').val().trim();
 				if (textoBusqueda) {
 					buscar_obras(textoBusqueda);
-					// Limpiar el input
+					// limpio input
 					$('#buscar').val('');
-					// Mostrar texto de búsqueda y quitar el borde inferior de los filtros
+					// quito borders
 					$('#foryou, #following, #new, #trending').removeClass('borderbottom');
-					// Eliminar búsquedas activas anteriores
+					// quito busqueda prev
 					$('#busqueda-activa').remove();
-					// Agregar indicador de búsqueda activa
+					// pongo texto busqueda
 					$('#tab').append('<span id="busqueda-activa">Results for: "' + textoBusqueda + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
 				}
 			}
-			
-			// Agregar evento para la búsqueda en el input de la barra de navegación al pulsar Enter
+					// enter en busqueda nav
 			$('#buscar').on('keypress', function (e) {
-				if (e.which === 13) { // Tecla Enter
+				if (e.which === 13) { // enter
 					e.preventDefault();
 					realizarBusquedaNavegacion();
 				}
 			});
-			
-			// Agregar evento para la búsqueda al hacer clic en las lupas de la barra de navegación
+					// click lupas nav
 			$('#lupa-blanca, #lupa-negra').on('click', function (e) {
-				// Si hay texto en el buscador de la barra de navegación, realizar búsqueda
+				// si hay texto hago busqueda
 				if ($('#buscar').val().trim()) {
 					e.preventDefault();
-					e.stopPropagation(); // Prevenir que el evento se propague
+					e.stopPropagation(); // stop propagacion
 					realizarBusquedaNavegacion();
 				}
-				// Si no hay texto, se comporta como antes (muestra el buscador expandido)
-			});
-
-			// Evento para cerrar la búsqueda activa
+				// sin texto muestra el buscador expandido
+			});			// cerrar busqueda activa
 			$('#tab').on('click', '#cerrar-busqueda', function () {
 				$(this).parent().remove();
 				$('#new').addClass('borderbottom');
 				cargar_recientes();
 			});
 
-			// Evento para cargar más obras al hacer clic en "Cargar más"
+			// cargar mas obras
 			$('#cargar-mas-container').on('click', '#cargar-mas', function () {
 				cargar_mas_obras();
 			});
@@ -221,16 +208,15 @@
 					const idObra = $(this).data('idobra');
 
 					if (idUsu && idObra) {
-						// Llamar a la función para alternar el like
 						toggle_like_obra(idObra, idUsu).then(estado => {
 							if (estado === true) {
-								// Se añadió like
+								// añado like
 								$(this).attr('src', 'imagenes/icons/Heart.svg');
 								let numLikesSpan = $(this).siblings('.num-likes');
 								let numLikes = parseInt(numLikesSpan.text()) + 1;
 								numLikesSpan.text(numLikes);
 							} else if (estado === false) {
-								// Se quitó like
+								// quito like
 								$(this).attr('src', 'imagenes/icons/Favorite.svg');
 								let numLikesSpan = $(this).siblings('.num-likes');
 								let numLikes = parseInt(numLikesSpan.text()) - 1;
@@ -238,24 +224,21 @@
 							}
 						});
 					}
-				} else {
-					// Redirigir al login si no hay usuario logueado
+				} else {					
 					window.location.href = "paginas/login.html";
 				}
 			});
-			// Evento para seguir/dejar de seguir a un usuario
+
+			// evento seguir/no seguir user
 			$('#galery-index').on('click', '.boton-seguir', function () {
 				if (localStorage.token) {
 					const idUsu = localStorage.getItem('idUsu');
 					const idAutor = $(this).data('idautor');
 
-					if (idUsu && idAutor) {
-						// Comprobar si ya lo sigue
+					if (idUsu && idAutor) {						
 						const esSiguiendo = $(this).text() === 'Following';
 
-						// Llamada a la API para seguir/dejar de seguir
 						if (!esSiguiendo) {
-							// Seguir al usuario
 							seguir_usuario(idUsu, idAutor).then(resultado => {
 								if (resultado) {
 									$(this).text('Following');
@@ -278,32 +261,28 @@
 							});
 						}
 					}
-				} else {
-					// Redirigir al login si no hay usuario logladeo
+				} else {					
+					// si no hay user login
 					window.location.href = "paginas/login.html";
 				}
-			});
-
-			// Evento para mostrar menú de opciones (albóndiga) cuando se hace clic
+			});			
+			// menu albondiga click
 			$('#galery-index').on('click', '.icon-albondiga', function (e) {
 				e.stopPropagation();
 				$(this).closest('article').find('.menu-post').fadeToggle('fast');
-			});
-
-			// Cerrar el menú al hacer clic fuera
+			});			
+			// cerrar menu click fuera
 			$(document).on('click', function (e) {
 				if (!$(e.target).closest('.icon-albondiga, .menu-post').length) {
 					$('.menu-post').fadeOut('fast');
 				}
-			});
+			});			
 
-			// Clicks en tags sugeridos
 			$('#tags li').on('click', function () {
 				const tag = $(this).text();
 				$('#buscador').val(tag);
 				buscar_obras(tag);
 				$('#capa-buscador').fadeOut();
-				// Mostrar texto de búsqueda
 				$('#foryou').removeClass('borderbottom');
 				$('#following').removeClass('borderbottom');
 				$('#tab').append('<span id="busqueda-activa">Results for: "' + tag + '" <img src="imagenes/icons/x.svg" alt="cerrar búsqueda" id="cerrar-busqueda"></span>');
